@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pattern Generator — ChandaCore</title>
+  <meta name="description" content="Generate Laghu–Guru patterns and explore their binary, decimal and combinatorial representations based on Pingala's Chandaśāstra.">
+  <meta name="theme-color" content="#071D18">
+  <link rel="icon" href="assets/logo-mark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --forest: #071D18;
+      --green: #0D2A23;
+      --gold: #D5A441;
+      --gold-soft: #E4BD67;
+      --parchment: #E8D5AF;
+      --cream: #F4EBDD;
+      --ink: #17231F;
+      --offwhite: #F7F3E8;
+      --brown: #4a3a22;
+
+      --card-bg: #F8F2E6;
+      --card-border: rgba(180, 146, 92, 0.45);
+      --card-shadow: 0 8px 24px rgba(40, 28, 12, 0.08);
+
+      --serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+      --sans: "Inter", "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --deva: "Noto Serif Devanagari", "Kohinoor Devanagari", serif;
+
+      --pad: clamp(1.25rem, 4vw, 3.5rem);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background-color: #E5D5B8;
+      background-image: url("assets/generator_bg.png");
+      background-position: top center;
+      background-size: 100% auto;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @media (max-width: 1024px) {
+      body {
+        background-size: cover;
+      }
+    }
+
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    :focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 3px; border-radius: 4px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* ---------- Brand Wordmark ---------- */
+    .brand { display: inline-flex; align-items: center; gap: .6rem; }
+    .brand img { width: 44px; height: 44px; object-fit: contain; }
+    .brand__text { display: flex; flex-direction: column; line-height: 1; }
+    .brand__name { font-family: var(--serif); font-weight: 600; font-size: 1.7rem; letter-spacing: .005em; color: var(--offwhite); }
+    .brand__name b { font-weight: 600; color: var(--gold); }
+    .brand__sub { font-size: .56rem; letter-spacing: .2em; margin-top: .3rem; color: rgba(247,243,232,.68); text-transform: uppercase; }
+
+    /* ---------- Navbar ---------- */
+    .nav {
+      position: relative; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+      padding: 1.1rem var(--pad);
+      background: linear-gradient(to bottom, rgba(7,29,24,.88), rgba(7,29,24,0));
+    }
+    .nav__links { display: flex; align-items: center; gap: clamp(1.1rem, 2.4vw, 2.3rem); list-style: none; margin: 0 0 0 auto; padding: 0; }
+    .nav__links a {
+      position: relative; display: block; padding: .5rem 0;
+      font-size: .85rem; font-weight: 500; color: rgba(247,243,232,.86);
+      transition: color .2s;
+    }
+    .nav__links a::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: .1rem; height: 2px;
+      background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform .25s ease;
+    }
+    .nav__links a:hover, .nav__links a[aria-current="page"] { color: var(--gold-soft); }
+    .nav__links a:hover::after, .nav__links a[aria-current="page"]::after { transform: scaleX(1); }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+      font: 600 .88rem/1 var(--sans); border-radius: 999px; cursor: pointer;
+      padding: .85rem 1.5rem; border: 1px solid transparent;
+      transition: transform .2s ease, background-color .2s, border-color .2s, box-shadow .2s, color .2s;
+    }
+    .btn--gold { background: linear-gradient(180deg, var(--gold-soft), var(--gold)); color: #241a08; box-shadow: 0 6px 20px -8px rgba(213,164,65,.7); }
+    .btn--gold:hover { transform: translateY(-2px); box-shadow: 0 10px 26px -8px rgba(228,189,103,.85); }
+    .nav .btn { padding: .7rem 1.25rem; font-size: .82rem; }
+
+    .nav__toggle {
+      display: none; width: 44px; height: 44px; margin-left: auto; padding: 0;
+      background: transparent; border: 1px solid rgba(247,243,232,.35); border-radius: 12px; color: var(--offwhite); cursor: pointer;
+    }
+    .nav__toggle span, .nav__toggle span::before, .nav__toggle span::after {
+      display: block; width: 20px; height: 1.5px; background: currentColor; position: relative; margin: 0 auto; transition: transform .25s, background .25s;
+    }
+    .nav__toggle span::before, .nav__toggle span::after { content: ""; position: absolute; left: 0; }
+    .nav__toggle span::before { top: -6px; }
+    .nav__toggle span::after { top: 6px; }
+    .nav__toggle[aria-expanded="true"] span { background: transparent; }
+    .nav__toggle[aria-expanded="true"] span::before { top: 0; transform: rotate(45deg); }
+    .nav__toggle[aria-expanded="true"] span::after { top: 0; transform: rotate(-45deg); }
+
+    /* ---------- Generator Hero Header ---------- */
+    .hero-header {
+      position: relative;
+      padding: 2.2rem var(--pad) 2.5rem;
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .hero-header__main {
+      max-width: 42rem;
+    }
+
+    .hero-header__eyebrow {
+      margin: 0 0 .8rem;
+      font-size: .74rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      color: var(--gold-soft);
+      text-transform: uppercase;
+    }
+
+    .hero-header__title {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: clamp(2.8rem, 5.5vw, 4.4rem);
+      line-height: 1.05;
+      color: var(--offwhite);
+      text-shadow: 0 3px 25px rgba(0,0,0,0.5);
+    }
+    .hero-header__title span {
+      color: var(--gold);
+    }
+
+    .hero-header__sub {
+      margin: .9rem 0 0;
+      font-size: clamp(1rem, 1.3vw, 1.15rem);
+      line-height: 1.5;
+      color: rgba(247, 243, 232, 0.9);
+      text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+      max-width: 36rem;
+    }
+
+    .hero-header__aside {
+      padding-top: 2.2rem;
+      text-align: right;
+    }
+    .hero-header__quote {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1.4rem, 2vw, 1.85rem);
+      line-height: 1.25;
+      color: var(--offwhite);
+      text-shadow: 0 2px 18px rgba(0,0,0,0.6);
+      margin: 0;
+    }
+    .hero-header__quote-line {
+      display: inline-block;
+      width: 2.4rem;
+      height: 2px;
+      background: var(--gold);
+      margin-top: .8rem;
+    }
+
+    /* ---------- Container for Main Sections ---------- */
+    .page-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 var(--pad);
+    }
+
+    /* ---------- Workspace Layout (3 Panels) ---------- */
+    .workspace {
+      display: grid;
+      grid-template-columns: 290px 1.25fr 320px;
+      gap: 1.4rem;
+      align-items: start;
+      margin-bottom: 3.5rem;
+    }
+
+    .panel-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.4rem 1.4rem 1.6rem;
+      box-shadow: var(--card-shadow);
+      position: relative;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: .75rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: .85rem;
+      border-bottom: 1px solid rgba(180, 146, 92, 0.25);
+    }
+
+    .panel-header__left {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+    }
+
+    .panel-header__icon {
+      width: 22px;
+      height: 22px;
+      color: var(--brown);
+      flex-shrink: 0;
+    }
+
+    .panel-title {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .panel-subtitle {
+      font-size: .8rem;
+      color: rgba(74, 58, 34, 0.82);
+      margin: .25rem 0 0;
+      line-height: 1.4;
+    }
+
+    .badge-total {
+      background: #EADECA;
+      color: #4A3A22;
+      border: 1px solid rgba(180, 146, 92, 0.35);
+      border-radius: 999px;
+      padding: .25rem .75rem;
+      font-size: .78rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* Form Controls in Left Panel */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      font-size: .88rem;
+      color: var(--ink);
+      margin-bottom: .45rem;
+    }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.45);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .stepper__btn {
+      width: 44px;
+      height: 42px;
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--brown);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color .15s;
+    }
+    .stepper__btn:hover {
+      background: rgba(180, 146, 92, 0.18);
+    }
+    .stepper__btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    .stepper__input {
+      flex: 1;
+      width: 100%;
+      height: 42px;
+      background: transparent;
+      border: none;
+      border-left: 1px solid rgba(180, 146, 92, 0.25);
+      border-right: 1px solid rgba(180, 146, 92, 0.25);
+      text-align: center;
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--ink);
+    }
+    .stepper__input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .form-help {
+      font-size: .76rem;
+      color: rgba(74, 58, 34, 0.75);
+      margin-top: .4rem;
+    }
+
+    .form-select {
+      width: 100%;
+      height: 44px;
+      padding: 0 1rem;
+      background: #F1E6D4 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234a3a22' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 1rem center;
+      border: 1px solid rgba(180, 146, 92, 0.45);
+      border-radius: 10px;
+      font-family: var(--sans);
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--ink);
+      appearance: none;
+      cursor: pointer;
+    }
+    .form-select:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .panel-actions {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+      margin-top: 1.6rem;
+    }
+
+    .btn--forest {
+      background: #071D18;
+      color: #F7F3E8;
+      border-radius: 999px;
+      padding: .85rem 1.4rem;
+      font-weight: 600;
+      font-size: .88rem;
+      border: 1px solid transparent;
+      cursor: pointer;
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      transition: background-color .2s, transform .15s;
+    }
+    .btn--forest:hover {
+      background: #0E332B;
+      transform: translateY(-1px);
+    }
+
+    .btn--outline {
+      background: #F1E6D4;
+      color: var(--ink);
+      border: 1px solid rgba(180, 146, 92, 0.5);
+      border-radius: 999px;
+      padding: .75rem 1.2rem;
+      font-weight: 600;
+      font-size: .85rem;
+      cursor: pointer;
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      transition: background-color .2s;
+    }
+    .btn--outline:hover {
+      background: #E8DAC2;
+    }
+
+    /* Center Panel: Patterns Table */
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid rgba(180, 146, 92, 0.3);
+      border-radius: 10px;
+      background: #FAF5EB;
+    }
+
+    .patterns-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: .85rem;
+    }
+
+    .patterns-table th {
+      background: #EBE0CE;
+      color: #4A3A22;
+      font-weight: 600;
+      padding: .7rem .9rem;
+      border-bottom: 1px solid rgba(180, 146, 92, 0.3);
+      font-size: .8rem;
+    }
+
+    .patterns-table td {
+      padding: .65rem .9rem;
+      border-bottom: 1px solid rgba(180, 146, 92, 0.18);
+      color: var(--ink);
+      transition: background-color .15s;
+    }
+
+    .patterns-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .patterns-table tbody tr {
+      cursor: pointer;
+    }
+
+    .patterns-table tbody tr:hover {
+      background-color: #EFE2CD;
+    }
+
+    .patterns-table tbody tr.is-selected {
+      background-color: #E5D3B3;
+      font-weight: 600;
+    }
+
+    .col-num { width: 42px; text-align: center; color: rgba(74, 58, 34, 0.7); }
+    .col-pattern { font-family: monospace; font-size: .95rem; letter-spacing: .15em; font-weight: 600; color: #071D18; }
+    .col-binary { font-family: monospace; font-size: .9rem; color: #4A3A22; }
+    .col-decimal { font-family: var(--sans); font-weight: 600; text-align: center; color: var(--ink); }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      margin-top: 1.1rem;
+    }
+
+    .page-btn {
+      min-width: 34px;
+      height: 34px;
+      padding: 0 .6rem;
+      border-radius: 6px;
+      border: 1px solid rgba(180, 146, 92, 0.4);
+      background: #EBE0CE;
+      color: #4A3A22;
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color .15s, color .15s;
+    }
+
+    .page-btn:hover:not(:disabled) {
+      background: #DECEB4;
+    }
+
+    .page-btn.is-active {
+      background: #071D18;
+      color: #F7F3E8;
+      border-color: #071D18;
+    }
+
+    .page-btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    /* Right Panel: Pattern Details */
+    .empty-details {
+      background: #F4E8D5;
+      border: 1px dashed rgba(180, 146, 92, 0.5);
+      border-radius: 12px;
+      padding: 2.5rem 1.2rem;
+      text-align: center;
+      margin-top: .2rem;
+    }
+
+    .empty-details__icon-wrapper {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(213, 164, 65, 0.15) 0%, transparent 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .empty-details__mandala {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: .35;
+    }
+
+    .empty-details__icon {
+      width: 32px;
+      height: 32px;
+      color: var(--brown);
+      position: relative;
+      z-index: 2;
+    }
+
+    .empty-details__title {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0 0 .4rem;
+    }
+
+    .empty-details__sub {
+      font-size: .8rem;
+      line-height: 1.45;
+      color: rgba(74, 58, 34, 0.82);
+      margin: 0;
+    }
+
+    /* Selected State in Pattern Details */
+    .details-view {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .details-badge-card {
+      background: #EAE0CD;
+      border: 1px solid rgba(180, 146, 92, 0.35);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .details-pattern-lg {
+      font-family: monospace;
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: .25em;
+      color: #071D18;
+      margin: 0 0 .25rem;
+    }
+
+    .details-pattern-sub {
+      font-size: .78rem;
+      color: rgba(74, 58, 34, 0.85);
+      margin: 0;
+    }
+
+    .details-grid {
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+
+    .details-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .5rem .75rem;
+      background: #FAF5EB;
+      border: 1px solid rgba(180, 146, 92, 0.22);
+      border-radius: 8px;
+      font-size: .83rem;
+    }
+
+    .details-row__label {
+      color: rgba(74, 58, 34, 0.85);
+      font-weight: 500;
+    }
+
+    .details-row__val {
+      font-weight: 700;
+      color: var(--ink);
+      font-family: var(--sans);
+    }
+    .details-row__val.mono {
+      font-family: monospace;
+      letter-spacing: .08em;
+    }
+
+    /* ---------- Section: What You Get ---------- */
+    .section-block {
+      margin-bottom: 3.5rem;
+    }
+
+    .section-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-header__title-row {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      margin-bottom: .25rem;
+    }
+
+    .section-header__icon {
+      width: 24px;
+      height: 24px;
+      color: var(--brown);
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: 1.85rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0;
+    }
+
+    .section-sub {
+      font-size: .88rem;
+      color: rgba(74, 58, 34, 0.85);
+      margin: 0;
+    }
+
+    .what-you-get-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.3rem 1.2rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(40, 28, 12, 0.12);
+    }
+
+    .feature-card__icon-box {
+      width: 44px;
+      height: 44px;
+      background: #EAD5B3;
+      border: 1px solid rgba(180, 146, 92, 0.4);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #4A3A22;
+      font-weight: 700;
+      font-size: .92rem;
+    }
+
+    .feature-card__icon-box svg {
+      width: 22px;
+      height: 22px;
+      stroke: #4A3A22;
+      fill: none;
+    }
+
+    .feature-card__body h4 {
+      font-family: var(--serif);
+      font-size: 1.12rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0 0 .3rem;
+      line-height: 1.25;
+    }
+
+    .feature-card__body p {
+      font-size: .8rem;
+      line-height: 1.45;
+      color: rgba(74, 58, 34, 0.85);
+      margin: 0;
+    }
+
+    /* ---------- Section: Quick Examples ---------- */
+    .quick-examples-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .quick-examples-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.1rem;
+    }
+
+    .example-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.28rem 1rem;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+      cursor: pointer;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .example-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--gold);
+      box-shadow: 0 10px 26px rgba(40, 28, 12, 0.12);
+    }
+
+    .example-card__pattern {
+      font-family: monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      color: #071D18;
+      margin: 0 0 .35rem;
+    }
+
+    .example-card__code {
+      font-size: .84rem;
+      font-weight: 600;
+      color: #4A3A22;
+      margin: 0 0 .25rem;
+    }
+
+    .example-card__desc {
+      font-size: .76rem;
+      color: rgba(74, 58, 34, 0.78);
+      margin: 0;
+    }
+
+    /* ---------- Footer ---------- */
+    .footer {
+      background: var(--offwhite);
+      color: var(--ink);
+      padding: 2.2rem var(--pad) 1.4rem;
+      margin-top: 4rem;
+      border-top: 1px solid rgba(180, 146, 92, 0.3);
+    }
+    .footer__row { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1.5rem; }
+    .footer .brand__name { color: var(--ink); }
+    .footer .brand__name b { color: #b8862a; }
+    .footer .brand img { width: 46px; height: 46px; }
+    .footer__tag { margin: .35rem 0 0 calc(46px + .6rem); font-size: .78rem; color: rgba(23,35,31,.72); }
+    .footer__nav { display: flex; gap: 2rem; list-style: none; margin: 0; padding: 0; }
+    .footer__nav a { font-size: .88rem; font-weight: 500; padding: .4rem 0; border-bottom: 1px solid transparent; transition: color .2s, border-color .2s; }
+    .footer__nav a:hover { color: #9a6c14; border-color: var(--gold); }
+    .footer__social { display: flex; justify-content: flex-end; gap: 1.1rem; list-style: none; margin: 0; padding: 0; }
+    .footer__social a { display: grid; place-items: center; width: 32px; height: 32px; color: var(--ink); transition: color .2s, transform .2s; }
+    .footer__social a:hover { color: #9a6c14; transform: translateY(-2px); }
+    .footer__social svg { width: 26px; height: 26px; }
+    .footer__copy { max-width: 1180px; margin: 1.6rem auto 0; padding-top: 1rem; border-top: 1px solid rgba(23,35,31,.12); text-align: center; font-size: .76rem; color: rgba(23,35,31,.65); }
+
+    /* ---------- Responsive Breakpoints ---------- */
+    @media (max-width: 1120px) {
+      .workspace {
+        grid-template-columns: 260px 1fr 280px;
+        gap: 1rem;
+      }
+      .quick-examples-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .what-you-get-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .nav__toggle { display: block; }
+      .nav__menu {
+        position: absolute; top: 100%; left: 0; right: 0; padding: 0 var(--pad) 1.4rem;
+        background: rgba(7,29,24,.96); border-bottom: 1px solid rgba(213,164,65,.3);
+        display: none; flex-direction: column; align-items: stretch;
+      }
+      .nav__menu.is-open { display: flex; }
+      .nav__links { flex-direction: column; align-items: stretch; gap: 0; margin: 0; }
+      .nav__links a { padding: .95rem 0; border-bottom: 1px solid rgba(247,243,232,.1); font-size: 1rem; }
+      .nav__links a::after { display: none; }
+      .nav__links a[aria-current="page"] { color: var(--gold-soft); box-shadow: inset 3px 0 0 var(--gold); padding-left: .8rem; }
+      .nav .btn { display: inline-flex; margin-top: 1.1rem; }
+
+      .hero-header {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .hero-header__aside {
+        padding-top: 0;
+        text-align: left;
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .footer__row { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+      .footer__tag { margin-left: 0; }
+      .footer__social { justify-content: center; }
+    }
+
+    @media (min-width: 901px) { .nav__menu { display: contents; } }
+
+    @media (max-width: 640px) {
+      .quick-examples-grid {
+        grid-template-columns: 1fr;
+      }
+      .what-you-get-grid {
+        grid-template-columns: 1fr;
+      }
+      .quick-examples-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="sr-only" href="#main-workspace">Skip to content</a>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="index.html" aria-label="ChandaCore home">
+        <img src="assets/logo-mark.png" alt="ChandaCore Logo" width="44" height="44">
+        <span class="brand__text">
+          <span class="brand__name">Chanda<b>Core</b></span>
+          <span class="brand__sub">Rhythm · Reason · Reality</span>
+        </span>
+      </a>
+
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <span></span>
+      </button>
+
+      <div class="nav__menu" id="nav-menu">
+        <ul class="nav__links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="generator.html" aria-current="page">Generator</a></li>
+            <li><a href="analyzer.html">Analyzer</a></li>
+            <li><a href="#">Combinatorics</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Tests</a></li>
+          </ul>
+        <a class="btn btn--gold" href="generator.html">Explore Now <span aria-hidden="true">→</span></a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <!-- GENERATOR HEADER -->
+    <section class="hero-header" aria-labelledby="generator-title">
+      <div class="hero-header__main">
+        <p class="hero-header__eyebrow">CREATE. EXPLORE. DISCOVER.</p>
+        <h1 class="hero-header__title" id="generator-title">Pattern <span>Generator</span></h1>
+        <p class="hero-header__sub">Generate Laghu–Guru patterns and explore their binary, decimal and combinatorial representations.</p>
+      </div>
+      <div class="hero-header__aside">
+        <p class="hero-header__quote">“From Syllables to Systems.”</p>
+        <span class="hero-header__quote-line" aria-hidden="true"></span>
+      </div>
+    </section>
+
+    <div class="page-container">
+      <!-- MAIN THREE-PANEL GENERATOR WORKSPACE -->
+      <section class="workspace" id="main-workspace" aria-label="Generator Workspace">
+        
+        <!-- PANEL 1: SETTINGS -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-header__left">
+              <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <div>
+                <h2 class="panel-title">Generator Settings</h2>
+                <p class="panel-subtitle">Choose the pattern length and generation type.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="pattern-n">Pattern Length (n)</label>
+            <div class="stepper">
+              <button class="stepper__btn" id="btn-minus" type="button" aria-label="Decrease pattern length">−</button>
+              <input class="stepper__input" id="pattern-n" type="number" value="4" min="1" max="10">
+              <button class="stepper__btn" id="btn-plus" type="button" aria-label="Increase pattern length">+</button>
+            </div>
+            <p class="form-help">Number of syllables in the pattern</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="gen-type">Generation Type</label>
+            <select class="form-select" id="gen-type">
+              <option value="all">All Patterns</option>
+              <option value="binary">Binary Order</option>
+              <option value="recursive">Recursive Order</option>
+            </select>
+            <p class="form-help">Choose what patterns to generate</p>
+          </div>
+
+          <div class="panel-actions">
+            <button class="btn--forest" id="btn-generate" type="button">
+              Generate Patterns <span aria-hidden="true">→</span>
+            </button>
+            <button class="btn--outline" id="btn-reset" type="button">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- PANEL 2: GENERATED PATTERNS TABLE -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-header__left">
+              <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="8" y1="6" x2="21" y2="6"/>
+                <line x1="8" y1="12" x2="21" y2="12"/>
+                <line x1="8" y1="18" x2="21" y2="18"/>
+                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                <line x1="3" y1="18" x2="3.01" y2="18"/>
+              </svg>
+              <div>
+                <h2 class="panel-title">Generated Patterns</h2>
+                <p class="panel-subtitle">Laghu (L) = 0 &nbsp;|&nbsp; Guru (G) = 1</p>
+              </div>
+            </div>
+            <span class="badge-total" id="badge-total">Total: 16</span>
+          </div>
+
+          <div class="table-container">
+            <table class="patterns-table" id="table-patterns">
+              <thead>
+                <tr>
+                  <th class="col-num">#</th>
+                  <th>Laghu–Guru Pattern</th>
+                  <th>Binary</th>
+                  <th style="text-align:center">Decimal</th>
+                </tr>
+              </thead>
+              <tbody id="patterns-tbody">
+                <!-- Dynamically rendered -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination" id="pagination-controls">
+            <!-- Dynamically rendered -->
+          </div>
+        </div>
+
+        <!-- PANEL 3: PATTERN DETAILS -->
+        <div class="panel-card" id="details-panel">
+          <div class="panel-header">
+            <div class="panel-header__left">
+              <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <div>
+                <h2 class="panel-title">Pattern Details</h2>
+                <p class="panel-subtitle">Select a pattern to view detailed information.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- DEFAULT EMPTY STATE -->
+          <div class="empty-details" id="empty-details-state">
+            <div class="empty-details__icon-wrapper">
+              <svg class="empty-details__mandala" viewBox="0 0 100 100" fill="none" stroke="#D5A441" stroke-width="1">
+                <circle cx="50" cy="50" r="45" stroke-dasharray="3 3"/>
+                <circle cx="50" cy="50" r="32"/>
+                <path d="M50 5 L50 95 M5 50 L95 50 M18 18 L82 82 M18 82 L82 18"/>
+              </svg>
+              <svg class="empty-details__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+              </svg>
+            </div>
+            <h3 class="empty-details__title">No pattern selected</h3>
+            <p class="empty-details__sub">Click on any pattern from the list to see its detailed analysis, properties and representations.</p>
+          </div>
+
+          <!-- SELECTED STATE -->
+          <div class="details-view" id="active-details-state" style="display: none;">
+            <div class="details-badge-card">
+              <div class="details-pattern-lg" id="det-pattern-lg">L G G L</div>
+              <p class="details-pattern-sub" id="det-pattern-sub">Decimal 6 &nbsp;|&nbsp; Binary 0110</p>
+            </div>
+
+            <div class="details-grid">
+              <div class="details-row">
+                <span class="details-row__label">Pattern</span>
+                <span class="details-row__val mono" id="det-val-pattern">L G G L</span>
+              </div>
+              <div class="details-row">
+                <span class="details-row__label">Binary</span>
+                <span class="details-row__val mono" id="det-val-binary">0110</span>
+              </div>
+              <div class="details-row">
+                <span class="details-row__label">Decimal</span>
+                <span class="details-row__val" id="det-val-decimal">6</span>
+              </div>
+              <div class="details-row">
+                <span class="details-row__label">Length</span>
+                <span class="details-row__val" id="det-val-length">4</span>
+              </div>
+              <div class="details-row">
+                <span class="details-row__label">Laghu Count</span>
+                <span class="details-row__val" id="det-val-laghu">2</span>
+              </div>
+              <div class="details-row">
+                <span class="details-row__label">Guru Count</span>
+                <span class="details-row__val" id="det-val-guru">2</span>
+              </div>
+              <div class="details-row">
+                <span class="details-row__label">Laghu Ratio</span>
+                <span class="details-row__val" id="det-val-lratio">50%</span>
+              </div>
+              <div class="details-row">
+                <span class="details-row__label">Guru Ratio</span>
+                <span class="details-row__val" id="det-val-gratio">50%</span>
+              </div>
+              <div class="details-row">
+                <span class="details-row__label">Complement</span>
+                <span class="details-row__val mono" id="det-val-complement">G L L G</span>
+              </div>
+              <div class="details-row">
+                <span class="details-row__label">Reverse</span>
+                <span class="details-row__val mono" id="det-val-reverse">L G G L</span>
+              </div>
+              <div class="details-row">
+                <span class="details-row__label">Weight</span>
+                <span class="details-row__val" id="det-val-weight">2</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SECTION: WHAT YOU GET -->
+      <section class="section-block" aria-labelledby="what-you-get-title">
+        <div class="section-header">
+          <div class="section-header__title-row">
+            <svg class="section-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.7 1.3 1.5 1.5 2.5"/>
+              <path d="M9 18h6"/>
+              <path d="M10 22h4"/>
+            </svg>
+            <h2 class="section-title" id="what-you-get-title">What You Get</h2>
+          </div>
+          <p class="section-sub">Each generated pattern comes with multiple representations and insights.</p>
+        </div>
+
+        <div class="what-you-get-grid">
+          <div class="feature-card">
+            <div class="feature-card__icon-box">0101</div>
+            <div class="feature-card__body">
+              <h4>Binary Representation</h4>
+              <p>Convert Laghu–Guru patterns to binary form (L = 0, G = 1).</p>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card__icon-box">Σ</div>
+            <div class="feature-card__body">
+              <h4>Decimal Equivalent</h4>
+              <p>View the decimal value of each pattern.</p>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card__icon-box">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="18" cy="5" r="3"/>
+                <circle cx="6" cy="12" r="3"/>
+                <circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+            </div>
+            <div class="feature-card__body">
+              <h4>Pattern Properties</h4>
+              <p>Analyze weight (number of Gurus), complements and symmetry.</p>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card__icon-box">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
+            </div>
+            <div class="feature-card__body">
+              <h4>Chandas Connection</h4>
+              <p>Understand how patterns relate to Pingala's Chandaśāstra.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: QUICK EXAMPLES -->
+      <section class="section-block" aria-labelledby="quick-examples-title">
+        <div class="quick-examples-header">
+          <div>
+            <div class="section-header__title-row">
+              <svg class="section-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+              <h2 class="section-title" id="quick-examples-title">Quick Examples</h2>
+            </div>
+            <p class="section-sub">Some common patterns and their representations.</p>
+          </div>
+          <button class="btn btn--gold" id="btn-try-different-length" type="button">
+            Try Different Length <span aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <div class="quick-examples-grid">
+          <div class="example-card" data-pattern="LLL" data-n="3">
+            <div class="example-card__pattern">L L L</div>
+            <div class="example-card__code">000 (0)</div>
+            <div class="example-card__desc">All Laghu</div>
+          </div>
+
+          <div class="example-card" data-pattern="LLG" data-n="3">
+            <div class="example-card__pattern">L L G</div>
+            <div class="example-card__code">001 (1)</div>
+            <div class="example-card__desc">Guru at end</div>
+          </div>
+
+          <div class="example-card" data-pattern="LGL" data-n="3">
+            <div class="example-card__pattern">L G L</div>
+            <div class="example-card__code">010 (2)</div>
+            <div class="example-card__desc">Alternating</div>
+          </div>
+
+          <div class="example-card" data-pattern="GLG" data-n="3">
+            <div class="example-card__pattern">G L G</div>
+            <div class="example-card__code">101 (5)</div>
+            <div class="example-card__desc">Alternating</div>
+          </div>
+
+          <div class="example-card" data-pattern="GGG" data-n="3">
+            <div class="example-card__pattern">G G G</div>
+            <div class="example-card__code">111 (7)</div>
+            <div class="example-card__desc">All Guru</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__row">
+      <div>
+        <a class="brand" href="index.html" aria-label="ChandaCore home">
+          <img src="assets/logo-mark.png" alt="ChandaCore Logo" width="46" height="46">
+          <span class="brand__text"><span class="brand__name">Chanda<b>Core</b></span></span>
+        </a>
+        <p class="footer__tag">Ancient Patterns. Modern Possibilities.</p>
+      </div>
+
+      <ul class="footer__nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+
+      <ul class="footer__social">
+        <li><a href="https://github.com/" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg></a></li>
+        <li><a href="https://www.linkedin.com/" aria-label="LinkedIn" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1.500" y="1.500" width="21" height="21" rx="4" fill="currentColor"/><g fill="#F7F3E8"><circle cx="7.300" cy="7.600" r="1.600"/><rect x="5.800" y="10" width="3" height="8.500"/><path d="M10.800 10h2.900v1.200c.5-.9 1.600-1.400 2.800-1.400 2.400 0 3.200 1.500 3.200 3.800v4.900h-3v-4.300c0-1.100-.3-1.800-1.300-1.800-1 0-1.600.7-1.600 1.800v4.300h-3z"/></g></svg></a></li>
+        <li><a href="https://www.youtube.com/" aria-label="YouTube" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="4.500" width="22" height="15" rx="4.500" fill="currentColor"/><path d="M10 9v6l5.200-3z" fill="#F7F3E8"/></svg></a></li>
+      </ul>
+    </div>
+    <p class="footer__copy">© 2026 ChandaCore. All rights reserved.</p>
+  </footer>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    (function () {
+      // Mobile Navigation
+      var toggle = document.querySelector('.nav__toggle');
+      var menu = document.getElementById('nav-menu');
+      function setOpen(open) {
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        menu.classList.toggle('is-open', open);
+      }
+      if (toggle && menu) {
+        toggle.addEventListener('click', function () { setOpen(toggle.getAttribute('aria-expanded') !== 'true'); });
+        menu.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+      }
+
+      // Generator State
+      var currentN = 4;
+      var currentGenType = 'all';
+      var currentPage = 1;
+      var pageSize = 8;
+      var generatedList = [];
+      var selectedIndex = null; // index in generatedList
+
+      // DOM Elements
+      var inputN = document.getElementById('pattern-n');
+      var btnMinus = document.getElementById('btn-minus');
+      var btnPlus = document.getElementById('btn-plus');
+      var selectGenType = document.getElementById('gen-type');
+      var btnGenerate = document.getElementById('btn-generate');
+      var btnReset = document.getElementById('btn-reset');
+      var badgeTotal = document.getElementById('badge-total');
+      var tbody = document.getElementById('patterns-tbody');
+      var pagination = document.getElementById('pagination-controls');
+
+      // Details DOM Elements
+      var emptyDetails = document.getElementById('empty-details-state');
+      var activeDetails = document.getElementById('active-details-state');
+      var detPatternLg = document.getElementById('det-pattern-lg');
+      var detPatternSub = document.getElementById('det-pattern-sub');
+      var detValPattern = document.getElementById('det-val-pattern');
+      var detValBinary = document.getElementById('det-val-binary');
+      var detValDecimal = document.getElementById('det-val-decimal');
+      var detValLength = document.getElementById('det-val-length');
+      var detValLaghu = document.getElementById('det-val-laghu');
+      var detValGuru = document.getElementById('det-val-guru');
+      var detValLratio = document.getElementById('det-val-lratio');
+      var detValGratio = document.getElementById('det-val-gratio');
+      var detValComplement = document.getElementById('det-val-complement');
+      var detValReverse = document.getElementById('det-val-reverse');
+      var detValWeight = document.getElementById('det-val-weight');
+
+      var btnTryDiffLength = document.getElementById('btn-try-different-length');
+
+      // Helper functions
+      function numToBinaryStr(num, len) {
+        var str = num.toString(2);
+        while (str.length < len) {
+          str = '0' + str;
+        }
+        return str;
+      }
+
+      function binaryToPattern(binaryStr) {
+        var res = [];
+        for (var i = 0; i < binaryStr.length; i++) {
+          res.push(binaryStr[i] === '0' ? 'L' : 'G');
+        }
+        return res.join(' ');
+      }
+
+      function generatePatterns(n, type) {
+        var total = Math.pow(2, n);
+        var list = [];
+
+        if (type === 'recursive') {
+          // Gray code or recursive order
+          for (var i = 0; i < total; i++) {
+            var g = i ^ (i >> 1);
+            var bStr = numToBinaryStr(g, n);
+            list.push({
+              index: i + 1,
+              decimal: g,
+              binary: bStr,
+              pattern: binaryToPattern(bStr)
+            });
+          }
+        } else {
+          // Standard / Binary Order
+          for (var i = 0; i < total; i++) {
+            var bStr = numToBinaryStr(i, n);
+            list.push({
+              index: i + 1,
+              decimal: i,
+              binary: bStr,
+              pattern: binaryToPattern(bStr)
+            });
+          }
+        }
+        return list;
+      }
+
+      function renderTable() {
+        badgeTotal.textContent = 'Total: ' + generatedList.length;
+        tbody.innerHTML = '';
+
+        var totalPages = Math.ceil(generatedList.length / pageSize) || 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        var startIdx = (currentPage - 1) * pageSize;
+        var endIdx = Math.min(startIdx + pageSize, generatedList.length);
+
+        for (var i = startIdx; i < endIdx; i++) {
+          var item = generatedList[i];
+          var tr = document.createElement('tr');
+          if (selectedIndex === i) {
+            tr.classList.add('is-selected');
+          }
+          tr.setAttribute('data-idx', i);
+          tr.innerHTML = 
+            '<td class="col-num">' + item.index + '</td>' +
+            '<td class="col-pattern">' + item.pattern + '</td>' +
+            '<td class="col-binary">' + item.binary + '</td>' +
+            '<td class="col-decimal">' + item.decimal + '</td>';
+          
+          tr.addEventListener('click', (function(idx) {
+            return function() {
+              selectPattern(idx);
+            };
+          })(i));
+
+          tbody.appendChild(tr);
+        }
+
+        renderPagination(totalPages);
+      }
+
+      function renderPagination(totalPages) {
+        pagination.innerHTML = '';
+        if (totalPages <= 1) return;
+
+        // Prev
+        var btnPrev = document.createElement('button');
+        btnPrev.className = 'page-btn';
+        btnPrev.innerHTML = '&lt;';
+        btnPrev.disabled = currentPage === 1;
+        btnPrev.addEventListener('click', function () {
+          if (currentPage > 1) {
+            currentPage--;
+            renderTable();
+          }
+        });
+        pagination.appendChild(btnPrev);
+
+        // Pages
+        for (var p = 1; p <= totalPages; p++) {
+          var pBtn = document.createElement('button');
+          pBtn.className = 'page-btn' + (p === currentPage ? ' is-active' : '');
+          pBtn.textContent = p;
+          pBtn.addEventListener('click', (function(pageNum) {
+            return function() {
+              currentPage = pageNum;
+              renderTable();
+            };
+          })(p));
+          pagination.appendChild(pBtn);
+        }
+
+        // Next
+        var btnNext = document.createElement('button');
+        btnNext.className = 'page-btn';
+        btnNext.innerHTML = '&gt;';
+        btnNext.disabled = currentPage === totalPages;
+        btnNext.addEventListener('click', function () {
+          if (currentPage < totalPages) {
+            currentPage++;
+            renderTable();
+          }
+        });
+        pagination.appendChild(btnNext);
+      }
+
+      function selectPattern(idx) {
+        selectedIndex = idx;
+        renderTable();
+
+        if (idx === null || !generatedList[idx]) {
+          emptyDetails.style.display = 'block';
+          activeDetails.style.display = 'none';
+          return;
+        }
+
+        var item = generatedList[idx];
+        var bStr = item.binary;
+        var len = bStr.length;
+
+        var laghuCount = 0;
+        var guruCount = 0;
+        var compBinary = [];
+        var revBinary = [];
+
+        for (var i = 0; i < len; i++) {
+          if (bStr[i] === '0') {
+            laghuCount++;
+            compBinary.push('1');
+          } else {
+            guruCount++;
+            compBinary.push('0');
+          }
+        }
+
+        for (var i = len - 1; i >= 0; i--) {
+          revBinary.push(bStr[i]);
+        }
+
+        var compPattern = binaryToPattern(compBinary.join(''));
+        var revPattern = binaryToPattern(revBinary.join(''));
+        var laghuRatio = Math.round((laghuCount / len) * 100) + '%';
+        var guruRatio = Math.round((guruCount / len) * 100) + '%';
+
+        emptyDetails.style.display = 'none';
+        activeDetails.style.display = 'flex';
+
+        detPatternLg.textContent = item.pattern;
+        detPatternSub.textContent = 'Decimal ' + item.decimal + '  |  Binary ' + item.binary;
+
+        detValPattern.textContent = item.pattern;
+        detValBinary.textContent = item.binary;
+        detValDecimal.textContent = item.decimal;
+        detValLength.textContent = len;
+        detValLaghu.textContent = laghuCount;
+        detValGuru.textContent = guruCount;
+        detValLratio.textContent = laghuRatio;
+        detValGratio.textContent = guruRatio;
+        detValComplement.textContent = compPattern;
+        detValReverse.textContent = revPattern;
+        detValWeight.textContent = guruCount; // weight = number of Gurus
+      }
+
+      function updateGenerator(forceN, forceType) {
+        if (typeof forceN === 'number') currentN = forceN;
+        if (forceType) currentGenType = forceType;
+
+        inputN.value = currentN;
+        selectGenType.value = currentGenType;
+
+        generatedList = generatePatterns(currentN, currentGenType);
+        currentPage = 1;
+        selectedIndex = null;
+
+        renderTable();
+        selectPattern(null);
+      }
+
+      // Event Listeners for Controls
+      btnMinus.addEventListener('click', function () {
+        if (currentN > 1) {
+          currentN--;
+          updateGenerator(currentN, currentGenType);
+        }
+      });
+
+      btnPlus.addEventListener('click', function () {
+        if (currentN < 10) {
+          currentN++;
+          updateGenerator(currentN, currentGenType);
+        }
+      });
+
+      inputN.addEventListener('change', function () {
+        var val = parseInt(inputN.value, 10);
+        if (isNaN(val) || val < 1) val = 1;
+        if (val > 10) val = 10;
+        currentN = val;
+        updateGenerator(currentN, currentGenType);
+      });
+
+      selectGenType.addEventListener('change', function () {
+        currentGenType = selectGenType.value;
+        updateGenerator(currentN, currentGenType);
+      });
+
+      btnGenerate.addEventListener('click', function () {
+        updateGenerator(currentN, currentGenType);
+      });
+
+      btnReset.addEventListener('click', function () {
+        currentN = 4;
+        currentGenType = 'all';
+        updateGenerator(4, 'all');
+      });
+
+      if (btnTryDiffLength) {
+        btnTryDiffLength.addEventListener('click', function () {
+          var targetN = currentN === 3 ? 4 : 3;
+          updateGenerator(targetN, currentGenType);
+          var workspaceEl = document.getElementById('main-workspace');
+          if (workspaceEl) workspaceEl.scrollIntoView({ behavior: 'smooth' });
+        });
+      }
+
+      // Quick Examples Interactivity
+      var exampleCards = document.querySelectorAll('.example-card');
+      exampleCards.forEach(function (card) {
+        card.addEventListener('click', function () {
+          var rawPattern = card.getAttribute('data-pattern'); // e.g. "LLL"
+          var exampleN = parseInt(card.getAttribute('data-n'), 10) || 3;
+
+          // If N differs, regenerate for that N
+          if (currentN !== exampleN) {
+            currentN = exampleN;
+            inputN.value = currentN;
+            generatedList = generatePatterns(currentN, currentGenType);
+            currentPage = 1;
+          }
+
+          // Convert raw pattern string (e.g. "LGL") to formatted pattern "L G L"
+          var targetPattern = rawPattern.split('').join(' ');
+
+          // Find in generatedList
+          var foundIdx = -1;
+          for (var i = 0; i < generatedList.length; i++) {
+            if (generatedList[i].pattern === targetPattern) {
+              foundIdx = i;
+              break;
+            }
+          }
+
+          if (foundIdx !== -1) {
+            currentPage = Math.floor(foundIdx / pageSize) + 1;
+            selectPattern(foundIdx);
+          }
+
+          var detailsPanel = document.getElementById('details-panel');
+          if (detailsPanel && window.innerWidth < 900) {
+            detailsPanel.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+
+      // Initialize default
+      updateGenerator(4, 'all');
+    })();
+  </script>
+</body>
+</html>

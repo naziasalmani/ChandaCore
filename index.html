@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChandaCore — Ancient Patterns. Modern Possibilities.</title>
+  <meta name="description" content="ChandaCore explores the link between Pingala's Chandaśāstra, Laghu–Guru patterns, binary representation, combinatorics and modern computer science.">
+  <meta name="theme-color" content="#071D18">
+  <link rel="icon" href="assets/logo-mark.png" type="image/png">
+  <link rel="preload" as="image" href="assets/hero.webp" type="image/webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600&family=Noto+Serif+Devanagari:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --forest: #071D18;
+      --green: #0D2A23;
+      --gold: #D5A441;
+      --gold-soft: #E4BD67;
+      --parchment: #E8D5AF;
+      --cream: #F4EBDD;
+      --ink: #17231F;
+      --offwhite: #F7F3E8;
+      --brown: #4a3a22;
+
+      --serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+      --sans: "Inter", "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --deva: "Noto Serif Devanagari", "Kohinoor Devanagari", serif;
+
+      --pad: clamp(1.25rem, 4vw, 3.5rem);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background: var(--forest);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    :focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 3px; border-radius: 4px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* ---------- Brand wordmark (lotus image + live text) ---------- */
+    .brand { display: inline-flex; align-items: center; gap: .6rem; }
+    .brand img { width: 44px; height: 44px; object-fit: contain; }
+    .brand__text { display: flex; flex-direction: column; line-height: 1; }
+    .brand__name { font-family: var(--serif); font-weight: 600; font-size: 1.7rem; letter-spacing: .005em; color: var(--offwhite); }
+    .brand__name b { font-weight: 600; color: var(--gold); }
+    .brand__sub { font-size: .56rem; letter-spacing: .2em; margin-top: .3rem; color: rgba(247,243,232,.68); text-transform: uppercase; }
+
+    /* ---------- Navbar ---------- */
+    .nav {
+      position: absolute; inset: 0 0 auto 0; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+      padding: 1.1rem var(--pad);
+      background: linear-gradient(to bottom, rgba(7,29,24,.82), rgba(7,29,24,0));
+    }
+    .nav__links { display: flex; align-items: center; gap: clamp(1.1rem, 2.4vw, 2.3rem); list-style: none; margin: 0 0 0 auto; padding: 0; }
+    .nav__links a {
+      position: relative; display: block; padding: .5rem 0;
+      font-size: .82rem; font-weight: 500; color: rgba(247,243,232,.86);
+      transition: color .2s;
+    }
+    .nav__links a::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: .1rem; height: 1.5px;
+      background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform .25s ease;
+    }
+    .nav__links a:hover, .nav__links a[aria-current="page"] { color: var(--gold-soft); }
+    .nav__links a:hover::after, .nav__links a[aria-current="page"]::after { transform: scaleX(1); }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+      font: 600 .9rem/1 var(--sans); border-radius: 999px; cursor: pointer;
+      padding: .95rem 1.6rem; border: 1px solid transparent;
+      transition: transform .2s ease, background-color .2s, border-color .2s, box-shadow .2s, color .2s;
+    }
+    .btn--gold { background: linear-gradient(180deg, var(--gold-soft), var(--gold)); color: #241a08; box-shadow: 0 6px 20px -8px rgba(213,164,65,.7); }
+    .btn--gold:hover { transform: translateY(-2px); box-shadow: 0 10px 26px -8px rgba(228,189,103,.85); }
+    .btn--ghost { background: rgba(7,29,24,.28); color: var(--offwhite); border-color: rgba(247,243,232,.5); backdrop-filter: blur(2px); }
+    .btn--ghost:hover { border-color: var(--gold-soft); color: var(--gold-soft); transform: translateY(-2px); }
+    .btn svg { width: 1em; height: 1em; }
+    .nav .btn { padding: .7rem 1.25rem; font-size: .82rem; }
+
+    .nav__toggle {
+      display: none; width: 44px; height: 44px; margin-left: auto; padding: 0;
+      background: transparent; border: 1px solid rgba(247,243,232,.35); border-radius: 12px; color: var(--offwhite); cursor: pointer;
+    }
+    .nav__toggle span, .nav__toggle span::before, .nav__toggle span::after {
+      display: block; width: 20px; height: 1.5px; background: currentColor; position: relative; margin: 0 auto; transition: transform .25s, background .25s;
+    }
+    .nav__toggle span::before, .nav__toggle span::after { content: ""; position: absolute; left: 0; }
+    .nav__toggle span::before { top: -6px; }
+    .nav__toggle span::after { top: 6px; }
+    .nav__toggle[aria-expanded="true"] span { background: transparent; }
+    .nav__toggle[aria-expanded="true"] span::before { top: 0; transform: rotate(45deg); }
+    .nav__toggle[aria-expanded="true"] span::after { top: 0; transform: rotate(-45deg); }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      position: relative; isolation: isolate; overflow: hidden;
+      min-height: clamp(640px, 100svh, 900px);
+      display: flex; align-items: center;
+      padding: 7rem var(--pad) 8.5rem;
+      background: var(--forest);
+    }
+    .hero__bg {
+      position: absolute; inset: -5% 0; z-index: -2;
+      background: url("assets/hero.webp") 62% 78% / cover no-repeat;
+      will-change: transform;
+    }
+    .hero::before { /* readability overlay: left for text, top for nav */
+      content: ""; position: absolute; inset: 0; z-index: -1;
+      background:
+        linear-gradient(90deg, rgba(7,29,24,.82) 0%, rgba(7,29,24,.5) 34%, rgba(7,29,24,0) 60%),
+        linear-gradient(to bottom, rgba(7,29,24,.55) 0%, rgba(7,29,24,0) 22%);
+    }
+    .hero__inner { width: 100%; max-width: 1280px; margin: 0 auto; }
+    .hero__content { max-width: 34rem; }
+
+    .hero__eyebrow {
+      margin: 0 0 1.4rem; font-size: .74rem; font-weight: 500; letter-spacing: .2em; line-height: 1.7;
+      color: var(--gold-soft); text-transform: uppercase;
+    }
+    .hero__title {
+      margin: 0; font-family: var(--serif); font-weight: 600; line-height: .95; letter-spacing: -.005em;
+      font-size: clamp(3.6rem, 8.2vw, 6.4rem); color: var(--offwhite);
+      text-shadow: 0 2px 30px rgba(0,0,0,.45);
+    }
+    .hero__title span { color: var(--gold); }
+    .hero__sub {
+      margin: 1.1rem 0 0; font-family: var(--serif); font-weight: 500; line-height: 1.15;
+      font-size: clamp(1.55rem, 2.7vw, 2.3rem); color: var(--offwhite);
+      text-shadow: 0 2px 20px rgba(0,0,0,.5);
+    }
+    .hero__lead {
+      margin: 1.3rem 0 0; max-width: 31rem; font-size: clamp(.95rem, 1.15vw, 1.05rem); line-height: 1.7;
+      color: rgba(247,243,232,.88); text-shadow: 0 1px 14px rgba(0,0,0,.6);
+    }
+    .hero__actions { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: 2rem; }
+
+    .hero__aside {
+      position: absolute; right: var(--pad); top: 24%; z-index: 1; text-align: left;
+      font-family: var(--serif); font-style: italic; font-size: clamp(1.5rem, 2.3vw, 2.1rem); line-height: 1.2;
+      color: var(--offwhite); text-shadow: 0 2px 22px rgba(0,0,0,.6); max-width: 9.5em;
+    }
+    .hero__aside::after { content: ""; display: block; width: 2rem; height: 1.5px; background: var(--gold); margin: .9rem 0 0 2.6rem; }
+    .hero__aside p { margin: 0; }
+
+    /* single orchestrated entrance */
+    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    .hero__content > *, .hero__aside { animation: rise .8s cubic-bezier(.2,.7,.2,1) both; }
+    .hero__content > :nth-child(1) { animation-delay: .05s; }
+    .hero__content > :nth-child(2) { animation-delay: .15s; }
+    .hero__content > :nth-child(3) { animation-delay: .27s; }
+    .hero__content > :nth-child(4) { animation-delay: .38s; }
+    .hero__content > :nth-child(5) { animation-delay: .5s; }
+    .hero__aside { animation-delay: .7s; }
+
+    /* ---------- Parchment base ---------- */
+    .parchment {
+      position: relative;
+      background-color: var(--parchment);
+      background-image:
+        radial-gradient(ellipse at 50% 0%, rgba(255,246,222,.75), transparent 65%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45  0 0 0 0 .32  0 0 0 0 .14  0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      box-shadow: inset 0 0 90px rgba(120,84,32,.28);
+    }
+
+    /* ---------- Features ---------- */
+    .features { padding: 3.2rem var(--pad) 2.9rem; z-index: 2; margin-top: -3.8rem; }
+    .features::before { /* worn top edge where stone meets parchment */
+      content: ""; position: absolute; left: 0; right: 0; top: -9px; height: 12px; background: inherit;
+      background-image: linear-gradient(var(--parchment), var(--parchment));
+      clip-path: polygon(0 60%, 4% 30%, 9% 55%, 15% 20%, 22% 50%, 29% 25%, 36% 55%, 44% 22%, 51% 50%, 58% 28%, 66% 55%, 73% 20%, 81% 48%, 88% 26%, 95% 52%, 100% 30%, 100% 100%, 0 100%);
+    }
+    .features__grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); max-width: 1180px; margin: 0 auto; list-style: none; padding: 0;
+    }
+    .feature { text-align: center; padding: .6rem 1.2rem; color: var(--brown); transition: transform .25s ease; }
+    .feature + .feature { border-left: 1px solid rgba(74,58,34,.28); }
+    .feature:hover { transform: translateY(-3px); }
+    .feature svg { width: 40px; height: 40px; margin: 0 auto .9rem; stroke: var(--brown); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transition: stroke .25s; }
+    .feature:hover svg { stroke: #8a5f14; }
+    .feature h3 { margin: 0; font-family: var(--serif); font-weight: 600; font-size: 1.32rem; line-height: 1.2; color: var(--ink); }
+    .feature p { margin: .3rem 0 0; font-size: .82rem; letter-spacing: .02em; color: rgba(74,58,34,.9); }
+
+    /* ---------- Quote / manuscript ---------- */
+    .manuscript { padding: clamp(4.5rem, 9vw, 7.5rem) var(--pad); overflow: hidden; text-align: center; border-top: 1px solid rgba(74,58,34,.18); }
+    .manuscript::before { /* inset decorative frame */
+      content: ""; position: absolute; inset: 1.1rem clamp(.8rem, 3vw, 2.2rem);
+      border: 1px solid rgba(138,95,20,.32); outline: 1px solid rgba(138,95,20,.16); outline-offset: 5px; pointer-events: none;
+    }
+    .script {
+      position: absolute; top: 0; bottom: 0; width: clamp(9rem, 26vw, 24rem);
+      display: flex; flex-direction: column; justify-content: space-around; padding: 2rem 0;
+      font-family: var(--deva); font-size: clamp(1.15rem, 2vw, 1.75rem); line-height: 1.2; color: rgba(74,58,34,.2);
+      user-select: none; pointer-events: none;
+    }
+    .script--l { left: 1.5rem; text-align: left; }
+    .script--r { right: 1.5rem; text-align: right; }
+    .script--l { -webkit-mask-image: linear-gradient(90deg, #000 30%, transparent); mask-image: linear-gradient(90deg, #000 30%, transparent); }
+    .script--r { -webkit-mask-image: linear-gradient(270deg, #000 30%, transparent); mask-image: linear-gradient(270deg, #000 30%, transparent); }
+    .manuscript__quote { position: relative; margin: 0 auto; max-width: 40rem; }
+    .manuscript__quote p {
+      margin: 0; font-family: var(--serif); font-style: italic; font-weight: 500;
+      font-size: clamp(1.6rem, 3.4vw, 2.5rem); line-height: 1.4; color: var(--ink);
+    }
+    .manuscript__quote footer { margin-top: 1.5rem; font-family: var(--serif); font-size: 1.25rem; color: var(--brown); }
+    .manuscript__quote footer::after { content: ""; display: block; width: 2.2rem; height: 2px; background: var(--brown); margin: 1.1rem auto 0; }
+
+    /* ---------- Footer ---------- */
+    .footer { background: var(--offwhite); color: var(--ink); padding: 2.2rem var(--pad) 1.4rem; }
+    .footer__row { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1.5rem; }
+    .footer .brand__name { color: var(--ink); }
+    .footer .brand__name b { color: #b8862a; }
+    .footer .brand img { width: 46px; height: 46px; }
+    .footer__tag { margin: .35rem 0 0 calc(46px + .6rem); font-size: .78rem; color: rgba(23,35,31,.72); }
+    .footer__nav { display: flex; gap: 2rem; list-style: none; margin: 0; padding: 0; }
+    .footer__nav a { font-size: .88rem; font-weight: 500; padding: .4rem 0; border-bottom: 1px solid transparent; transition: color .2s, border-color .2s; }
+    .footer__nav a:hover { color: #9a6c14; border-color: var(--gold); }
+    .footer__social { display: flex; justify-content: flex-end; gap: 1.1rem; list-style: none; margin: 0; padding: 0; }
+    .footer__social a { display: grid; place-items: center; width: 32px; height: 32px; color: var(--ink); transition: color .2s, transform .2s; }
+    .footer__social a:hover { color: #9a6c14; transform: translateY(-2px); }
+    .footer__social svg { width: 26px; height: 26px; }
+    .footer__copy { max-width: 1180px; margin: 1.6rem auto 0; padding-top: 1rem; border-top: 1px solid rgba(23,35,31,.12); text-align: center; font-size: .76rem; color: rgba(23,35,31,.65); }
+
+    /* ---------- Tablet ---------- */
+    @media (max-width: 1080px) {
+      .nav__links { gap: 1.1rem; }
+      .nav .btn { display: none; }
+      .hero__aside { display: none; }
+    }
+    @media (max-width: 900px) {
+      .nav__toggle { display: block; }
+      .nav__menu {
+        position: absolute; top: 100%; left: 0; right: 0; padding: 0 var(--pad) 1.4rem;
+        background: rgba(7,29,24,.96); border-bottom: 1px solid rgba(213,164,65,.3);
+        display: none; flex-direction: column; align-items: stretch;
+      }
+      .nav__menu.is-open { display: flex; }
+      .nav__links { flex-direction: column; align-items: stretch; gap: 0; margin: 0; }
+      .nav__links a { padding: .95rem 0; border-bottom: 1px solid rgba(247,243,232,.1); font-size: 1rem; }
+      .nav__links a::after { display: none; }
+      .nav__links a[aria-current="page"] { color: var(--gold-soft); box-shadow: inset 3px 0 0 var(--gold); padding-left: .8rem; }
+      .nav .btn { display: inline-flex; margin-top: 1.1rem; }
+      .features__grid { grid-template-columns: repeat(2, 1fr); row-gap: 2rem; }
+      .feature:nth-child(3) { border-left: 0; }
+      .footer__row { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+      .footer__tag { margin-left: 0; }
+      .footer__social { justify-content: center; }
+    }
+    @media (min-width: 901px) { .nav__menu { display: contents; } }
+
+    /* ---------- Mobile ---------- */
+    @media (max-width: 640px) {
+      .brand img { width: 38px; height: 38px; }
+      .brand__name { font-size: 1.45rem; }
+      .hero { align-items: flex-start; min-height: 0; padding: calc(56svh) var(--pad) 6rem; }
+      .hero__bg { inset: -5svh 0 auto 0; height: 71svh; background-position: 70% 72%; }
+      .hero::before {
+        background:
+          linear-gradient(to bottom, rgba(7,29,24,.6) 0%, rgba(7,29,24,0) 14%, rgba(7,29,24,0) 40%, var(--forest) 64svh);
+      }
+      .hero__actions .btn { flex: 1 1 100%; }
+      .features { margin-top: -3rem; padding-top: 2.6rem; }
+      .feature { padding: .4rem .5rem; }
+      .feature h3 { font-size: 1.1rem; }
+      .feature + .feature { border-left: 0; }
+      .script--r { display: none; }
+      .script--l { opacity: .7; }
+      .footer__nav { gap: 1.4rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .hero__content > *, .hero__aside { animation: none; }
+      .btn, .feature, .footer__social a { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="sr-only" href="#main">Skip to content</a>
+
+  <header>
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="index.html" aria-label="ChandaCore home">
+        <img src="assets/logo-mark.png" alt="" width="44" height="44">
+        <span class="brand__text">
+          <span class="brand__name">Chanda<b>Core</b></span>
+          <span class="brand__sub">Rhythm · Reason · Reality</span>
+        </span>
+      </a>
+
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu"><span></span></button>
+
+      <div class="nav__menu" id="nav-menu">
+        <ul class="nav__links">
+            <li><a href="index.html" aria-current="page">Home</a></li>
+            <li><a href="generator.html">Generator</a></li>
+            <li><a href="analyzer.html">Analyzer</a></li>
+            <li><a href="#">Combinatorics</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Tests</a></li>
+          </ul>
+        <a class="btn btn--gold" href="generator.html">Explore Now <span aria-hidden="true">→</span></a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__bg" role="img" aria-label="A traveller climbs ancient temple steps toward a glowing doorway, binary digits falling from the sky"></div>
+
+      <div class="hero__inner">
+        <div class="hero__content">
+          <p class="hero__eyebrow">Same patterns.<br>A brighter tomorrow.</p>
+          <h1 class="hero__title" id="hero-title">Chanda<span>Core</span></h1>
+          <p class="hero__sub">Decode the Rhythm of Knowledge</p>
+          <p class="hero__lead">From the verses of Pingala to the algorithms of today — explore the mathematical patterns that connect ancient thought with modern computation.</p>
+          <div class="hero__actions">
+            <a class="btn btn--gold" href="#features">Start Exploring <span aria-hidden="true">→</span></a>
+            <a class="btn btn--ghost" href="#video">Watch Video
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M10 8.2v7.6l6-3.8z" fill="currentColor" stroke="none"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__aside" aria-hidden="true"><p>“The past computes with us.”</p></div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features parchment" id="features" aria-label="What ChandaCore explores">
+      <ul class="features__grid">
+        <li class="feature">
+          <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 10.5C16 8 10.5 7.5 5.5 8.5v21c5-1 10.5-.5 14.5 2 4-2.500 9.500-3 14.500-2v-21c-5-1-10.500-.5-14.500 2z"/><path d="M20 10.500v21"/></svg>
+          <h3>Ancient Roots</h3>
+          <p>Chandaśāstra</p>
+        </li>
+        <li class="feature">
+          <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="8" r="3.5"/><circle cx="20" cy="21" r="3.2"/><circle cx="9" cy="31" r="3.2"/><circle cx="31" cy="31" r="3.2"/><path d="M20 11.500v6.300M17.500 23.300l-6.200 5M22.500 23.300l6.200 5M12.200 31h15.600"/></svg>
+          <h3>Mathematical Beauty</h3>
+          <p>Combinatorics</p>
+        </li>
+        <li class="feature">
+          <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M13 12 5 20l8 8M27 12l8 8-8 8M23 8l-6 24"/></svg>
+          <h3>Computational Thinking</h3>
+          <p>Modern Algorithms</p>
+        </li>
+        <li class="feature">
+          <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M31.500 6C18 6 8.500 12 8.500 23c0 3 1 5.500 2.500 7.500C13 32.500 15.500 33.500 18.500 33.500 29 33.500 32 20 31.500 6z"/><path d="M8 34c5-8 11-14 19-19M17 24l6-.5M14 29l5-.5"/></svg>
+          <h3>Limitless Future</h3>
+          <p>More Possibilities</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- QUOTE / MANUSCRIPT -->
+    <section class="manuscript parchment" aria-label="Quote">
+      <div class="script script--l" aria-hidden="true" lang="sa">
+        <span>छन्दःशास्त्रम्</span><span>लघु गुरु लघु</span><span>पिङ्गलाचार्य</span><span>द्विगुणं</span><span>प्रस्तारः</span>
+      </div>
+      <div class="script script--r" aria-hidden="true" lang="sa">
+        <span>गणितम्</span><span>गुरु लघु गुरु</span><span>मात्रावृत्तम्</span><span>सङ्ख्या</span><span>छन्दो हि</span>
+      </div>
+      <figure class="manuscript__quote" style="margin-inline:auto">
+        <blockquote style="margin:0">
+          <p>“In every pattern, there is a possibility.<br>In every possibility, a future.”</p>
+        </blockquote>
+        <footer>— ChandaCore</footer>
+      </figure>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__row">
+      <div>
+        <a class="brand" href="index.html" aria-label="ChandaCore home">
+          <img src="assets/logo-mark.png" alt="" width="46" height="46">
+          <span class="brand__text"><span class="brand__name">Chanda<b>Core</b></span></span>
+        </a>
+        <p class="footer__tag">Ancient Patterns. Modern Possibilities.</p>
+      </div>
+
+      <ul class="footer__nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+
+      <ul class="footer__social">
+        <li><a href="https://github.com/" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg></a></li>
+        <li><a href="https://www.linkedin.com/" aria-label="LinkedIn" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1.500" y="1.500" width="21" height="21" rx="4" fill="currentColor"/><g fill="#F7F3E8"><circle cx="7.300" cy="7.600" r="1.600"/><rect x="5.800" y="10" width="3" height="8.500"/><path d="M10.800 10h2.900v1.200c.5-.9 1.600-1.400 2.800-1.400 2.400 0 3.200 1.500 3.200 3.800v4.900h-3v-4.300c0-1.100-.3-1.800-1.300-1.800-1 0-1.600.7-1.600 1.800v4.300h-3z"/></g></svg></a></li>
+        <li><a href="https://www.youtube.com/" aria-label="YouTube" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="4.500" width="22" height="15" rx="4.500" fill="currentColor"/><path d="M10 9v6l5.200-3z" fill="#F7F3E8"/></svg></a></li>
+      </ul>
+    </div>
+    <p class="footer__copy">© 2026 ChandaCore. All rights reserved.</p>
+  </footer>
+
+  <script>
+    (function () {
+      // Mobile menu
+      var toggle = document.querySelector('.nav__toggle');
+      var menu = document.getElementById('nav-menu');
+      function setOpen(open) {
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        menu.classList.toggle('is-open', open);
+      }
+      toggle.addEventListener('click', function () { setOpen(toggle.getAttribute('aria-expanded') !== 'true'); });
+      menu.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+
+      // Restrained hero parallax
+      var bg = document.querySelector('.hero__bg');
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var ticking = false;
+      function update() {
+        ticking = false;
+        if (reduce.matches) { bg.style.transform = ''; return; }
+        var y = Math.min(window.scrollY, 900);
+        bg.style.transform = 'translate3d(0,' + (y * 0.12).toFixed(1) + 'px,0)';
+      }
+      window.addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>
