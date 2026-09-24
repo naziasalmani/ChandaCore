@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pattern Tests — ChandaCore</title>
+  <meta name="description" content="Test and challenge your understanding of Laghu–Guru patterns, binary representations, combinatorics, and Pingala's Chandaśāstra.">
+  <meta name="theme-color" content="#071D18">
+  <link rel="icon" href="../assets/logo-mark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --forest: #071D18;
+      --green: #0D2A23;
+      --gold: #D5A441;
+      --gold-soft: #E4BD67;
+      --parchment: #E8D5AF;
+      --cream: #F4EBDD;
+      --ink: #17231F;
+      --offwhite: #F7F3E8;
+      --brown: #4a3a22;
+
+      --card-bg: #F8F2E6;
+      --card-border: rgba(180, 146, 92, 0.45);
+      --card-shadow: 0 8px 24px rgba(40, 28, 12, 0.08);
+
+      --serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+      --sans: "Inter", "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --deva: "Noto Serif Devanagari", "Kohinoor Devanagari", serif;
+
+      --pad: clamp(1.25rem, 4vw, 3.5rem);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background-color: #E5D5B8;
+      background-image: url("../assets/tests_bg.png");
+      background-position: top center;
+      background-size: 100% auto;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @media (max-width: 1024px) {
+      body {
+        background-size: cover;
+      }
+    }
+
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    :focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 3px; border-radius: 4px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* ---------- Brand Wordmark ---------- */
+    .brand { display: inline-flex; align-items: center; gap: .6rem; }
+    .brand img { width: 44px; height: 44px; object-fit: contain; }
+    .brand__text { display: flex; flex-direction: column; line-height: 1; }
+    .brand__name { font-family: var(--serif); font-weight: 600; font-size: 1.7rem; letter-spacing: .005em; color: var(--offwhite); }
+    .brand__name b { font-weight: 600; color: var(--gold); }
+    .brand__sub { font-size: .56rem; letter-spacing: .2em; margin-top: .3rem; color: rgba(247,243,232,.68); text-transform: uppercase; }
+
+    /* ---------- Navbar ---------- */
+    .nav {
+      position: relative; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+      padding: 1.1rem var(--pad);
+      background: linear-gradient(to bottom, rgba(7,29,24,.88), rgba(7,29,24,0));
+    }
+    .nav__links { display: flex; align-items: center; gap: clamp(1.1rem, 2.4vw, 2.3rem); list-style: none; margin: 0 0 0 auto; padding: 0; }
+    .nav__links a {
+      position: relative; display: block; padding: .5rem 0;
+      font-size: .85rem; font-weight: 500; color: rgba(247,243,232,.86);
+      transition: color .2s;
+    }
+    .nav__links a::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: .1rem; height: 2px;
+      background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform .25s ease;
+    }
+    .nav__links a:hover, .nav__links a[aria-current="page"] { color: var(--gold-soft); }
+    .nav__links a:hover::after, .nav__links a[aria-current="page"]::after { transform: scaleX(1); }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+      font: 600 .88rem/1 var(--sans); border-radius: 999px; cursor: pointer;
+      padding: .85rem 1.5rem; border: 1px solid transparent;
+      transition: transform .2s ease, background-color .2s, border-color .2s, box-shadow .2s, color .2s;
+    }
+    .btn--gold { background: linear-gradient(180deg, var(--gold-soft), var(--gold)); color: #241a08; box-shadow: 0 6px 20px -8px rgba(213,164,65,.7); }
+    .btn--gold:hover { transform: translateY(-2px); box-shadow: 0 10px 26px -8px rgba(228,189,103,.85); }
+    .nav .btn { padding: .7rem 1.25rem; font-size: .82rem; }
+
+    .nav__toggle {
+      display: none; width: 44px; height: 44px; margin-left: auto; padding: 0;
+      background: transparent; border: 1px solid rgba(247,243,232,.35); border-radius: 12px; color: var(--offwhite); cursor: pointer;
+    }
+    .nav__toggle span, .nav__toggle span::before, .nav__toggle span::after {
+      display: block; width: 20px; height: 1.5px; background: currentColor; position: relative; margin: 0 auto; transition: transform .25s, background .25s;
+    }
+    .nav__toggle span::before, .nav__toggle span::after { content: ""; position: absolute; left: 0; }
+    .nav__toggle span::before { top: -6px; }
+    .nav__toggle span::after { top: 6px; }
+    .nav__toggle[aria-expanded="true"] span { background: transparent; }
+    .nav__toggle[aria-expanded="true"] span::before { top: 0; transform: rotate(45deg); }
+    .nav__toggle[aria-expanded="true"] span::after { top: 0; transform: rotate(-45deg); }
+
+    /* ---------- Hero Header ---------- */
+    .hero-header {
+      position: relative;
+      padding: 2.2rem var(--pad) 2.5rem;
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .hero-header__main {
+      max-width: 44rem;
+    }
+
+    .hero-header__eyebrow {
+      margin: 0 0 .8rem;
+      font-size: .74rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      color: var(--gold-soft);
+      text-transform: uppercase;
+    }
+
+    .hero-header__title {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: clamp(2.8rem, 5.5vw, 4.4rem);
+      line-height: 1.05;
+      color: var(--offwhite);
+      text-shadow: 0 3px 25px rgba(0,0,0,0.5);
+    }
+    .hero-header__title span {
+      color: var(--gold);
+    }
+
+    .hero-header__sub {
+      margin: .9rem 0 0;
+      font-size: clamp(1rem, 1.3vw, 1.15rem);
+      line-height: 1.5;
+      color: rgba(247, 243, 232, 0.92);
+      text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+      max-width: 36rem;
+    }
+
+    .hero-header__aside {
+      padding-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+      align-items: flex-end;
+    }
+
+    .hero-tag {
+      background: rgba(13, 42, 35, 0.7);
+      border: 1px solid rgba(213, 164, 65, 0.35);
+      border-radius: 4px;
+      padding: .25rem .75rem;
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .18em;
+      color: var(--gold-soft);
+      backdrop-filter: blur(4px);
+    }
+
+    .hero-quote-card {
+      background: rgba(13, 42, 35, 0.75);
+      border: 1px solid rgba(213, 164, 65, 0.4);
+      border-radius: 12px;
+      padding: 1.1rem 1.4rem;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      max-width: 320px;
+      text-align: right;
+    }
+
+    .hero-sanskrit {
+      font-family: var(--deva);
+      font-size: 1.1rem;
+      color: var(--gold-soft);
+      margin-bottom: .4rem;
+      letter-spacing: .02em;
+    }
+
+    .hero-quote {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--offwhite);
+      margin: 0;
+    }
+
+    /* ---------- Container for Main Sections ---------- */
+    .page-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--pad);
+    }
+
+    /* ---------- Feature Strip ---------- */
+    .feature-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem;
+      margin-bottom: 2.2rem;
+    }
+
+    @media (max-width: 1024px) {
+      .feature-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 540px) {
+      .feature-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .feature-icon-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brown);
+      flex-shrink: 0;
+    }
+    .feature-icon-box svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .feature-title {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0 0 .15rem;
+      line-height: 1.2;
+    }
+
+    .feature-sub {
+      font-size: .78rem;
+      color: rgba(74, 58, 34, 0.82);
+      margin: 0;
+    }
+
+    /* ---------- Main Layout (Sidebar + Content Grid) ---------- */
+    .test-layout {
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      gap: 1.4rem;
+      align-items: start;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (max-width: 960px) {
+      .test-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ---------- Sidebar Styling ---------- */
+    .sidebar-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.4rem 1.2rem;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 1.4rem;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: flex-start;
+      gap: .65rem;
+      margin-bottom: 1.1rem;
+      padding-bottom: .75rem;
+      border-bottom: 1px solid rgba(180, 146, 92, 0.25);
+    }
+
+    .sidebar-icon {
+      width: 24px;
+      height: 24px;
+      color: var(--brown);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .sidebar-title {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .sidebar-sub {
+      font-size: .78rem;
+      color: rgba(74, 58, 34, 0.8);
+      margin: .2rem 0 0;
+    }
+
+    .category-list {
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+
+    .category-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: .85rem 1rem;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      text-align: left;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .category-btn__content {
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+    }
+
+    .category-btn__icon {
+      width: 20px;
+      height: 20px;
+      color: var(--brown);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .category-btn__name {
+      font-weight: 600;
+      font-size: .88rem;
+      color: var(--ink);
+      display: block;
+      line-height: 1.25;
+    }
+
+    .category-btn__sub {
+      font-size: .75rem;
+      color: rgba(74, 58, 34, 0.78);
+      margin-top: .15rem;
+      display: block;
+    }
+
+    .category-btn__chevron {
+      width: 16px;
+      height: 16px;
+      color: rgba(74, 58, 34, 0.6);
+      flex-shrink: 0;
+    }
+
+    /* Selected Category State */
+    .category-btn.is-active {
+      background: var(--green);
+      border-color: rgba(213, 164, 65, 0.4);
+      box-shadow: 0 4px 14px rgba(7,29,24,0.18);
+    }
+    .category-btn.is-active .category-btn__icon,
+    .category-btn.is-active .category-btn__chevron {
+      color: var(--gold-soft);
+    }
+    .category-btn.is-active .category-btn__name {
+      color: var(--offwhite);
+    }
+    .category-btn.is-active .category-btn__sub {
+      color: rgba(247, 243, 232, 0.75);
+    }
+
+    .category-btn:not(.is-active):hover {
+      background: rgba(180, 146, 92, 0.15);
+      border-color: rgba(180, 146, 92, 0.3);
+    }
+
+    /* Sidebar Quote Box */
+    .sidebar-quote-card {
+      background: #F8F2E6;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.4rem 1.2rem;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+    }
+    .sidebar-quote-card svg {
+      width: 28px;
+      height: 28px;
+      color: var(--gold);
+      margin-bottom: .6rem;
+    }
+    .sidebar-quote-text {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.45;
+      color: var(--ink);
+      margin: 0 0 .6rem;
+    }
+    .sidebar-quote-author {
+      font-size: .78rem;
+      color: var(--brown);
+      font-weight: 500;
+    }
+
+    /* ---------- Right Content Panel ---------- */
+    .panel-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.4rem 1.6rem;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 1.4rem;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: .75rem;
+      margin-bottom: 1.1rem;
+      padding-bottom: .85rem;
+      border-bottom: 1px solid rgba(180, 146, 92, 0.25);
+    }
+
+    .panel-header__left {
+      display: flex;
+      align-items: flex-start;
+      gap: .65rem;
+    }
+
+    .panel-header__icon {
+      width: 24px;
+      height: 24px;
+      color: var(--brown);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .panel-title {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .panel-subtitle {
+      font-size: .8rem;
+      color: rgba(74, 58, 34, 0.82);
+      margin: .25rem 0 0;
+      line-height: 1.4;
+    }
+
+    /* Start New Test Form Controls */
+    .test-controls-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 1rem;
+      align-items: end;
+    }
+
+    @media (max-width: 900px) {
+      .test-controls-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 540px) {
+      .test-controls-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+
+    .form-label {
+      font-weight: 600;
+      font-size: .85rem;
+      color: var(--ink);
+    }
+
+    .select-control {
+      height: 44px;
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.45);
+      border-radius: 10px;
+      padding: 0 .9rem;
+      font-family: var(--sans);
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--ink);
+      cursor: pointer;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .select-control:focus {
+      border-color: var(--gold);
+    }
+
+    .btn-start {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      height: 44px;
+      background: var(--green);
+      color: var(--gold-soft);
+      border: 1px solid rgba(213, 164, 65, 0.4);
+      border-radius: 10px;
+      padding: 0 1.5rem;
+      font-weight: 600;
+      font-size: .9rem;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: 0 4px 14px rgba(7,29,24,0.18);
+      white-space: nowrap;
+    }
+    .btn-start:hover {
+      background: #071D18;
+      color: var(--gold);
+      border-color: var(--gold);
+      transform: translateY(-1px);
+    }
+
+    /* ---------- Question Preview & Test Experience ---------- */
+    .question-header-controls {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .quiz-nav-btn {
+      width: 32px;
+      height: 32px;
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.4);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brown);
+      cursor: pointer;
+      transition: background-color .15s;
+    }
+    .quiz-nav-btn:hover {
+      background: #E5D5B8;
+    }
+    .quiz-nav-btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    .quiz-step-indicator {
+      font-size: .88rem;
+      font-weight: 700;
+      color: var(--ink);
+      padding: 0 .4rem;
+    }
+
+    .question-body-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 1.4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 820px) {
+      .question-body-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .q-number {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: .4rem;
+    }
+
+    .q-text {
+      font-size: .92rem;
+      line-height: 1.5;
+      color: var(--ink);
+      margin-bottom: .9rem;
+    }
+
+    .syllable-pills {
+      display: flex;
+      gap: .4rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .syllable-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.45);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--ink);
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+      margin-bottom: 1.2rem;
+    }
+
+    @media (max-width: 500px) {
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .75rem .9rem;
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.4);
+      border-radius: 10px;
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--ink);
+      cursor: pointer;
+      text-align: left;
+      transition: all .2s;
+    }
+    .option-btn:hover {
+      border-color: var(--gold);
+      background: #EDE1CB;
+    }
+
+    .option-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(180, 146, 92, 0.2);
+      border: 1px solid rgba(180, 146, 92, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: .8rem;
+      color: var(--brown);
+      flex-shrink: 0;
+    }
+
+    .option-btn.selected {
+      background: #E5D7BF;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(213, 164, 65, 0.4);
+    }
+    .option-btn.selected .option-badge {
+      background: var(--gold);
+      color: #241a08;
+    }
+
+    .option-btn.correct-ans {
+      background: #E1F0E5;
+      border-color: #2E7D32;
+    }
+    .option-btn.correct-ans .option-badge {
+      background: #2E7D32;
+      color: #FFF;
+    }
+
+    .option-btn.wrong-ans {
+      background: #FDE8E8;
+      border-color: #C62828;
+    }
+    .option-btn.wrong-ans .option-badge {
+      background: #C62828;
+      color: #FFF;
+    }
+
+    .btn-check-ans {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: .75rem 1.4rem;
+      background: var(--green);
+      color: var(--gold-soft);
+      border: 1px solid rgba(213, 164, 65, 0.4);
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: .88rem;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-check-ans:hover {
+      background: #071D18;
+      color: var(--gold);
+    }
+
+    /* Explanation Box */
+    .explanation-box {
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.35);
+      border-radius: 12px;
+      padding: 1.1rem;
+    }
+
+    .explanation-header {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: .6rem;
+      padding-bottom: .4rem;
+      border-bottom: 1px solid rgba(180, 146, 92, 0.25);
+    }
+
+    .explanation-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--gold);
+    }
+
+    .explanation-text {
+      font-size: .84rem;
+      color: rgba(23, 35, 31, 0.88);
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    /* Test Results Screen */
+    .test-complete-card {
+      text-align: center;
+      padding: 1.5rem 1rem;
+    }
+    .test-complete-title {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0 0 .4rem;
+    }
+    .test-complete-score {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--gold-soft);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: .8rem;
+    }
+    .test-complete-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+
+    /* ---------- Bottom Row Grid (3 Cards Across) ---------- */
+    .bottom-row-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.4rem;
+      align-items: stretch;
+    }
+
+    @media (max-width: 1024px) {
+      .bottom-row-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Your Progress Card */
+    .progress-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: .4rem;
+      margin-bottom: .9rem;
+    }
+
+    .donut-chart-box {
+      width: 90px;
+      height: 90px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .donut-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+      overflow: visible;
+    }
+
+    .donut-bg {
+      fill: none;
+      stroke: rgba(180, 146, 92, 0.25);
+      stroke-width: 4.5;
+    }
+
+    .donut-fill {
+      fill: none;
+      stroke: var(--green);
+      stroke-width: 4.5;
+      stroke-linecap: round;
+      transition: stroke-dasharray .6s ease;
+    }
+
+    .donut-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--ink);
+    }
+
+    .stats-table {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+      font-size: .82rem;
+    }
+
+    .stat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(74, 58, 34, 0.88);
+    }
+
+    .stat-val {
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .card-footer-link {
+      margin-top: auto;
+      text-align: center;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--brown);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .3rem;
+      transition: color .2s;
+    }
+    .card-footer-link:hover {
+      color: var(--gold);
+    }
+
+    /* Quick Tips List */
+    .tips-list {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+      margin-top: .4rem;
+      margin-bottom: .9rem;
+    }
+
+    .tip-item {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      font-size: .82rem;
+      color: var(--ink);
+    }
+
+    .tip-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--brown);
+      flex-shrink: 0;
+    }
+
+    /* Recent Results List */
+    .results-list {
+      display: flex;
+      flex-direction: column;
+      gap: .55rem;
+      margin-top: .4rem;
+      margin-bottom: .9rem;
+    }
+
+    .result-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .8rem;
+      padding: .4rem 0;
+      border-bottom: 1px solid rgba(180, 146, 92, 0.2);
+    }
+    .result-item:last-child {
+      border-bottom: none;
+    }
+
+    .result-name {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .result-right {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+
+    .result-score {
+      font-weight: 700;
+      color: var(--brown);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .status-dot.pass { background: #2E7D32; }
+    .status-dot.warn { background: #F57C00; }
+    .status-dot.fail { background: #C62828; }
+
+    .result-date {
+      font-size: .74rem;
+      color: rgba(74, 58, 34, 0.75);
+    }
+
+    /* ---------- Footer ---------- */
+    .footer {
+      background: var(--cream); border-top: 1px solid rgba(74,58,34,.18);
+      padding: 3.5rem var(--pad) 2rem; color: var(--ink); position: relative; z-index: 10;
+      font-family: var(--sans);
+    }
+    .footer__container {
+      max-width: 1180px; margin: 0 auto;
+    }
+    .footer__grid {
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .footer .brand img { width: 44px; height: 44px; }
+    .footer__tagline {
+      font-family: var(--serif); font-size: 1.05rem; font-style: italic; font-weight: 600;
+      color: var(--green); margin: 0.75rem 0 0.4rem; line-height: 1.3;
+    }
+    .footer__desc {
+      font-size: 0.82rem; color: rgba(23,35,31,0.75); margin: 0 0 0.9rem; line-height: 1.45;
+    }
+    .footer__badge {
+      display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #b8862a; background: rgba(213,164,65,0.12);
+      border: 1px solid rgba(213,164,65,0.3); padding: 0.25rem 0.65rem; border-radius: 4px;
+    }
+    .footer__heading {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 700; color: var(--green);
+      margin: 0 0 1rem; letter-spacing: 0.02em;
+    }
+    .footer__links {
+      list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem;
+    }
+    .footer__links a {
+      font-size: 0.88rem; color: rgba(23,35,31,0.8); transition: all 0.2s ease;
+      display: inline-flex; align-items: center; gap: 0.3rem;
+    }
+    .footer__links a:hover {
+      color: #b8862a; transform: translateX(2px);
+    }
+    .footer__divider {
+      height: 1px; background: rgba(74,58,34,0.15); margin: 2rem 0 1.5rem;
+    }
+    .footer__mid {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+      margin-bottom: 1.5rem; font-size: 0.88rem;
+    }
+    .footer__mid-statement strong {
+      font-family: var(--serif); color: var(--green); font-size: 1rem; font-weight: 700;
+    }
+    .footer__mid-statement p {
+      margin: 0.2rem 0 0; color: rgba(23,35,31,0.7); font-size: 0.82rem;
+    }
+    .footer__mid-links {
+      display: flex; gap: 1.5rem; align-items: center;
+    }
+    .footer__mid-links a {
+      font-weight: 600; color: var(--green); transition: color 0.2s; display: inline-flex; align-items: center; gap: 0.25rem;
+    }
+    .footer__mid-links a:hover { color: #b8862a; }
+    .footer__bottom {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;
+      padding-top: 1.2rem; border-top: 1px opacity(0.08) solid; font-size: 0.78rem; color: rgba(23,35,31,0.65);
+    }
+
+    /* ---------- Mobile Adjustments ---------- */
+    @media (max-width: 900px) {
+      .nav__toggle { display: block; }
+      .nav__menu {
+        position: absolute; top: 100%; left: 0; right: 0; padding: 0 var(--pad) 1.4rem;
+        background: rgba(7,29,24,.96); border-bottom: 1px solid rgba(213,164,65,.3);
+        display: none; flex-direction: column; align-items: stretch;
+      }
+      .nav__menu.is-open { display: flex; }
+      .nav__links { flex-direction: column; align-items: stretch; gap: 0; margin: 0; }
+      .nav__links a { padding: .95rem 0; border-bottom: 1px solid rgba(247,243,232,.1); font-size: 1rem; }
+      .nav__links a::after { display: none; }
+      .nav__links a[aria-current="page"] { color: var(--gold-soft); box-shadow: inset 3px 0 0 var(--gold); padding-left: .8rem; }
+      .nav .btn { display: inline-flex; margin-top: 1.1rem; }
+      
+      .hero-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .hero-header__aside {
+        align-items: flex-start;
+      }
+      .hero-quote-card {
+        text-align: left;
+      }
+
+      .footer__row { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+      .footer__tag { margin-left: 0; }
+      .footer__social { justify-content: center; }
+    }
+    @media (min-width: 901px) { .nav__menu { display: contents; } }
+  </style>
+</head>
+<body>
+
+  <a class="sr-only" href="#main">Skip to content</a>
+
+  <header>
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="../index.html" aria-label="ChandaCore home">
+        <img src="../assets/logo-mark.png" alt="" width="44" height="44">
+        <span class="brand__text">
+          <span class="brand__name">Chanda<b>Core</b></span>
+          <span class="brand__sub">Ancient Patterns. Modern Possibilities.</span>
+        </span>
+      </a>
+
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <span></span>
+      </button>
+
+      <div class="nav__menu" id="nav-menu">
+        <ul class="nav__links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../generator.html">Generator</a></li>
+          <li><a href="../analyzer.html">Analyzer</a></li>
+          <li><a href="../combinatorics.html">Combinatorics</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="index.html" aria-current="page">Tests</a></li>
+        </ul>
+        <a class="btn btn--gold" href="../generator.html">Explore Now <span aria-hidden="true">→</span></a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-header">
+    <div class="hero-header__main">
+      <p class="hero-header__eyebrow">PRACTICE. TEST. MASTER.</p>
+      <h1 class="hero-header__title">Pattern <span>Tests</span></h1>
+      <p class="hero-header__sub">Challenge your understanding of Laghu–Guru patterns, binary representations, and combinatorics.</p>
+    </div>
+    <div class="hero-header__aside">
+      <div class="hero-tags">
+        <span class="hero-tag">LEARN</span>
+        <span class="hero-tag">PRACTICE</span>
+        <span class="hero-tag">ANALYZE</span>
+        <span class="hero-tag">IMPROVE</span>
+      </div>
+      <div class="hero-quote-card">
+        <div class="hero-sanskrit">अभ्यासात् सिद्धिः ॥</div>
+        <p class="hero-quote">“Practice today, insight tomorrow.”</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTAINER -->
+  <main id="main" class="page-container">
+
+    <!-- FEATURE STRIP -->
+    <section class="feature-strip" aria-label="Key features">
+      <div class="feature-item">
+        <div class="feature-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+        </div>
+        <div>
+          <h3 class="feature-title">Multiple Test Types</h3>
+          <p class="feature-sub">Concepts, Patterns, Combinatorics & More</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </div>
+        <div>
+          <h3 class="feature-title">Instant Feedback</h3>
+          <p class="feature-sub">Learn from detailed explanations</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+        </div>
+        <div>
+          <h3 class="feature-title">Track Your Progress</h3>
+          <p class="feature-sub">See your improvement over time</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        </div>
+        <div>
+          <h3 class="feature-title">Build Confidence</h3>
+          <p class="feature-sub">Strengthen your understanding</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEST LAYOUT GRID -->
+    <div class="test-layout">
+
+      <!-- LEFT SIDEBAR -->
+      <aside aria-label="Test Categories Sidebar">
+        <div class="sidebar-card">
+          <div class="sidebar-header">
+            <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <div>
+              <h2 class="sidebar-title">Test Categories</h2>
+              <p class="sidebar-sub">Choose a topic to begin</p>
+            </div>
+          </div>
+
+          <div class="category-list" id="category-list">
+            
+            <button type="button" class="category-btn is-active" data-cat="all">
+              <div class="category-btn__content">
+                <svg class="category-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                <div>
+                  <span class="category-btn__name">All Topics</span>
+                  <span class="category-btn__sub">Mixed questions</span>
+                </div>
+              </div>
+              <svg class="category-btn__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+            <button type="button" class="category-btn" data-cat="patterns">
+              <div class="category-btn__content">
+                <svg class="category-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                <div>
+                  <span class="category-btn__name">Laghu–Guru Patterns</span>
+                  <span class="category-btn__sub">Basics and conversions</span>
+                </div>
+              </div>
+              <svg class="category-btn__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+            <button type="button" class="category-btn" data-cat="binary">
+              <div class="category-btn__content">
+                <svg class="category-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h2v8H7"/><path d="M15 8h2v8h-2"/></svg>
+                <div>
+                  <span class="category-btn__name">Binary Representation</span>
+                  <span class="category-btn__sub">Binary, decimal, transformations</span>
+                </div>
+              </div>
+              <svg class="category-btn__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+            <button type="button" class="category-btn" data-cat="combinatorics">
+              <div class="category-btn__content">
+                <svg class="category-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 22 22 22"/><line x1="12" y1="9" x2="12" y2="15"/></svg>
+                <div>
+                  <span class="category-btn__name">Combinatorics</span>
+                  <span class="category-btn__sub">Counting and Pascal's Triangle</span>
+                </div>
+              </div>
+              <svg class="category-btn__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+            <button type="button" class="category-btn" data-cat="properties">
+              <div class="category-btn__content">
+                <svg class="category-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <div>
+                  <span class="category-btn__name">Pattern Properties</span>
+                  <span class="category-btn__sub">Palindrome, complement, shifts</span>
+                </div>
+              </div>
+              <svg class="category-btn__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+            <button type="button" class="category-btn" data-cat="application">
+              <div class="category-btn__content">
+                <svg class="category-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                <div>
+                  <span class="category-btn__name">Application Based</span>
+                  <span class="category-btn__sub">Real world and conceptual</span>
+                </div>
+              </div>
+              <svg class="category-btn__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+            <button type="button" class="category-btn" data-cat="challenge">
+              <div class="category-btn__content">
+                <svg class="category-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <div>
+                  <span class="category-btn__name">Challenge Mode</span>
+                  <span class="category-btn__sub">For advanced learners</span>
+                </div>
+              </div>
+              <svg class="category-btn__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+          </div>
+        </div>
+
+        <div class="sidebar-quote-card">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-6h2zm0-8h-2V7h2z"/></svg>
+          <p class="sidebar-quote-text">“A little practice each day leads to a deeper understanding.”</p>
+          <div class="sidebar-quote-author">— ChandaCore</div>
+        </div>
+      </aside>
+
+      <!-- RIGHT CONTENT AREA -->
+      <section aria-label="Main Test Experience">
+        
+        <!-- CARD 1: START A NEW TEST -->
+        <article class="panel-card" aria-labelledby="title-start">
+          <div class="panel-header">
+            <div class="panel-header__left">
+              <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              <div>
+                <h2 class="panel-title" id="title-start">Start a New Test</h2>
+                <p class="panel-subtitle">Select your preferences and begin.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="test-controls-row">
+            <div class="form-group">
+              <label for="select-num-q" class="form-label">Number of Questions</label>
+              <select id="select-num-q" class="select-control">
+                <option value="5">5</option>
+                <option value="10" selected>10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="select-diff" class="form-label">Difficulty Level</label>
+              <select id="select-diff" class="select-control">
+                <option value="easy">Easy</option>
+                <option value="medium" selected>Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="select-cat" class="form-label">Category</label>
+              <select id="select-cat" class="select-control">
+                <option value="all">All Topics</option>
+                <option value="patterns">Laghu–Guru Patterns</option>
+                <option value="binary">Binary Representation</option>
+                <option value="combinatorics">Combinatorics</option>
+                <option value="properties">Pattern Properties</option>
+                <option value="application">Application Based</option>
+                <option value="challenge">Challenge Mode</option>
+              </select>
+            </div>
+
+            <button type="button" class="btn-start" id="btn-start-test">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Start Test →
+            </button>
+          </div>
+        </article>
+
+        <!-- CARD 2: QUESTION CONTAINER (PREVIEW / ACTIVE TEST) -->
+        <article class="panel-card" aria-labelledby="title-sample-q">
+          <div class="panel-header">
+            <div class="panel-header__left">
+              <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <div>
+                <h2 class="panel-title" id="title-sample-q">Sample Question Preview</h2>
+                <p class="panel-subtitle" id="sub-sample-q">Here's an example question from the selected category.</p>
+              </div>
+            </div>
+
+            <div class="question-header-controls" id="quiz-header-nav">
+              <button type="button" class="quiz-nav-btn" id="btn-prev-q" aria-label="Previous question" disabled>‹</button>
+              <span class="quiz-step-indicator" id="q-counter">1 / 10</span>
+              <button type="button" class="quiz-nav-btn" id="btn-next-q" aria-label="Next question">›</button>
+            </div>
+          </div>
+
+          <div id="quiz-active-area">
+            <div class="question-body-grid">
+              <div>
+                <div class="q-number" id="q-num-label">Q1.</div>
+                <div class="q-text" id="q-text-body">What is the binary representation of the following Laghu–Guru pattern?</div>
+                <div class="syllable-pills" id="q-syllables-box">
+                  <span class="syllable-pill">L</span>
+                  <span class="syllable-pill">G</span>
+                  <span class="syllable-pill">G</span>
+                  <span class="syllable-pill">L</span>
+                </div>
+
+                <div class="options-grid" id="options-container">
+                  <button type="button" class="option-btn" data-opt="A">
+                    <span class="option-badge">A</span>
+                    <span class="option-label">0110</span>
+                  </button>
+                  <button type="button" class="option-btn" data-opt="B">
+                    <span class="option-badge">B</span>
+                    <span class="option-label">0011</span>
+                  </button>
+                  <button type="button" class="option-btn" data-opt="C">
+                    <span class="option-badge">C</span>
+                    <span class="option-label">1001</span>
+                  </button>
+                  <button type="button" class="option-btn" data-opt="D">
+                    <span class="option-badge">D</span>
+                    <span class="option-label">0101</span>
+                  </button>
+                </div>
+
+                <button type="button" class="btn-check-ans" id="btn-check-ans">Check Answer</button>
+              </div>
+
+              <!-- Explanation Box -->
+              <div class="explanation-box" id="explanation-box">
+                <div class="explanation-header">
+                  <svg class="explanation-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1.55.6 2.8 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/></svg>
+                  Explanation
+                </div>
+                <p class="explanation-text" id="explanation-text">In the binary representation, L = 0 and G = 1.<br>So, L G G L → 0 1 1 0 → 0110.</p>
+              </div>
+            </div>
+          </div>
+
+          <div id="quiz-complete-area" style="display: none;">
+            <div class="test-complete-card">
+              <h3 class="test-complete-title">Test Complete!</h3>
+              <div class="test-complete-score" id="final-score-text">8 / 10</div>
+              <p class="panel-subtitle" id="final-score-pct">You scored 80%. Excellent work on mastering the patterns!</p>
+              <div class="test-complete-actions">
+                <button type="button" class="btn-check-ans" id="btn-try-again">Try Again</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- BOTTOM ROW (3 CARDS ACROSS) -->
+        <div class="bottom-row-grid">
+          
+          <!-- YOUR PROGRESS CARD -->
+          <article class="panel-card" style="margin-bottom:0;" aria-labelledby="title-progress">
+            <div class="panel-header">
+              <div class="panel-header__left">
+                <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+                <div>
+                  <h3 class="panel-title" id="title-progress">Your Progress</h3>
+                  <p class="panel-subtitle">Keep track of your performance.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="progress-content">
+              <div class="donut-chart-box">
+                <svg class="donut-svg" viewBox="0 0 42 42">
+                  <circle class="donut-bg" cx="21" cy="21" r="15.9155" />
+                  <circle class="donut-fill" id="donut-stroke" cx="21" cy="21" r="15.9155" stroke-dasharray="75, 100" />
+                </svg>
+                <div class="donut-text" id="donut-pct-text">75%</div>
+              </div>
+
+              <div class="stats-table">
+                <div class="stat-row">
+                  <span>Tests Attempted</span>
+                  <span class="stat-val" id="stat-attempts">4</span>
+                </div>
+                <div class="stat-row">
+                  <span>Correct Answers</span>
+                  <span class="stat-val" id="stat-correct">30</span>
+                </div>
+                <div class="stat-row">
+                  <span>Total Questions</span>
+                  <span class="stat-val" id="stat-total">40</span>
+                </div>
+              </div>
+            </div>
+
+            <a href="#title-start" class="card-footer-link">View Detailed Progress →</a>
+          </article>
+
+          <!-- QUICK TIPS CARD -->
+          <article class="panel-card" style="margin-bottom:0;" aria-labelledby="title-tips">
+            <div class="panel-header">
+              <div class="panel-header__left">
+                <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <div>
+                  <h3 class="panel-title" id="title-tips">Quick Tips</h3>
+                  <p class="panel-subtitle">Keep these in mind while solving.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="tips-list">
+              <div class="tip-item">
+                <span class="tip-badge">1</span>
+                <span>L = 0 and G = 1</span>
+              </div>
+              <div class="tip-item">
+                <span class="tip-badge">2</span>
+                <span>Total patterns of length n = 2ⁿ</span>
+              </div>
+              <div class="tip-item">
+                <span class="tip-badge">3</span>
+                <span>Use combinatorics: C(n, k)</span>
+              </div>
+              <div class="tip-item">
+                <span class="tip-badge">4</span>
+                <span>Check for symmetry and complement</span>
+              </div>
+              <div class="tip-item">
+                <span class="tip-badge">5</span>
+                <span>Read questions carefully</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- RECENT RESULTS CARD -->
+          <article class="panel-card" style="margin-bottom:0;" aria-labelledby="title-results">
+            <div class="panel-header">
+              <div class="panel-header__left">
+                <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <div>
+                  <h3 class="panel-title" id="title-results">Recent Results</h3>
+                  <p class="panel-subtitle">Your last 5 test attempts.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="results-list" id="results-list">
+              <div class="result-item">
+                <span class="result-name">Mixed Test (10 Q)</span>
+                <div class="result-right">
+                  <span class="result-score">8/10</span>
+                  <span class="status-dot pass"></span>
+                  <span class="result-date">Sep 22, 2026</span>
+                </div>
+              </div>
+              <div class="result-item">
+                <span class="result-name">Combinatorics (5 Q)</span>
+                <div class="result-right">
+                  <span class="result-score">4/5</span>
+                  <span class="status-dot pass"></span>
+                  <span class="result-date">Sep 20, 2026</span>
+                </div>
+              </div>
+              <div class="result-item">
+                <span class="result-name">Binary Basics (10 Q)</span>
+                <div class="result-right">
+                  <span class="result-score">7/10</span>
+                  <span class="status-dot warn"></span>
+                  <span class="result-date">Sep 18, 2026</span>
+                </div>
+              </div>
+              <div class="result-item">
+                <span class="result-name">Pattern Properties (10 Q)</span>
+                <div class="result-right">
+                  <span class="result-score">6/10</span>
+                  <span class="status-dot warn"></span>
+                  <span class="result-date">Sep 15, 2026</span>
+                </div>
+              </div>
+              <div class="result-item">
+                <span class="result-name">Challenge (10 Q)</span>
+                <div class="result-right">
+                  <span class="result-score">5/10</span>
+                  <span class="status-dot fail"></span>
+                  <span class="result-date">Sep 12, 2026</span>
+                </div>
+              </div>
+            </div>
+
+            <a href="#title-start" class="card-footer-link">View All Results →</a>
+          </article>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__container">
+      <div class="footer__grid">
+        <!-- COLUMN 1 — BRAND -->
+        <div class="footer__col-brand">
+          <a class="brand" href="../index.html" aria-label="ChandaCore home">
+            <img src="../assets/logo-mark.png" alt="ChandaCore Logo" width="44" height="44">
+            <span class="brand__text">
+              <span class="brand__name">Chanda<b>Core</b></span>
+            </span>
+          </a>
+          <p class="footer__tagline">"Ancient Patterns. Modern Possibilities."</p>
+          <p class="footer__desc">Exploring ancient knowledge systems through modern computational thinking.</p>
+          <span class="footer__badge">IKS × Computer Science</span>
+        </div>
+
+        <!-- COLUMN 2 — EXPLORE -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Explore</h3>
+          <ul class="footer__links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../generator.html">Generator</a></li>
+            <li><a href="../analyzer.html">Analyzer</a></li>
+            <li><a href="../combinatorics.html">Combinatorics</a></li>
+            <li><a href="../tests.html">Tests</a></li>
+          </ul>
+        </div>
+
+        <!-- COLUMN 3 — PROJECT -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Project</h3>
+          <ul class="footer__links">
+            <li><a href="../about.html">About</a></li>
+            <li><a href="../index.html#how-it-works">How It Works</a></li>
+            <li><a href="../contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- COLUMN 4 — KNOWLEDGE -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Knowledge</h3>
+          <ul class="footer__links">
+            <li><a href="../index.html#how-it-works">Chandaśāstra</a></li>
+            <li><a href="../index.html#how-it-works">Binary Encoding</a></li>
+            <li><a href="../combinatorics.html">Combinatorics</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__divider"></div>
+
+      <div class="footer__mid">
+        <div class="footer__mid-statement">
+          <strong>IKS × Computer Science</strong>
+          <p>Exploring ancient patterns through modern computation.</p>
+        </div>
+        <div class="footer__mid-links">
+          <a href="https://github.com/naziasalmani/ChandaCore" target="_blank" rel="noopener" aria-label="GitHub Repository">GitHub ↗</a>
+          <a href="../contact.html">Contact ↗</a>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <div>© 2026 ChandaCore. All rights reserved.</div>
+        <div>Built for IKS × Computer Science</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT ENGINE -->
+  <script>
+    (function() {
+      // Mobile Nav Toggle
+      const navToggle = document.querySelector('.nav__toggle');
+      const navMenu = document.getElementById('nav-menu');
+      if (navToggle && navMenu) {
+        navToggle.addEventListener('click', () => {
+          const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+          navToggle.setAttribute('aria-expanded', !isOpen);
+          navMenu.classList.toggle('is-open');
+        });
+      }
+
+      // QUESTION BANK
+      const questionBank = [
+        {
+          id: 1,
+          cat: "patterns",
+          diff: "easy",
+          q: "What is the binary representation of the following Laghu–Guru pattern?",
+          syllables: ["L", "G", "G", "L"],
+          options: [
+            { id: "A", text: "0110", correct: true },
+            { id: "B", text: "0011", correct: false },
+            { id: "C", text: "1001", correct: false },
+            { id: "D", text: "0101", correct: false }
+          ],
+          exp: "In the binary representation, L = 0 and G = 1. So, L G G L → 0 1 1 0 → 0110."
+        },
+        {
+          id: 2,
+          cat: "patterns",
+          diff: "easy",
+          q: "In Pingala's Chandaśāstra, what values do Laghu (L) and Guru (G) represent respectively?",
+          syllables: ["L", "G"],
+          options: [
+            { id: "A", text: "L = 1 and G = 0", correct: false },
+            { id: "B", text: "L = 0 and G = 1", correct: true },
+            { id: "C", text: "L = 2 and G = 1", correct: false },
+            { id: "D", text: "L = 0 and G = 2", correct: false }
+          ],
+          exp: "Laghu represents a short syllable (binary 0) and Guru represents a long syllable (binary 1)."
+        },
+        {
+          id: 3,
+          cat: "binary",
+          diff: "medium",
+          q: "What is the decimal equivalent of the pattern 'G L G L' when evaluated as standard 4-bit binary?",
+          syllables: ["G", "L", "G", "L"],
+          options: [
+            { id: "A", text: "5", correct: false },
+            { id: "B", text: "10", correct: true },
+            { id: "C", text: "12", correct: false },
+            { id: "D", text: "9", correct: false }
+          ],
+          exp: "G L G L corresponds to binary 1 0 1 0. In decimal: (1×8) + (0×4) + (1×2) + (0×1) = 10."
+        },
+        {
+          id: 4,
+          cat: "combinatorics",
+          diff: "easy",
+          q: "How many total possible patterns of length n = 4 can be formed using Laghu and Guru?",
+          syllables: ["n", "=", "4"],
+          options: [
+            { id: "A", text: "8", correct: false },
+            { id: "B", text: "12", correct: false },
+            { id: "C", text: "16", correct: true },
+            { id: "D", text: "32", correct: false }
+          ],
+          exp: "Since each syllable has 2 choices (L or G), the total number of patterns for length n is 2ⁿ = 2⁴ = 16."
+        },
+        {
+          id: 5,
+          cat: "combinatorics",
+          diff: "medium",
+          q: "For a pattern length of n = 4, how many patterns contain exactly 2 Gurus?",
+          syllables: ["n", "=", "4", "|", "k", "=", "2"],
+          options: [
+            { id: "A", text: "4", correct: false },
+            { id: "B", text: "6", correct: true },
+            { id: "C", text: "8", correct: false },
+            { id: "D", text: "10", correct: false }
+          ],
+          exp: "The number of patterns with k Gurus is given by C(n, k). Here C(4, 2) = 4! / (2! × 2!) = 6."
+        },
+        {
+          id: 6,
+          cat: "properties",
+          diff: "medium",
+          q: "Which of the following Laghu–Guru patterns is a palindrome?",
+          syllables: ["L", "G", "G", "L"],
+          options: [
+            { id: "A", text: "L G L G", correct: false },
+            { id: "B", text: "L G G L", correct: true },
+            { id: "C", text: "G G L L", correct: false },
+            { id: "D", text: "L L G L", correct: false }
+          ],
+          exp: "A pattern is a palindrome if it reads the same forward and backward. 'L G G L' reversed is 'L G G L'."
+        },
+        {
+          id: 7,
+          cat: "properties",
+          diff: "hard",
+          q: "What is the complement of the pattern 'L L G L G'?",
+          syllables: ["L", "L", "G", "L", "G"],
+          options: [
+            { id: "A", text: "G G L G L", correct: true },
+            { id: "B", text: "G L G L L", correct: false },
+            { id: "C", text: "L L G L G", correct: false },
+            { id: "D", text: "G G G L L", correct: false }
+          ],
+          exp: "The complement flips every L to G and every G to L. L L G L G → G G L G L."
+        },
+        {
+          id: 8,
+          cat: "application",
+          diff: "medium",
+          q: "In rhythmic meter, if a Laghu takes 1 mora (matra) and a Guru takes 2 moras, what is the total duration of 'L G L G G'?",
+          syllables: ["L", "G", "L", "G", "G"],
+          options: [
+            { id: "A", text: "7 matras", correct: false },
+            { id: "B", text: "8 matras", correct: true },
+            { id: "C", text: "9 matras", correct: false },
+            { id: "D", text: "10 matras", correct: false }
+          ],
+          exp: "Laghu = 1, Guru = 2. Total duration = 1 + 2 + 1 + 2 + 2 = 8 matras."
+        },
+        {
+          id: 9,
+          cat: "challenge",
+          diff: "hard",
+          q: "Which row of Pascal's Triangle gives the distribution of Gurus for patterns of length n = 5?",
+          syllables: ["1", "5", "10", "10", "5", "1"],
+          options: [
+            { id: "A", text: "Row 4", correct: false },
+            { id: "B", text: "Row 5 (1, 5, 10, 10, 5, 1)", correct: true },
+            { id: "C", text: "Row 6", correct: false },
+            { id: "D", text: "Row 3", correct: false }
+          ],
+          exp: "The coefficients for n = 5 are C(5,0)=1, C(5,1)=5, C(5,2)=10, C(5,3)=10, C(5,4)=5, C(5,5)=1, which forms the 5th row of Pascal's Triangle."
+        },
+        {
+          id: 10,
+          cat: "binary",
+          diff: "easy",
+          q: "Convert binary 0101 into its corresponding Laghu–Guru pattern.",
+          syllables: ["0", "1", "0", "1"],
+          options: [
+            { id: "A", text: "L G L G", correct: true },
+            { id: "B", text: "G L G L", correct: false },
+            { id: "C", text: "L L G G", correct: false },
+            { id: "D", text: "G G L L", correct: false }
+          ],
+          exp: "0 maps to L and 1 maps to G. So 0101 → L G L G."
+        }
+      ];
+
+      // DOM Elements
+      const selectNumQ = document.getElementById('select-num-q');
+      const selectDiff = document.getElementById('select-diff');
+      const selectCat = document.getElementById('select-cat');
+      const btnStartTest = document.getElementById('btn-start-test');
+      const categoryBtns = document.querySelectorAll('.category-btn');
+
+      const titleSampleQ = document.getElementById('title-sample-q');
+      const subSampleQ = document.getElementById('sub-sample-q');
+      const qCounter = document.getElementById('q-counter');
+      const btnPrevQ = document.getElementById('btn-prev-q');
+      const btnNextQ = document.getElementById('btn-next-q');
+
+      const quizActiveArea = document.getElementById('quiz-active-area');
+      const quizCompleteArea = document.getElementById('quiz-complete-area');
+
+      const qNumLabel = document.getElementById('q-num-label');
+      const qTextBody = document.getElementById('q-text-body');
+      const qSyllablesBox = document.getElementById('q-syllables-box');
+      const optionsContainer = document.getElementById('options-container');
+      const btnCheckAns = document.getElementById('btn-check-ans');
+      const explanationText = document.getElementById('explanation-text');
+
+      const finalScoreText = document.getElementById('final-score-text');
+      const finalScorePct = document.getElementById('final-score-pct');
+      const btnTryAgain = document.getElementById('btn-try-again');
+
+      // Progress Elements
+      const donutStroke = document.getElementById('donut-stroke');
+      const donutPctText = document.getElementById('donut-pct-text');
+      const statAttempts = document.getElementById('stat-attempts');
+      const statCorrect = document.getElementById('stat-correct');
+      const statTotal = document.getElementById('stat-total');
+      const resultsList = document.getElementById('results-list');
+
+      // State Variables
+      let currentActiveCategory = "all";
+      let activeTestMode = false;
+      let activeQuestions = [];
+      let currentQIndex = 0;
+      let userAnswers = {};
+      let userChecked = {};
+
+      // LocalStorage Key
+      const STORAGE_KEY = "chandacore_test_progress";
+
+      function loadProgress() {
+        let saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) {
+          return {
+            attempts: 4,
+            correct: 30,
+            total: 40,
+            recent: [
+              { name: "Mixed Test (10 Q)", score: "8/10", status: "pass", date: "Sep 22, 2026" },
+              { name: "Combinatorics (5 Q)", score: "4/5", status: "pass", date: "Sep 20, 2026" },
+              { name: "Binary Basics (10 Q)", score: "7/10", status: "warn", date: "Sep 18, 2026" },
+              { name: "Pattern Properties (10 Q)", score: "6/10", status: "warn", date: "Sep 15, 2026" },
+              { name: "Challenge (10 Q)", score: "5/10", status: "fail", date: "Sep 12, 2026" }
+            ]
+          };
+        }
+        try {
+          return JSON.parse(saved);
+        } catch(e) {
+          return { attempts: 0, correct: 0, total: 0, recent: [] };
+        }
+      }
+
+      function saveProgress(data) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
+
+      function renderProgressUI() {
+        const data = loadProgress();
+        const pct = data.total > 0 ? Math.round((data.correct / data.total) * 100) : 0;
+        
+        donutPctText.textContent = `${pct}%`;
+        donutStroke.setAttribute('stroke-dasharray', `${pct}, 100`);
+
+        statAttempts.textContent = data.attempts;
+        statCorrect.textContent = data.correct;
+        statTotal.textContent = data.total;
+
+        // Render Recent Results list
+        resultsList.innerHTML = '';
+        if (!data.recent || data.recent.length === 0) {
+          resultsList.innerHTML = '<div class="result-item"><span class="result-name">No tests attempted yet.</span></div>';
+        } else {
+          data.recent.slice(0, 5).forEach(r => {
+            const item = document.createElement('div');
+            item.className = 'result-item';
+            item.innerHTML = `
+              <span class="result-name">${r.name}</span>
+              <div class="result-right">
+                <span class="result-score">${r.score}</span>
+                <span class="status-dot ${r.status}"></span>
+                <span class="result-date">${r.date}</span>
+              </div>
+            `;
+            resultsList.appendChild(item);
+          });
+        }
+      }
+
+      // Filter Questions
+      function getQuestionsForCategory(cat, diff) {
+        let list = questionBank;
+        if (cat !== 'all') {
+          list = list.filter(q => q.cat === cat);
+        }
+        if (list.length === 0) list = questionBank; // fallback
+        return list;
+      }
+
+      // Render Single Question
+      function renderQuestion(qObj, index, totalCount) {
+        qNumLabel.textContent = `Q${index + 1}.`;
+        qTextBody.textContent = qObj.q;
+
+        // Syllable Pills
+        qSyllablesBox.innerHTML = '';
+        if (qObj.syllables && qObj.syllables.length > 0) {
+          qSyllablesBox.style.display = 'flex';
+          qObj.syllables.forEach(s => {
+            const span = document.createElement('span');
+            span.className = 'syllable-pill';
+            span.textContent = s;
+            qSyllablesBox.appendChild(span);
+          });
+        } else {
+          qSyllablesBox.style.display = 'none';
+        }
+
+        // Options
+        optionsContainer.innerHTML = '';
+        const userChoice = userAnswers[index];
+        const isChecked = userChecked[index];
+
+        qObj.options.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'option-btn';
+          btn.dataset.opt = opt.id;
+
+          if (userChoice === opt.id) {
+            btn.classList.add('selected');
+          }
+
+          if (isChecked) {
+            if (opt.correct) {
+              btn.classList.add('correct-ans');
+            } else if (userChoice === opt.id && !opt.correct) {
+              btn.classList.add('wrong-ans');
+            }
+          }
+
+          btn.innerHTML = `
+            <span class="option-badge">${opt.id}</span>
+            <span class="option-label">${opt.text}</span>
+          `;
+
+          btn.addEventListener('click', () => {
+            if (isChecked) return; // locked after check
+            userAnswers[index] = opt.id;
+            // update selection UI
+            document.querySelectorAll('#options-container .option-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+          });
+
+          optionsContainer.appendChild(btn);
+        });
+
+        // Explanation
+        if (isChecked) {
+          explanationText.innerHTML = qObj.exp;
+        } else {
+          explanationText.textContent = "Select an option and click 'Check Answer' to reveal the detailed explanation.";
+        }
+
+        // Counter & Buttons
+        qCounter.textContent = `${index + 1} / ${totalCount}`;
+        btnPrevQ.disabled = (index === 0);
+        btnNextQ.disabled = (index === totalCount - 1 && !activeTestMode);
+        if (activeTestMode && index === totalCount - 1) {
+          btnNextQ.textContent = 'Finish ✓';
+        } else {
+          btnNextQ.textContent = '›';
+        }
+      }
+
+      // Start Test Mode
+      function startTest() {
+        const cat = selectCat.value;
+        const diff = selectDiff.value;
+        const count = parseInt(selectNumQ.value, 10);
+
+        activeQuestions = getQuestionsForCategory(cat, diff).slice(0, count);
+        if (activeQuestions.length < count) {
+          // pad questions if needed
+          while (activeQuestions.length < count && questionBank.length > 0) {
+            activeQuestions.push(questionBank[activeQuestions.length % questionBank.length]);
+          }
+        }
+
+        activeTestMode = true;
+        currentQIndex = 0;
+        userAnswers = {};
+        userChecked = {};
+
+        titleSampleQ.textContent = "Active Test Experience";
+        subSampleQ.textContent = `Category: ${selectCat.options[selectCat.selectedIndex].text} | Difficulty: ${diff.toUpperCase()}`;
+
+        quizActiveArea.style.display = 'block';
+        quizCompleteArea.style.display = 'none';
+
+        renderQuestion(activeQuestions[currentQIndex], currentQIndex, activeQuestions.length);
+      }
+
+      function finishTest() {
+        let correctCount = 0;
+        activeQuestions.forEach((q, idx) => {
+          const userChoice = userAnswers[idx];
+          const correctOpt = q.options.find(o => o.correct);
+          if (userChoice && correctOpt && userChoice === correctOpt.id) {
+            correctCount++;
+          }
+        });
+
+        const totalQ = activeQuestions.length;
+        const pct = Math.round((correctCount / totalQ) * 100);
+
+        // Update progress storage
+        const prog = loadProgress();
+        prog.attempts += 1;
+        prog.correct += correctCount;
+        prog.total += totalQ;
+
+        let statusClass = "pass";
+        if (pct < 60) statusClass = "fail";
+        else if (pct < 80) statusClass = "warn";
+
+        const todayStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const catName = selectCat.options[selectCat.selectedIndex].text;
+
+        prog.recent.unshift({
+          name: `${catName} (${totalQ} Q)`,
+          score: `${correctCount}/${totalQ}`,
+          status: statusClass,
+          date: todayStr
+        });
+
+        saveProgress(prog);
+        renderProgressUI();
+
+        // Render Complete Screen
+        finalScoreText.textContent = `${correctCount} / ${totalQ}`;
+        finalScorePct.textContent = `You scored ${pct}%. ${pct >= 70 ? 'Excellent work mastering the patterns!' : 'Keep practicing to strengthen your understanding.'}`;
+
+        quizActiveArea.style.display = 'none';
+        quizCompleteArea.style.display = 'block';
+      }
+
+      // Event Listeners for Categories Sidebar
+      categoryBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          categoryBtns.forEach(b => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+
+          const cat = btn.dataset.cat;
+          currentActiveCategory = cat;
+          selectCat.value = cat;
+
+          if (!activeTestMode) {
+            // Update Preview question
+            const list = getQuestionsForCategory(cat, 'medium');
+            activeQuestions = [list[0]];
+            currentQIndex = 0;
+            userAnswers = {};
+            userChecked = {};
+            renderQuestion(activeQuestions[0], 0, 1);
+          }
+        });
+      });
+
+      selectCat.addEventListener('change', () => {
+        const cat = selectCat.value;
+        categoryBtns.forEach(b => {
+          if (b.dataset.cat === cat) b.classList.add('is-active');
+          else b.classList.remove('is-active');
+        });
+      });
+
+      btnStartTest.addEventListener('click', startTest);
+
+      btnCheckAns.addEventListener('click', () => {
+        userChecked[currentQIndex] = true;
+        renderQuestion(activeQuestions[currentQIndex], currentQIndex, activeQuestions.length);
+      });
+
+      btnPrevQ.addEventListener('click', () => {
+        if (currentQIndex > 0) {
+          currentQIndex--;
+          renderQuestion(activeQuestions[currentQIndex], currentQIndex, activeQuestions.length);
+        }
+      });
+
+      btnNextQ.addEventListener('click', () => {
+        if (currentQIndex < activeQuestions.length - 1) {
+          currentQIndex++;
+          renderQuestion(activeQuestions[currentQIndex], currentQIndex, activeQuestions.length);
+        } else if (activeTestMode && currentQIndex === activeQuestions.length - 1) {
+          finishTest();
+        }
+      });
+
+      btnTryAgain.addEventListener('click', () => {
+        startTest();
+      });
+
+      // Initial Setup
+      renderProgressUI();
+      activeQuestions = [questionBank[0]];
+      renderQuestion(activeQuestions[0], 0, 1);
+
+    })();
+  </script>
+</body>
+</html>

@@ -751,27 +751,70 @@
       margin: 0;
     }
 
-    /* ---------- Footer ---------- */
+    /* ---------- Shared Enhanced Footer ---------- */
     .footer {
-      background: var(--offwhite);
-      color: var(--ink);
-      padding: 2.2rem var(--pad) 1.4rem;
-      margin-top: 4rem;
-      border-top: 1px solid rgba(180, 146, 92, 0.3);
+      background: var(--cream); border-top: 1px solid rgba(74,58,34,.18);
+      padding: 3.5rem var(--pad) 2rem; color: var(--ink); position: relative; z-index: 10;
+      font-family: var(--sans);
     }
-    .footer__row { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1.5rem; }
-    .footer .brand__name { color: var(--ink); }
-    .footer .brand__name b { color: #b8862a; }
-    .footer .brand img { width: 46px; height: 46px; }
-    .footer__tag { margin: .35rem 0 0 calc(46px + .6rem); font-size: .78rem; color: rgba(23,35,31,.72); }
-    .footer__nav { display: flex; gap: 2rem; list-style: none; margin: 0; padding: 0; }
-    .footer__nav a { font-size: .88rem; font-weight: 500; padding: .4rem 0; border-bottom: 1px solid transparent; transition: color .2s, border-color .2s; }
-    .footer__nav a:hover { color: #9a6c14; border-color: var(--gold); }
-    .footer__social { display: flex; justify-content: flex-end; gap: 1.1rem; list-style: none; margin: 0; padding: 0; }
-    .footer__social a { display: grid; place-items: center; width: 32px; height: 32px; color: var(--ink); transition: color .2s, transform .2s; }
-    .footer__social a:hover { color: #9a6c14; transform: translateY(-2px); }
-    .footer__social svg { width: 26px; height: 26px; }
-    .footer__copy { max-width: 1180px; margin: 1.6rem auto 0; padding-top: 1rem; border-top: 1px solid rgba(23,35,31,.12); text-align: center; font-size: .76rem; color: rgba(23,35,31,.65); }
+    .footer__container {
+      max-width: 1180px; margin: 0 auto;
+    }
+    .footer__grid {
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .footer .brand img { width: 44px; height: 44px; }
+    .footer__tagline {
+      font-family: var(--serif); font-size: 1.05rem; font-style: italic; font-weight: 600;
+      color: var(--green); margin: 0.75rem 0 0.4rem; line-height: 1.3;
+    }
+    .footer__desc {
+      font-size: 0.82rem; color: rgba(23,35,31,0.75); margin: 0 0 0.9rem; line-height: 1.45;
+    }
+    .footer__badge {
+      display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #b8862a; background: rgba(213,164,65,0.12);
+      border: 1px solid rgba(213,164,65,0.3); padding: 0.25rem 0.65rem; border-radius: 4px;
+    }
+    .footer__heading {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 700; color: var(--green);
+      margin: 0 0 1rem; letter-spacing: 0.02em;
+    }
+    .footer__links {
+      list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem;
+    }
+    .footer__links a {
+      font-size: 0.88rem; color: rgba(23,35,31,0.8); transition: all 0.2s ease;
+      display: inline-flex; align-items: center; gap: 0.3rem;
+    }
+    .footer__links a:hover {
+      color: #b8862a; transform: translateX(2px);
+    }
+    .footer__divider {
+      height: 1px; background: rgba(74,58,34,0.15); margin: 2rem 0 1.5rem;
+    }
+    .footer__mid {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+      margin-bottom: 1.5rem; font-size: 0.88rem;
+    }
+    .footer__mid-statement strong {
+      font-family: var(--serif); color: var(--green); font-size: 1rem; font-weight: 700;
+    }
+    .footer__mid-statement p {
+      margin: 0.2rem 0 0; color: rgba(23,35,31,0.7); font-size: 0.82rem;
+    }
+    .footer__mid-links {
+      display: flex; gap: 1.5rem; align-items: center;
+    }
+    .footer__mid-links a {
+      font-weight: 600; color: var(--green); transition: color 0.2s; display: inline-flex; align-items: center; gap: 0.25rem;
+    }
+    .footer__mid-links a:hover { color: #b8862a; }
+    .footer__bottom {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;
+      padding-top: 1.2rem; border-top: 1px opacity(0.08) solid; font-size: 0.78rem; color: rgba(23,35,31,0.65);
+    }
 
     /* ---------- Responsive Breakpoints ---------- */
     @media (max-width: 1120px) {
@@ -860,9 +903,9 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="generator.html" aria-current="page">Generator</a></li>
             <li><a href="analyzer.html">Analyzer</a></li>
-            <li><a href="#">Combinatorics</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Tests</a></li>
+            <li><a href="combinatorics.html">Combinatorics</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="tests.html">Tests</a></li>
           </ul>
         <a class="btn btn--gold" href="generator.html">Explore Now <span aria-hidden="true">→</span></a>
       </div>
@@ -1047,16 +1090,20 @@
                 <span class="details-row__val" id="det-val-gratio">50%</span>
               </div>
               <div class="details-row">
+                <span class="details-row__label">Weight (Gurus)</span>
+                <span class="details-row__val" id="det-val-weight">2</span>
+              </div>
+              <div class="details-row">
                 <span class="details-row__label">Complement</span>
-                <span class="details-row__val mono" id="det-val-complement">G L L G</span>
+                <span class="details-row__val mono" id="det-val-complement">G L L G (1001)</span>
               </div>
               <div class="details-row">
                 <span class="details-row__label">Reverse</span>
-                <span class="details-row__val mono" id="det-val-reverse">L G G L</span>
+                <span class="details-row__val mono" id="det-val-reverse">L G G L (0110)</span>
               </div>
               <div class="details-row">
-                <span class="details-row__label">Weight</span>
-                <span class="details-row__val" id="det-val-weight">2</span>
+                <span class="details-row__label">Palindrome</span>
+                <span class="details-row__val" id="det-val-palindrome">Yes</span>
               </div>
             </div>
           </div>
@@ -1185,28 +1232,72 @@
 
   <!-- FOOTER -->
   <footer class="footer">
-    <div class="footer__row">
-      <div>
-        <a class="brand" href="index.html" aria-label="ChandaCore home">
-          <img src="assets/logo-mark.png" alt="ChandaCore Logo" width="46" height="46">
-          <span class="brand__text"><span class="brand__name">Chanda<b>Core</b></span></span>
-        </a>
-        <p class="footer__tag">Ancient Patterns. Modern Possibilities.</p>
+    <div class="footer__container">
+      <div class="footer__grid">
+        <!-- COLUMN 1 — BRAND -->
+        <div class="footer__col-brand">
+          <a class="brand" href="index.html" aria-label="ChandaCore home">
+            <img src="assets/logo-mark.png" alt="ChandaCore Logo" width="44" height="44">
+            <span class="brand__text">
+              <span class="brand__name">Chanda<b>Core</b></span>
+            </span>
+          </a>
+          <p class="footer__tagline">"Ancient Patterns. Modern Possibilities."</p>
+          <p class="footer__desc">Exploring ancient knowledge systems through modern computational thinking.</p>
+          <span class="footer__badge">IKS × Computer Science</span>
+        </div>
+
+        <!-- COLUMN 2 — EXPLORE -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Explore</h3>
+          <ul class="footer__links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="generator.html">Generator</a></li>
+            <li><a href="analyzer.html">Analyzer</a></li>
+            <li><a href="combinatorics.html">Combinatorics</a></li>
+            <li><a href="tests.html">Tests</a></li>
+          </ul>
+        </div>
+
+        <!-- COLUMN 3 — PROJECT -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Project</h3>
+          <ul class="footer__links">
+            <li><a href="about.html">About</a></li>
+            <li><a href="index.html#how-it-works">How It Works</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- COLUMN 4 — KNOWLEDGE -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Knowledge</h3>
+          <ul class="footer__links">
+            <li><a href="index.html#how-it-works">Chandaśāstra</a></li>
+            <li><a href="index.html#how-it-works">Binary Encoding</a></li>
+            <li><a href="combinatorics.html">Combinatorics</a></li>
+          </ul>
+        </div>
       </div>
 
-      <ul class="footer__nav">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/contact">Contact</a></li>
-      </ul>
+      <div class="footer__divider"></div>
 
-      <ul class="footer__social">
-        <li><a href="https://github.com/" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg></a></li>
-        <li><a href="https://www.linkedin.com/" aria-label="LinkedIn" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1.500" y="1.500" width="21" height="21" rx="4" fill="currentColor"/><g fill="#F7F3E8"><circle cx="7.300" cy="7.600" r="1.600"/><rect x="5.800" y="10" width="3" height="8.500"/><path d="M10.800 10h2.900v1.200c.5-.9 1.600-1.400 2.800-1.400 2.400 0 3.200 1.500 3.200 3.800v4.900h-3v-4.300c0-1.100-.3-1.800-1.300-1.800-1 0-1.600.7-1.600 1.800v4.300h-3z"/></g></svg></a></li>
-        <li><a href="https://www.youtube.com/" aria-label="YouTube" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="4.500" width="22" height="15" rx="4.500" fill="currentColor"/><path d="M10 9v6l5.200-3z" fill="#F7F3E8"/></svg></a></li>
-      </ul>
+      <div class="footer__mid">
+        <div class="footer__mid-statement">
+          <strong>IKS × Computer Science</strong>
+          <p>Exploring ancient patterns through modern computation.</p>
+        </div>
+        <div class="footer__mid-links">
+          <a href="https://github.com/naziasalmani/ChandaCore" target="_blank" rel="noopener" aria-label="GitHub Repository">GitHub ↗</a>
+          <a href="contact.html">Contact ↗</a>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <div>© 2026 ChandaCore. All rights reserved.</div>
+        <div>Built for IKS × Computer Science</div>
+      </div>
     </div>
-    <p class="footer__copy">© 2026 ChandaCore. All rights reserved.</p>
   </footer>
 
   <!-- SCRIPT LOGIC -->
@@ -1258,9 +1349,10 @@
       var detValGuru = document.getElementById('det-val-guru');
       var detValLratio = document.getElementById('det-val-lratio');
       var detValGratio = document.getElementById('det-val-gratio');
+      var detValWeight = document.getElementById('det-val-weight');
       var detValComplement = document.getElementById('det-val-complement');
       var detValReverse = document.getElementById('det-val-reverse');
-      var detValWeight = document.getElementById('det-val-weight');
+      var detValPalindrome = document.getElementById('det-val-palindrome');
 
       var btnTryDiffLength = document.getElementById('btn-try-different-length');
 
@@ -1334,17 +1426,21 @@
             '<td class="col-pattern">' + item.pattern + '</td>' +
             '<td class="col-binary">' + item.binary + '</td>' +
             '<td class="col-decimal">' + item.decimal + '</td>';
-          
-          tr.addEventListener('click', (function(idx) {
-            return function() {
-              selectPattern(idx);
-            };
-          })(i));
-
           tbody.appendChild(tr);
         }
 
         renderPagination(totalPages);
+      }
+
+      if (tbody) {
+        tbody.addEventListener('click', function (e) {
+          var tr = e.target.closest('tr');
+          if (!tr) return;
+          var idxStr = tr.getAttribute('data-idx');
+          if (idxStr !== null) {
+            selectPattern(parseInt(idxStr, 10));
+          }
+        });
       }
 
       function renderPagination(totalPages) {
@@ -1394,9 +1490,18 @@
 
       function selectPattern(idx) {
         selectedIndex = idx;
-        renderTable();
 
-        if (idx === null || !generatedList[idx]) {
+        var rows = tbody.querySelectorAll('tr');
+        rows.forEach(function (r) {
+          var rIdx = parseInt(r.getAttribute('data-idx'), 10);
+          if (rIdx === selectedIndex) {
+            r.classList.add('is-selected');
+          } else {
+            r.classList.remove('is-selected');
+          }
+        });
+
+        if (idx === null || idx === undefined || !generatedList[idx]) {
           emptyDetails.style.display = 'block';
           activeDetails.style.display = 'none';
           return;
@@ -1425,28 +1530,35 @@
           revBinary.push(bStr[i]);
         }
 
-        var compPattern = binaryToPattern(compBinary.join(''));
-        var revPattern = binaryToPattern(revBinary.join(''));
+        var compBinStr = compBinary.join('');
+        var revBinStr = revBinary.join('');
+
+        var compPattern = binaryToPattern(compBinStr);
+        var revPattern = binaryToPattern(revBinStr);
+
         var laghuRatio = Math.round((laghuCount / len) * 100) + '%';
         var guruRatio = Math.round((guruCount / len) * 100) + '%';
+
+        var isPalindrome = (bStr === revBinStr) ? 'Yes' : 'No';
 
         emptyDetails.style.display = 'none';
         activeDetails.style.display = 'flex';
 
-        detPatternLg.textContent = item.pattern;
-        detPatternSub.textContent = 'Decimal ' + item.decimal + '  |  Binary ' + item.binary;
+        if (detPatternLg) detPatternLg.textContent = item.pattern;
+        if (detPatternSub) detPatternSub.textContent = 'Decimal ' + item.decimal + '  |  Binary ' + item.binary;
 
-        detValPattern.textContent = item.pattern;
-        detValBinary.textContent = item.binary;
-        detValDecimal.textContent = item.decimal;
-        detValLength.textContent = len;
-        detValLaghu.textContent = laghuCount;
-        detValGuru.textContent = guruCount;
-        detValLratio.textContent = laghuRatio;
-        detValGratio.textContent = guruRatio;
-        detValComplement.textContent = compPattern;
-        detValReverse.textContent = revPattern;
-        detValWeight.textContent = guruCount; // weight = number of Gurus
+        if (detValPattern) detValPattern.textContent = item.pattern;
+        if (detValBinary) detValBinary.textContent = item.binary;
+        if (detValDecimal) detValDecimal.textContent = item.decimal;
+        if (detValLength) detValLength.textContent = len;
+        if (detValLaghu) detValLaghu.textContent = laghuCount;
+        if (detValGuru) detValGuru.textContent = guruCount;
+        if (detValLratio) detValLratio.textContent = laghuRatio;
+        if (detValGratio) detValGratio.textContent = guruRatio;
+        if (detValWeight) detValWeight.textContent = guruCount;
+        if (detValComplement) detValComplement.textContent = compPattern + ' (' + compBinStr + ')';
+        if (detValReverse) detValReverse.textContent = revPattern + ' (' + revBinStr + ')';
+        if (detValPalindrome) detValPalindrome.textContent = isPalindrome;
       }
 
       function updateGenerator(forceN, forceType) {
@@ -1524,6 +1636,8 @@
             inputN.value = currentN;
             generatedList = generatePatterns(currentN, currentGenType);
             currentPage = 1;
+            selectedIndex = null;
+            renderTable();
           }
 
           // Convert raw pattern string (e.g. "LGL") to formatted pattern "L G L"
@@ -1540,6 +1654,7 @@
 
           if (foundIdx !== -1) {
             currentPage = Math.floor(foundIdx / pageSize) + 1;
+            renderTable();
             selectPattern(foundIdx);
           }
 

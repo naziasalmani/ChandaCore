@@ -214,21 +214,70 @@
     .manuscript__quote footer { margin-top: 1.5rem; font-family: var(--serif); font-size: 1.25rem; color: var(--brown); }
     .manuscript__quote footer::after { content: ""; display: block; width: 2.2rem; height: 2px; background: var(--brown); margin: 1.1rem auto 0; }
 
-    /* ---------- Footer ---------- */
-    .footer { background: var(--offwhite); color: var(--ink); padding: 2.2rem var(--pad) 1.4rem; }
-    .footer__row { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1.5rem; }
-    .footer .brand__name { color: var(--ink); }
-    .footer .brand__name b { color: #b8862a; }
-    .footer .brand img { width: 46px; height: 46px; }
-    .footer__tag { margin: .35rem 0 0 calc(46px + .6rem); font-size: .78rem; color: rgba(23,35,31,.72); }
-    .footer__nav { display: flex; gap: 2rem; list-style: none; margin: 0; padding: 0; }
-    .footer__nav a { font-size: .88rem; font-weight: 500; padding: .4rem 0; border-bottom: 1px solid transparent; transition: color .2s, border-color .2s; }
-    .footer__nav a:hover { color: #9a6c14; border-color: var(--gold); }
-    .footer__social { display: flex; justify-content: flex-end; gap: 1.1rem; list-style: none; margin: 0; padding: 0; }
-    .footer__social a { display: grid; place-items: center; width: 32px; height: 32px; color: var(--ink); transition: color .2s, transform .2s; }
-    .footer__social a:hover { color: #9a6c14; transform: translateY(-2px); }
-    .footer__social svg { width: 26px; height: 26px; }
-    .footer__copy { max-width: 1180px; margin: 1.6rem auto 0; padding-top: 1rem; border-top: 1px solid rgba(23,35,31,.12); text-align: center; font-size: .76rem; color: rgba(23,35,31,.65); }
+    /* ---------- Shared Enhanced Footer ---------- */
+    .footer {
+      background: var(--cream); border-top: 1px solid rgba(74,58,34,.18);
+      padding: 3.5rem var(--pad) 2rem; color: var(--ink); position: relative; z-index: 10;
+      font-family: var(--sans);
+    }
+    .footer__container {
+      max-width: 1180px; margin: 0 auto;
+    }
+    .footer__grid {
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .footer .brand img { width: 44px; height: 44px; }
+    .footer__tagline {
+      font-family: var(--serif); font-size: 1.05rem; font-style: italic; font-weight: 600;
+      color: var(--green); margin: 0.75rem 0 0.4rem; line-height: 1.3;
+    }
+    .footer__desc {
+      font-size: 0.82rem; color: rgba(23,35,31,0.75); margin: 0 0 0.9rem; line-height: 1.45;
+    }
+    .footer__badge {
+      display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #b8862a; background: rgba(213,164,65,0.12);
+      border: 1px solid rgba(213,164,65,0.3); padding: 0.25rem 0.65rem; border-radius: 4px;
+    }
+    .footer__heading {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 700; color: var(--green);
+      margin: 0 0 1rem; letter-spacing: 0.02em;
+    }
+    .footer__links {
+      list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem;
+    }
+    .footer__links a {
+      font-size: 0.88rem; color: rgba(23,35,31,0.8); transition: all 0.2s ease;
+      display: inline-flex; align-items: center; gap: 0.3rem;
+    }
+    .footer__links a:hover {
+      color: #b8862a; transform: translateX(2px);
+    }
+    .footer__divider {
+      height: 1px; background: rgba(74,58,34,0.15); margin: 2rem 0 1.5rem;
+    }
+    .footer__mid {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+      margin-bottom: 1.5rem; font-size: 0.88rem;
+    }
+    .footer__mid-statement strong {
+      font-family: var(--serif); color: var(--green); font-size: 1rem; font-weight: 700;
+    }
+    .footer__mid-statement p {
+      margin: 0.2rem 0 0; color: rgba(23,35,31,0.7); font-size: 0.82rem;
+    }
+    .footer__mid-links {
+      display: flex; gap: 1.5rem; align-items: center;
+    }
+    .footer__mid-links a {
+      font-weight: 600; color: var(--green); transition: color 0.2s; display: inline-flex; align-items: center; gap: 0.25rem;
+    }
+    .footer__mid-links a:hover { color: #b8862a; }
+    .footer__bottom {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;
+      padding-top: 1.2rem; border-top: 1px opacity(0.08) solid; font-size: 0.78rem; color: rgba(23,35,31,0.65);
+    }
 
     /* ---------- Tablet ---------- */
     @media (max-width: 1080px) {
@@ -282,6 +331,429 @@
       .hero__content > *, .hero__aside { animation: none; }
       .btn, .feature, .footer__social a { transition: none; }
     }
+
+    /* ---------- How It Works Section ---------- */
+    .how-it-works-section {
+      background: var(--card-bg);
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+      padding: 4rem var(--pad);
+      position: relative;
+    }
+
+    .how-it-works-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .hiw-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .hiw-eyebrow {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .22em;
+      color: #b8862a;
+      text-transform: uppercase;
+      margin-bottom: .6rem;
+    }
+
+    .hiw-title {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0 0 .8rem;
+      line-height: 1.15;
+    }
+
+    .hiw-subtitle {
+      font-size: clamp(.95rem, 1.6vw, 1.1rem);
+      color: rgba(74, 58, 34, 0.85);
+      max-width: 40rem;
+      margin: 0 auto;
+      line-height: 1.55;
+    }
+
+    .hiw-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .hiw-step-card {
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.4);
+      border-radius: 16px;
+      padding: 2rem 2.2rem;
+      box-shadow: 0 8px 24px rgba(40, 28, 12, 0.06);
+      transition: transform .25s ease, border-color .25s, box-shadow .25s;
+      position: relative;
+    }
+    .hiw-step-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--gold);
+      box-shadow: 0 12px 32px rgba(40, 28, 12, 0.1);
+    }
+
+    .hiw-step-num {
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .15em;
+      color: #b8862a;
+      text-transform: uppercase;
+      margin-bottom: .4rem;
+    }
+
+    .hiw-step-heading {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0 0 1rem;
+    }
+
+    .hiw-step-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    @media (max-width: 800px) {
+      .hiw-step-grid {
+        grid-template-columns: 1fr;
+        gap: 1.4rem;
+      }
+    }
+
+    .hiw-step-text {
+      font-size: .95rem;
+      line-height: 1.65;
+      color: rgba(23, 35, 31, 0.9);
+      margin: 0 0 1.2rem;
+    }
+
+    .syllable-weight-box {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .syllable-card {
+      background: #F8F2E6;
+      border: 1px solid rgba(180, 146, 92, 0.45);
+      border-radius: 12px;
+      padding: 1rem 1.4rem;
+      text-align: center;
+      flex: 1;
+    }
+
+    .syllable-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: var(--green);
+      color: var(--gold-soft);
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+    }
+
+    .syllable-label {
+      font-weight: 700;
+      font-size: .95rem;
+      color: var(--ink);
+      display: block;
+    }
+
+    .syllable-desc {
+      font-size: .78rem;
+      color: rgba(74, 58, 34, 0.8);
+    }
+
+    .binary-transform-box {
+      background: #071D18;
+      border: 1px solid rgba(213, 164, 65, 0.35);
+      border-radius: 14px;
+      padding: 1.6rem;
+      color: #F7F3E8;
+      text-align: center;
+    }
+
+    .transform-row {
+      display: flex;
+      justify-content: center;
+      gap: 1.8rem;
+      margin-bottom: .6rem;
+    }
+
+    .transform-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .3rem;
+    }
+
+    .symbol-pill {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--gold-soft);
+    }
+
+    .arrow-down {
+      color: rgba(213, 164, 65, 0.6);
+      font-size: 1.1rem;
+    }
+
+    .binary-digit {
+      font-family: monospace;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #4CAF50;
+    }
+
+    .transform-result {
+      margin-top: 1rem;
+      padding-top: .8rem;
+      border-top: 1px dashed rgba(213, 164, 65, 0.3);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--gold-soft);
+    }
+    .transform-result code {
+      color: #4CAF50;
+      font-family: monospace;
+    }
+
+    .matrix-visual-box {
+      background: #F8F2E6;
+      border: 1px solid rgba(180, 146, 92, 0.45);
+      border-radius: 14px;
+      padding: 1.2rem;
+    }
+
+    .formula-pill {
+      display: inline-block;
+      background: var(--green);
+      color: var(--gold-soft);
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      padding: .3rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .pattern-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .6rem;
+    }
+
+    .pattern-chip {
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.4);
+      border-radius: 8px;
+      padding: .5rem .3rem;
+      text-align: center;
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: .1em;
+    }
+
+    .pascal-visual-box {
+      background: #F8F2E6;
+      border: 1px solid rgba(180, 146, 92, 0.45);
+      border-radius: 14px;
+      padding: 1.4rem;
+      text-align: center;
+    }
+
+    .pascal-formula {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 1rem;
+    }
+
+    .pascal-triangle {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .4rem;
+      margin-bottom: 1rem;
+    }
+
+    .pascal-row {
+      display: flex;
+      gap: .8rem;
+    }
+
+    .pascal-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(180, 146, 92, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .pascal-num.highlight {
+      background: var(--gold);
+      color: #241a08;
+      box-shadow: 0 2px 8px rgba(213, 164, 65, 0.5);
+    }
+
+    .guru-dist-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .8rem;
+      margin-top: .6rem;
+    }
+    .guru-dist-table th, .guru-dist-table td {
+      padding: .35rem .4rem;
+      border: 1px solid rgba(180, 146, 92, 0.3);
+      text-align: center;
+    }
+    .guru-dist-table th {
+      background: #E8D5AF;
+      font-weight: 700;
+    }
+
+    .pipeline-visual-box {
+      background: #071D18;
+      border: 1px solid rgba(213, 164, 65, 0.35);
+      border-radius: 14px;
+      padding: 1.4rem;
+      color: #F7F3E8;
+    }
+
+    .pipeline-flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .5rem;
+      font-size: .85rem;
+      font-weight: 600;
+    }
+
+    .pipeline-badge {
+      background: rgba(213, 164, 65, 0.2);
+      border: 1px solid rgba(213, 164, 65, 0.4);
+      color: var(--gold-soft);
+      padding: .35rem .7rem;
+      border-radius: 6px;
+      font-family: monospace;
+    }
+
+    .pipeline-arrow {
+      color: rgba(213, 164, 65, 0.6);
+    }
+
+    .explore-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .explore-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 500px) {
+      .explore-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .explore-card {
+      background: #F8F2E6;
+      border: 1px solid rgba(180, 146, 92, 0.4);
+      border-radius: 12px;
+      padding: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      transition: all .2s ease;
+    }
+    .explore-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(40, 28, 12, 0.08);
+    }
+
+    .explore-card__title {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .explore-card__desc {
+      font-size: .8rem;
+      color: rgba(74, 58, 34, 0.85);
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .hiw-final-banner {
+      margin-top: 3.5rem;
+      background: linear-gradient(135deg, #071D18 0%, #0D2A23 100%);
+      border: 1px solid rgba(213, 164, 65, 0.4);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      color: #F7F3E8;
+      box-shadow: 0 12px 36px rgba(7, 29, 24, 0.3);
+    }
+
+    .banner-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(.5rem, 2vw, 1.5rem);
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .banner-flow-item {
+      font-size: clamp(.75rem, 1.5vw, .85rem);
+      font-weight: 700;
+      letter-spacing: .15em;
+      color: var(--gold-soft);
+      text-transform: uppercase;
+    }
+
+    .banner-flow-arrow {
+      color: rgba(213, 164, 65, 0.6);
+      font-size: 1.1rem;
+    }
+
+    .banner-motto {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 700;
+      color: var(--offwhite);
+      margin: 0 0 1.5rem;
+    }
   </style>
 </head>
 <body>
@@ -305,9 +777,9 @@
             <li><a href="index.html" aria-current="page">Home</a></li>
             <li><a href="generator.html">Generator</a></li>
             <li><a href="analyzer.html">Analyzer</a></li>
-            <li><a href="#">Combinatorics</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Tests</a></li>
+            <li><a href="combinatorics.html">Combinatorics</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="tests.html">Tests</a></li>
           </ul>
         <a class="btn btn--gold" href="generator.html">Explore Now <span aria-hidden="true">→</span></a>
       </div>
@@ -327,9 +799,7 @@
           <p class="hero__lead">From the verses of Pingala to the algorithms of today — explore the mathematical patterns that connect ancient thought with modern computation.</p>
           <div class="hero__actions">
             <a class="btn btn--gold" href="#features">Start Exploring <span aria-hidden="true">→</span></a>
-            <a class="btn btn--ghost" href="#video">Watch Video
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M10 8.2v7.6l6-3.8z" fill="currentColor" stroke="none"/></svg>
-            </a>
+            <a class="btn btn--ghost" href="#how-it-works">How It Works <span aria-hidden="true">→</span></a>
           </div>
         </div>
       </div>
@@ -363,6 +833,281 @@
       </ul>
     </section>
 
+    <!-- HOW IT WORKS SECTION -->
+    <section class="how-it-works-section" id="how-it-works" aria-labelledby="hiw-title">
+      <div class="how-it-works-container">
+        
+        <!-- HEADER -->
+        <header class="hiw-header">
+          <p class="hiw-eyebrow">FROM ANCIENT PATTERNS TO MODERN COMPUTATION</p>
+          <h2 class="hiw-title" id="hiw-title">How It Works</h2>
+          <p class="hiw-subtitle">Discover how an ancient system of poetic patterns can be represented, generated, analyzed, and explored through computational thinking.</p>
+        </header>
+
+        <!-- STEPS FLOW -->
+        <div class="hiw-steps">
+          
+          <!-- STEP 1 — ANCIENT KNOWLEDGE -->
+          <article class="hiw-step-card">
+            <div class="hiw-step-grid">
+              <div>
+                <div class="hiw-step-num">01 — Ancient Knowledge</div>
+                <h3 class="hiw-step-heading">Pingala's Chandaśāstra</h3>
+                <p class="hiw-step-text">ChandaCore is inspired by Pingala's Chandaśāstra, an ancient Indian work concerned with poetic meter and patterns of Laghu (short) and Guru (long) syllables.</p>
+              </div>
+              <div>
+                <div class="syllable-weight-box">
+                  <div class="syllable-card">
+                    <div class="syllable-badge">L</div>
+                    <span class="syllable-label">Laghu</span>
+                    <span class="syllable-desc">Short Syllable (1 Matra)</span>
+                  </div>
+                  <div class="syllable-card">
+                    <div class="syllable-badge" style="background:var(--gold); color:#241a08;">G</div>
+                    <span class="syllable-label">Guru</span>
+                    <span class="syllable-desc">Long Syllable (2 Matras)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- STEP 2 — BINARY ENCODING -->
+          <article class="hiw-step-card">
+            <div class="hiw-step-grid">
+              <div>
+                <div class="hiw-step-num">02 — Binary Encoding</div>
+                <h3 class="hiw-step-heading">Laghu &amp; Guru → 0 &amp; 1</h3>
+                <p class="hiw-step-text">By representing Laghu as 0 and Guru as 1, each syllable pattern can be represented as a binary sequence.</p>
+              </div>
+              <div>
+                <div class="binary-transform-box">
+                  <div class="transform-row">
+                    <div class="transform-col">
+                      <span class="symbol-pill">L</span>
+                      <span class="arrow-down">↓</span>
+                      <span class="binary-digit">0</span>
+                    </div>
+                    <div class="transform-col">
+                      <span class="symbol-pill">G</span>
+                      <span class="arrow-down">↓</span>
+                      <span class="binary-digit">1</span>
+                    </div>
+                    <div class="transform-col">
+                      <span class="symbol-pill">G</span>
+                      <span class="arrow-down">↓</span>
+                      <span class="binary-digit">1</span>
+                    </div>
+                    <div class="transform-col">
+                      <span class="symbol-pill">L</span>
+                      <span class="arrow-down">↓</span>
+                      <span class="binary-digit">0</span>
+                    </div>
+                  </div>
+                  <div class="transform-result">
+                    <span>LGGL</span> &nbsp;→&nbsp; <code>0110</code>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- STEP 3 — COMBINATORIAL GENERATION -->
+          <article class="hiw-step-card">
+            <div class="hiw-step-grid">
+              <div>
+                <div class="hiw-step-num">03 — Pattern Generation</div>
+                <h3 class="hiw-step-heading">Every Pattern Has a Possibility</h3>
+                <p class="hiw-step-text">For a pattern of length <i>n</i>, there are <b>2<sup>n</sup></b> possible Laghu–Guru combinations.</p>
+              </div>
+              <div>
+                <div class="matrix-visual-box">
+                  <div style="text-align:center;">
+                    <div class="formula-pill">2<sup>n</sup></div>
+                    <p style="font-size:.82rem; color:rgba(74,58,34,0.8); margin:0 0 .8rem; font-weight:600;">Example for n = 3 (2<sup>3</sup> = 8 patterns):</p>
+                  </div>
+                  <div class="pattern-grid-3">
+                    <div class="pattern-chip">LLL</div>
+                    <div class="pattern-chip">LLG</div>
+                    <div class="pattern-chip">LGL</div>
+                    <div class="pattern-chip">LGG</div>
+                    <div class="pattern-chip">GLL</div>
+                    <div class="pattern-chip">GLG</div>
+                    <div class="pattern-chip">GGL</div>
+                    <div class="pattern-chip">GGG</div>
+                  </div>
+                  <div style="text-align:center; margin-top:.8rem; font-size:.84rem; font-weight:700; color:var(--brown);">
+                    Total: 2<sup>3</sup> = 8
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- STEP 4 — MATHEMATICAL STRUCTURE -->
+          <article class="hiw-step-card">
+            <div class="hiw-step-grid">
+              <div>
+                <div class="hiw-step-num">04 — Combinatorics</div>
+                <h3 class="hiw-step-heading">Patterns Follow Structure</h3>
+                <p class="hiw-step-text">If exactly <i>k</i> positions contain Guru syllables, the number of possible patterns is given by <b>C(n, k) = n! / (k!(n - k)!)</b>.</p>
+              </div>
+              <div>
+                <div class="pascal-visual-box">
+                  <div class="pascal-formula">C(n,k) = n! / (k!(n - k)!)</div>
+                  
+                  <!-- PASCAL'S TRIANGLE -->
+                  <div class="pascal-triangle">
+                    <div class="pascal-row"><span class="pascal-num">1</span></div>
+                    <div class="pascal-row"><span class="pascal-num">1</span><span class="pascal-num">1</span></div>
+                    <div class="pascal-row"><span class="pascal-num">1</span><span class="pascal-num">2</span><span class="pascal-num">1</span></div>
+                    <div class="pascal-row"><span class="pascal-num">1</span><span class="pascal-num">3</span><span class="pascal-num">3</span><span class="pascal-num">1</span></div>
+                    <div class="pascal-row">
+                      <span class="pascal-num highlight">1</span>
+                      <span class="pascal-num highlight">4</span>
+                      <span class="pascal-num highlight">6</span>
+                      <span class="pascal-num highlight">4</span>
+                      <span class="pascal-num highlight">1</span>
+                    </div>
+                  </div>
+
+                  <!-- DISTRIBUTION TABLE (n = 4) -->
+                  <table class="guru-dist-table">
+                    <thead>
+                      <tr>
+                        <th>Gurus (k)</th>
+                        <th>0</th>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><b>Patterns</b></td>
+                        <td><b>1</b></td>
+                        <td><b>4</b></td>
+                        <td><b>6</b></td>
+                        <td><b>4</b></td>
+                        <td><b>1</b></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- STEP 5 — PATTERN ANALYSIS -->
+          <article class="hiw-step-card">
+            <div class="hiw-step-grid">
+              <div>
+                <div class="hiw-step-num">05 — Pattern Analysis</div>
+                <h3 class="hiw-step-heading">From Pattern to Properties</h3>
+                <p class="hiw-step-text">ChandaCore analyzes each pattern and reveals its mathematical and structural properties.</p>
+                <a href="analyzer.html" class="btn btn--gold" style="margin-top:.4rem; padding:.65rem 1.3rem; font-size:.85rem;">Open Analyzer →</a>
+              </div>
+              <div>
+                <div class="pipeline-visual-box">
+                  <div style="font-size:.78rem; font-weight:700; color:var(--gold-soft); letter-spacing:.15em; text-transform:uppercase; margin-bottom:.8rem;">Analysis Pipeline</div>
+                  <div class="pipeline-flow">
+                    <span class="pipeline-badge">LGGL</span>
+                    <span class="pipeline-arrow">→</span>
+                    <span class="pipeline-badge">0110</span>
+                    <span class="pipeline-arrow">→</span>
+                    <span class="pipeline-badge">Index: 6</span>
+                  </div>
+                  <div class="pipeline-flow" style="margin-top:.7rem;">
+                    <span class="pipeline-badge">Length: 4</span>
+                    <span class="pipeline-arrow">→</span>
+                    <span class="pipeline-badge">Laghu: 2 | Guru: 2</span>
+                  </div>
+                  <div class="pipeline-flow" style="margin-top:.7rem;">
+                    <span class="pipeline-badge">Weight: 2</span>
+                    <span class="pipeline-arrow">→</span>
+                    <span class="pipeline-badge">Palindrome: Yes</span>
+                  </div>
+                  <div class="pipeline-flow" style="margin-top:.7rem;">
+                    <span class="pipeline-arrow">→</span>
+                    <span class="pipeline-badge">Complement: GLLG</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- STEP 6 — EXPLORE & TEST -->
+          <article class="hiw-step-card">
+            <div style="margin-bottom:1.4rem;">
+              <div class="hiw-step-num">06 — Explore &amp; Test</div>
+              <h3 class="hiw-step-heading">Learn by Experimenting</h3>
+              <p class="hiw-step-text" style="max-width:36rem;">Explore every dimension of Pingala's pattern mathematics through our suite of interactive tools.</p>
+            </div>
+
+            <div class="explore-grid">
+              
+              <!-- CARD 1: GENERATOR -->
+              <a href="generator.html" class="explore-card">
+                <div class="explore-card__title">
+                  <span>Generator</span>
+                  <span style="color:var(--gold); font-size:1.1rem;">→</span>
+                </div>
+                <p class="explore-card__desc">Generate every possible Laghu–Guru pattern.</p>
+              </a>
+
+              <!-- CARD 2: ANALYZER -->
+              <a href="analyzer.html" class="explore-card">
+                <div class="explore-card__title">
+                  <span>Analyzer</span>
+                  <span style="color:var(--gold); font-size:1.1rem;">→</span>
+                </div>
+                <p class="explore-card__desc">Explore pattern properties and transformations.</p>
+              </a>
+
+              <!-- CARD 3: COMBINATORICS -->
+              <a href="combinatorics.html" class="explore-card">
+                <div class="explore-card__title">
+                  <span>Combinatorics</span>
+                  <span style="color:var(--gold); font-size:1.1rem;">→</span>
+                </div>
+                <p class="explore-card__desc">Discover counting rules and Pascal's Triangle.</p>
+              </a>
+
+              <!-- CARD 4: TESTS -->
+              <a href="tests.html" class="explore-card">
+                <div class="explore-card__title">
+                  <span>Tests</span>
+                  <span style="color:var(--gold); font-size:1.1rem;">→</span>
+                </div>
+                <p class="explore-card__desc">Test your understanding through interactive questions.</p>
+              </a>
+
+            </div>
+          </article>
+
+        </div>
+
+        <!-- FINAL CONNECTION BANNER -->
+        <div class="hiw-final-banner">
+          <div class="banner-flow">
+            <span class="banner-flow-item">ANCIENT KNOWLEDGE</span>
+            <span class="banner-flow-arrow">↓</span>
+            <span class="banner-flow-item">MATHEMATICAL PATTERNS</span>
+            <span class="banner-flow-arrow">↓</span>
+            <span class="banner-flow-item">COMPUTATIONAL REPRESENTATION</span>
+            <span class="banner-flow-arrow">↓</span>
+            <span class="banner-flow-item">ALGORITHMIC EXPLORATION</span>
+          </div>
+
+          <h3 class="banner-motto">“Ancient Patterns. Modern Possibilities.”</h3>
+
+          <a href="generator.html" class="btn btn--gold" style="padding:.9rem 2rem; font-size:.95rem;">Start Exploring <span aria-hidden="true">→</span></a>
+        </div>
+
+      </div>
+    </section>
+
     <!-- QUOTE / MANUSCRIPT -->
     <section class="manuscript parchment" aria-label="Quote">
       <div class="script script--l" aria-hidden="true" lang="sa">
@@ -380,29 +1125,74 @@
     </section>
   </main>
 
+  <!-- FOOTER -->
   <footer class="footer">
-    <div class="footer__row">
-      <div>
-        <a class="brand" href="index.html" aria-label="ChandaCore home">
-          <img src="assets/logo-mark.png" alt="" width="46" height="46">
-          <span class="brand__text"><span class="brand__name">Chanda<b>Core</b></span></span>
-        </a>
-        <p class="footer__tag">Ancient Patterns. Modern Possibilities.</p>
+    <div class="footer__container">
+      <div class="footer__grid">
+        <!-- COLUMN 1 — BRAND -->
+        <div class="footer__col-brand">
+          <a class="brand" href="index.html" aria-label="ChandaCore home">
+            <img src="assets/logo-mark.png" alt="ChandaCore Logo" width="44" height="44">
+            <span class="brand__text">
+              <span class="brand__name">Chanda<b>Core</b></span>
+            </span>
+          </a>
+          <p class="footer__tagline">"Ancient Patterns. Modern Possibilities."</p>
+          <p class="footer__desc">Exploring ancient knowledge systems through modern computational thinking.</p>
+          <span class="footer__badge">IKS × Computer Science</span>
+        </div>
+
+        <!-- COLUMN 2 — EXPLORE -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Explore</h3>
+          <ul class="footer__links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="generator.html">Generator</a></li>
+            <li><a href="analyzer.html">Analyzer</a></li>
+            <li><a href="combinatorics.html">Combinatorics</a></li>
+            <li><a href="tests.html">Tests</a></li>
+          </ul>
+        </div>
+
+        <!-- COLUMN 3 — PROJECT -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Project</h3>
+          <ul class="footer__links">
+            <li><a href="about.html">About</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- COLUMN 4 — KNOWLEDGE -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Knowledge</h3>
+          <ul class="footer__links">
+            <li><a href="#how-it-works">Chandaśāstra</a></li>
+            <li><a href="#how-it-works">Binary Encoding</a></li>
+            <li><a href="combinatorics.html">Combinatorics</a></li>
+          </ul>
+        </div>
       </div>
 
-      <ul class="footer__nav">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/contact">Contact</a></li>
-      </ul>
+      <div class="footer__divider"></div>
 
-      <ul class="footer__social">
-        <li><a href="https://github.com/" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg></a></li>
-        <li><a href="https://www.linkedin.com/" aria-label="LinkedIn" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1.500" y="1.500" width="21" height="21" rx="4" fill="currentColor"/><g fill="#F7F3E8"><circle cx="7.300" cy="7.600" r="1.600"/><rect x="5.800" y="10" width="3" height="8.500"/><path d="M10.800 10h2.900v1.200c.5-.9 1.600-1.400 2.800-1.400 2.400 0 3.200 1.500 3.200 3.800v4.900h-3v-4.300c0-1.100-.3-1.800-1.300-1.800-1 0-1.600.7-1.600 1.800v4.300h-3z"/></g></svg></a></li>
-        <li><a href="https://www.youtube.com/" aria-label="YouTube" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="4.500" width="22" height="15" rx="4.500" fill="currentColor"/><path d="M10 9v6l5.200-3z" fill="#F7F3E8"/></svg></a></li>
-      </ul>
+      <div class="footer__mid">
+        <div class="footer__mid-statement">
+          <strong>IKS × Computer Science</strong>
+          <p>Exploring ancient patterns through modern computation.</p>
+        </div>
+        <div class="footer__mid-links">
+          <a href="https://github.com/naziasalmani/ChandaCore" target="_blank" rel="noopener" aria-label="GitHub Repository">GitHub ↗</a>
+          <a href="contact.html">Contact ↗</a>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <div>© 2026 ChandaCore. All rights reserved.</div>
+        <div>Built for IKS × Computer Science</div>
+      </div>
     </div>
-    <p class="footer__copy">© 2026 ChandaCore. All rights reserved.</p>
   </footer>
 
   <script>

@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pattern Combinatorics — ChandaCore</title>
+  <meta name="description" content="Explore the mathematical beauty behind Laghu–Guru patterns, binomial coefficients, Pascal's triangle, and combinatorial relationships based on Pingala's Chandaśāstra.">
+  <meta name="theme-color" content="#071D18">
+  <link rel="icon" href="assets/logo-mark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --forest: #071D18;
+      --green: #0D2A23;
+      --gold: #D5A441;
+      --gold-soft: #E4BD67;
+      --parchment: #E8D5AF;
+      --cream: #F4EBDD;
+      --ink: #17231F;
+      --offwhite: #F7F3E8;
+      --brown: #4a3a22;
+
+      --card-bg: #F8F2E6;
+      --card-border: rgba(180, 146, 92, 0.45);
+      --card-shadow: 0 8px 24px rgba(40, 28, 12, 0.08);
+
+      --serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+      --sans: "Inter", "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --deva: "Noto Serif Devanagari", "Kohinoor Devanagari", serif;
+
+      --pad: clamp(1.25rem, 4vw, 3.5rem);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background-color: #E5D5B8;
+      background-image: url("assets/combinatorics_bg.png");
+      background-position: top center;
+      background-size: 100% auto;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @media (max-width: 1024px) {
+      body {
+        background-size: cover;
+      }
+    }
+
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    :focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 3px; border-radius: 4px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* ---------- Brand Wordmark ---------- */
+    .brand { display: inline-flex; align-items: center; gap: .6rem; }
+    .brand img { width: 44px; height: 44px; object-fit: contain; }
+    .brand__text { display: flex; flex-direction: column; line-height: 1; }
+    .brand__name { font-family: var(--serif); font-weight: 600; font-size: 1.7rem; letter-spacing: .005em; color: var(--offwhite); }
+    .brand__name b { font-weight: 600; color: var(--gold); }
+    .brand__sub { font-size: .56rem; letter-spacing: .2em; margin-top: .3rem; color: rgba(247,243,232,.68); text-transform: uppercase; }
+
+    /* ---------- Navbar ---------- */
+    .nav {
+      position: relative; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+      padding: 1.1rem var(--pad);
+      background: linear-gradient(to bottom, rgba(7,29,24,.88), rgba(7,29,24,0));
+    }
+    .nav__links { display: flex; align-items: center; gap: clamp(1.1rem, 2.4vw, 2.3rem); list-style: none; margin: 0 0 0 auto; padding: 0; }
+    .nav__links a {
+      position: relative; display: block; padding: .5rem 0;
+      font-size: .85rem; font-weight: 500; color: rgba(247,243,232,.86);
+      transition: color .2s;
+    }
+    .nav__links a::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: .1rem; height: 2px;
+      background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform .25s ease;
+    }
+    .nav__links a:hover, .nav__links a[aria-current="page"] { color: var(--gold-soft); }
+    .nav__links a:hover::after, .nav__links a[aria-current="page"]::after { transform: scaleX(1); }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+      font: 600 .88rem/1 var(--sans); border-radius: 999px; cursor: pointer;
+      padding: .85rem 1.5rem; border: 1px solid transparent;
+      transition: transform .2s ease, background-color .2s, border-color .2s, box-shadow .2s, color .2s;
+    }
+    .btn--gold { background: linear-gradient(180deg, var(--gold-soft), var(--gold)); color: #241a08; box-shadow: 0 6px 20px -8px rgba(213,164,65,.7); }
+    .btn--gold:hover { transform: translateY(-2px); box-shadow: 0 10px 26px -8px rgba(228,189,103,.85); }
+    .nav .btn { padding: .7rem 1.25rem; font-size: .82rem; }
+
+    .nav__toggle {
+      display: none; width: 44px; height: 44px; margin-left: auto; padding: 0;
+      background: transparent; border: 1px solid rgba(247,243,232,.35); border-radius: 12px; color: var(--offwhite); cursor: pointer;
+    }
+    .nav__toggle span, .nav__toggle span::before, .nav__toggle span::after {
+      display: block; width: 20px; height: 1.5px; background: currentColor; position: relative; margin: 0 auto; transition: transform .25s, background .25s;
+    }
+    .nav__toggle span::before, .nav__toggle span::after { content: ""; position: absolute; left: 0; }
+    .nav__toggle span::before { top: -6px; }
+    .nav__toggle span::after { top: 6px; }
+    .nav__toggle[aria-expanded="true"] span { background: transparent; }
+    .nav__toggle[aria-expanded="true"] span::before { top: 0; transform: rotate(45deg); }
+    .nav__toggle[aria-expanded="true"] span::after { top: 0; transform: rotate(-45deg); }
+
+    /* ---------- Hero Header ---------- */
+    .hero-header {
+      position: relative;
+      padding: 2.2rem var(--pad) 2.5rem;
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .hero-header__main {
+      max-width: 44rem;
+    }
+
+    .hero-header__eyebrow {
+      margin: 0 0 .8rem;
+      font-size: .74rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      color: var(--gold-soft);
+      text-transform: uppercase;
+    }
+
+    .hero-header__title {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: clamp(2.8rem, 5.5vw, 4.4rem);
+      line-height: 1.05;
+      color: var(--offwhite);
+      text-shadow: 0 3px 25px rgba(0,0,0,0.5);
+    }
+    .hero-header__title span {
+      color: var(--gold);
+    }
+
+    .hero-header__sub {
+      margin: .9rem 0 0;
+      font-size: clamp(1rem, 1.3vw, 1.15rem);
+      line-height: 1.5;
+      color: rgba(247, 243, 232, 0.92);
+      text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+      max-width: 36rem;
+    }
+
+    .hero-header__aside {
+      padding-top: 0.5rem;
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+
+    .hero-quote-card {
+      background: rgba(13, 42, 35, 0.75);
+      border: 1px solid rgba(213, 164, 65, 0.4);
+      border-radius: 12px;
+      padding: 1.1rem 1.4rem;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      max-width: 320px;
+      text-align: right;
+    }
+
+    .hero-sanskrit {
+      font-family: var(--deva);
+      font-size: 1.1rem;
+      color: var(--gold-soft);
+      margin-bottom: .4rem;
+      letter-spacing: .02em;
+    }
+
+    .hero-quote {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.25rem;
+      color: var(--offwhite);
+      margin: 0;
+    }
+
+    /* ---------- Container for Main Sections ---------- */
+    .page-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--pad);
+    }
+
+    /* ---------- Grid Layout (3 Columns Desktop) ---------- */
+    .combinatorics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.4rem;
+      align-items: stretch;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (max-width: 1100px) {
+      .combinatorics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .combinatorics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ---------- Panel Cards ---------- */
+    .panel-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.4rem 1.4rem 1.6rem;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: .75rem;
+      margin-bottom: 1.1rem;
+      padding-bottom: .85rem;
+      border-bottom: 1px solid rgba(180, 146, 92, 0.25);
+    }
+
+    .panel-header__left {
+      display: flex;
+      align-items: flex-start;
+      gap: .65rem;
+    }
+
+    .panel-header__icon {
+      width: 24px;
+      height: 24px;
+      color: var(--brown);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .panel-title {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .panel-subtitle {
+      font-size: .8rem;
+      color: rgba(74, 58, 34, 0.82);
+      margin: .25rem 0 0;
+      line-height: 1.4;
+    }
+
+    /* Form Controls */
+    .form-group {
+      margin-bottom: 1.1rem;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      font-size: .88rem;
+      color: var(--ink);
+      margin-bottom: .45rem;
+    }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.45);
+      border-radius: 10px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .stepper__btn {
+      width: 48px;
+      height: 44px;
+      background: transparent;
+      border: none;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--brown);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color .15s;
+    }
+    .stepper__btn:hover {
+      background: rgba(180, 146, 92, 0.18);
+    }
+    .stepper__btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    .stepper__input {
+      flex: 1;
+      height: 44px;
+      background: transparent;
+      border: none;
+      text-align: center;
+      font-family: var(--sans);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--ink);
+      -moz-appearance: textfield;
+    }
+    .stepper__input::-webkit-outer-spin-button,
+    .stepper__input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .stepper-caption {
+      text-align: center;
+      font-size: .78rem;
+      color: rgba(74, 58, 34, 0.75);
+      margin-top: .4rem;
+    }
+
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .btn-calc {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      background: var(--green);
+      color: var(--gold-soft);
+      border: 1px solid rgba(213, 164, 65, 0.4);
+      border-radius: 10px;
+      padding: .75rem 1rem;
+      font-weight: 600;
+      font-size: .88rem;
+      cursor: pointer;
+      transition: all .2s ease;
+      box-shadow: 0 4px 12px rgba(7,29,24,0.15);
+    }
+    .btn-calc:hover {
+      background: #071D18;
+      color: var(--gold);
+      border-color: var(--gold);
+      transform: translateY(-1px);
+    }
+
+    .btn-reset {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      background: #F1E6D4;
+      color: var(--brown);
+      border: 1px solid rgba(180, 146, 92, 0.45);
+      border-radius: 10px;
+      padding: .75rem 1rem;
+      font-weight: 600;
+      font-size: .88rem;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    .btn-reset:hover {
+      background: #E8DAC2;
+      border-color: var(--brown);
+      transform: translateY(-1px);
+    }
+
+    /* Quick Formulas Inset Box */
+    .formulas-box {
+      background: #F1E7D5;
+      border: 1px solid rgba(180, 146, 92, 0.35);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      margin-top: auto;
+    }
+
+    .formulas-box__header {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: .75rem;
+      padding-bottom: .4rem;
+      border-bottom: 1px solid rgba(180, 146, 92, 0.25);
+    }
+
+    .formula-item {
+      font-size: .82rem;
+      color: rgba(23, 35, 31, 0.88);
+      margin-bottom: .6rem;
+      line-height: 1.45;
+    }
+    .formula-item:last-child {
+      margin-bottom: 0;
+    }
+    .formula-label {
+      font-size: .76rem;
+      color: rgba(74, 58, 34, 0.78);
+      display: block;
+      margin-bottom: .15rem;
+    }
+    .formula-math {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #071D18;
+      background: rgba(255,255,255,0.4);
+      padding: .2rem .4rem;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    /* ---------- Table Styling ---------- */
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+
+    .combo-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .86rem;
+      text-align: center;
+    }
+
+    .combo-table th {
+      background: #EDE1CB;
+      color: var(--ink);
+      font-weight: 600;
+      padding: .65rem .6rem;
+      border-bottom: 2px solid rgba(180, 146, 92, 0.4);
+      font-family: var(--sans);
+    }
+    .combo-table th span {
+      display: block;
+      font-weight: 400;
+      font-size: .74rem;
+      color: rgba(74, 58, 34, 0.8);
+      margin-top: 2px;
+    }
+
+    .combo-table td {
+      padding: .65rem .6rem;
+      border-bottom: 1px solid rgba(180, 146, 92, 0.2);
+      color: var(--ink);
+    }
+
+    .combo-table tr:nth-child(even) td {
+      background: rgba(241, 230, 212, 0.4);
+    }
+
+    .combo-table tr.total-row td {
+      font-weight: 700;
+      background: #E5D7BF;
+      border-top: 2px solid rgba(180, 146, 92, 0.45);
+      border-bottom: none;
+    }
+
+    /* Observation Box */
+    .observation-box {
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.35);
+      border-radius: 10px;
+      padding: .85rem 1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      margin-top: auto;
+    }
+    .observation-box svg {
+      width: 22px;
+      height: 22px;
+      color: var(--gold);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .observation-title {
+      font-weight: 600;
+      font-size: .85rem;
+      color: var(--ink);
+      margin: 0 0 .2rem;
+    }
+    .observation-text {
+      font-size: .78rem;
+      color: rgba(74, 58, 34, 0.88);
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    /* ---------- Pascal's Triangle Visualizer ---------- */
+    .pascal-control {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: .5rem;
+      margin-bottom: 1rem;
+      font-size: .82rem;
+      color: var(--brown);
+      font-weight: 500;
+    }
+
+    .pascal-stepper {
+      display: flex;
+      align-items: center;
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.45);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .pascal-stepper button {
+      width: 32px;
+      height: 30px;
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--brown);
+      cursor: pointer;
+    }
+    .pascal-stepper button:hover {
+      background: rgba(180, 146, 92, 0.2);
+    }
+    .pascal-stepper input {
+      width: 38px;
+      height: 30px;
+      border: none;
+      background: transparent;
+      text-align: center;
+      font-weight: 700;
+      color: var(--ink);
+      font-size: .95rem;
+    }
+
+    .pascal-container {
+      background: #F2E8D7;
+      border: 1px solid rgba(180, 146, 92, 0.3);
+      border-radius: 12px;
+      padding: 1.2rem .6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+      overflow-x: auto;
+      min-height: 240px;
+      justify-content: center;
+    }
+
+    .pascal-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+    }
+
+    .pascal-node {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #FDF9F0, #E4D3B4);
+      border: 1px solid rgba(180, 146, 92, 0.5);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--ink);
+      transition: transform .2s, background-color .2s;
+    }
+    .pascal-node:hover {
+      transform: scale(1.15);
+      background: radial-gradient(circle at 30% 30%, #FFF5D6, var(--gold-soft));
+      border-color: var(--gold);
+      z-index: 2;
+    }
+    .pascal-node.active-row-node {
+      border: 2px solid var(--gold);
+      background: radial-gradient(circle at 30% 30%, #FFF2CE, #E7C276);
+    }
+
+    .pascal-caption {
+      text-align: center;
+      font-size: .78rem;
+      color: rgba(74, 58, 34, 0.82);
+      margin-top: .9rem;
+      line-height: 1.4;
+    }
+
+    /* ---------- Bar Chart Section ---------- */
+    .chart-container {
+      background: #F2E8D7;
+      border: 1px solid rgba(180, 146, 92, 0.3);
+      border-radius: 12px;
+      padding: 1.2rem 1rem 1rem;
+      position: relative;
+      margin-bottom: auto;
+    }
+
+    .chart-svg {
+      width: 100%;
+      height: 210px;
+      overflow: visible;
+    }
+
+    .chart-bar {
+      fill: var(--green);
+      rx: 4px;
+      transition: height .4s ease, y .4s ease;
+    }
+    .chart-bar:hover {
+      fill: #071D18;
+    }
+
+    .chart-val {
+      font-size: 12px;
+      font-weight: 700;
+      fill: var(--ink);
+      text-anchor: middle;
+      transition: y .4s ease;
+    }
+
+    .chart-axis-label {
+      font-size: 11px;
+      fill: rgba(74, 58, 34, 0.85);
+      text-anchor: middle;
+      font-family: var(--sans);
+    }
+
+    .chart-title-y {
+      font-size: 11px;
+      fill: rgba(74, 58, 34, 0.85);
+      text-anchor: middle;
+      font-weight: 600;
+    }
+
+    .chart-title-x {
+      text-align: center;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--brown);
+      margin-top: .6rem;
+    }
+
+    /* ---------- Examples Accordion ---------- */
+    .examples-list {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+    }
+
+    .example-group {
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.35);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .example-group:hover {
+      border-color: rgba(180, 146, 92, 0.6);
+    }
+
+    .example-header {
+      padding: .7rem .9rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .example-title {
+      font-weight: 600;
+      font-size: .86rem;
+      color: var(--ink);
+    }
+
+    .example-count {
+      font-weight: 400;
+      color: rgba(74, 58, 34, 0.75);
+    }
+
+    .example-body {
+      padding: 0 .9rem .75rem;
+      font-size: .82rem;
+      font-family: monospace;
+      color: #071D18;
+      line-height: 1.5;
+      word-break: break-all;
+    }
+
+    .pattern-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.6);
+      border: 1px solid rgba(180, 146, 92, 0.3);
+      padding: .15rem .45rem;
+      border-radius: 4px;
+      margin: 2px 3px;
+      letter-spacing: .08em;
+      font-weight: 600;
+    }
+
+    .limit-notice {
+      font-size: .75rem;
+      font-style: italic;
+      color: rgba(74, 58, 34, 0.75);
+      margin-top: .4rem;
+    }
+
+    /* ---------- Key Insights ---------- */
+    .insights-list {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+
+    .insight-card {
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.35);
+      border-radius: 10px;
+      padding: .85rem .95rem;
+      display: flex;
+      align-items: flex-start;
+      gap: .8rem;
+    }
+
+    .insight-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #E5D5B8;
+      border: 1px solid rgba(180, 146, 92, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brown);
+      flex-shrink: 0;
+    }
+    .insight-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .insight-content h4 {
+      margin: 0 0 .2rem;
+      font-size: .88rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .insight-content p {
+      margin: 0;
+      font-size: .8rem;
+      color: rgba(74, 58, 34, 0.88);
+      line-height: 1.4;
+    }
+
+    /* ---------- Related Topics Section ---------- */
+    .related-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.3rem 1.6rem;
+      margin-bottom: 3.5rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .related-info {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+    }
+    .related-info svg {
+      width: 24px;
+      height: 24px;
+      color: var(--brown);
+      flex-shrink: 0;
+    }
+    .related-title {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0;
+      line-height: 1.2;
+    }
+    .related-sub {
+      font-size: .8rem;
+      color: rgba(74, 58, 34, 0.8);
+      margin: .2rem 0 0;
+    }
+
+    .related-buttons {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-topic {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: .65rem 1.25rem;
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.45);
+      border-radius: 10px;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--brown);
+      transition: all .2s;
+      cursor: pointer;
+    }
+    .btn-topic:hover {
+      background: var(--green);
+      color: var(--gold-soft);
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+    .btn-topic.disabled {
+      opacity: .65;
+      cursor: default;
+    }
+    .btn-topic.disabled:hover {
+      background: #F1E6D4;
+      color: var(--brown);
+      border-color: rgba(180, 146, 92, 0.45);
+      transform: none;
+    }
+
+    /* ---------- Footer ---------- */
+    .footer {
+      background: var(--cream); border-top: 1px solid rgba(74,58,34,.18);
+      padding: 3.5rem var(--pad) 2rem; color: var(--ink); position: relative; z-index: 10;
+      font-family: var(--sans);
+    }
+    .footer__container {
+      max-width: 1180px; margin: 0 auto;
+    }
+    .footer__grid {
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .footer .brand img { width: 44px; height: 44px; }
+    .footer__tagline {
+      font-family: var(--serif); font-size: 1.05rem; font-style: italic; font-weight: 600;
+      color: var(--green); margin: 0.75rem 0 0.4rem; line-height: 1.3;
+    }
+    .footer__desc {
+      font-size: 0.82rem; color: rgba(23,35,31,0.75); margin: 0 0 0.9rem; line-height: 1.45;
+    }
+    .footer__badge {
+      display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #b8862a; background: rgba(213,164,65,0.12);
+      border: 1px solid rgba(213,164,65,0.3); padding: 0.25rem 0.65rem; border-radius: 4px;
+    }
+    .footer__heading {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 700; color: var(--green);
+      margin: 0 0 1rem; letter-spacing: 0.02em;
+    }
+    .footer__links {
+      list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem;
+    }
+    .footer__links a {
+      font-size: 0.88rem; color: rgba(23,35,31,0.8); transition: all 0.2s ease;
+      display: inline-flex; align-items: center; gap: 0.3rem;
+    }
+    .footer__links a:hover {
+      color: #b8862a; transform: translateX(2px);
+    }
+    .footer__divider {
+      height: 1px; background: rgba(74,58,34,0.15); margin: 2rem 0 1.5rem;
+    }
+    .footer__mid {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+      margin-bottom: 1.5rem; font-size: 0.88rem;
+    }
+    .footer__mid-statement strong {
+      font-family: var(--serif); color: var(--green); font-size: 1rem; font-weight: 700;
+    }
+    .footer__mid-statement p {
+      margin: 0.2rem 0 0; color: rgba(23,35,31,0.7); font-size: 0.82rem;
+    }
+    .footer__mid-links {
+      display: flex; gap: 1.5rem; align-items: center;
+    }
+    .footer__mid-links a {
+      font-weight: 600; color: var(--green); transition: color 0.2s; display: inline-flex; align-items: center; gap: 0.25rem;
+    }
+    .footer__mid-links a:hover { color: #b8862a; }
+    .footer__bottom {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;
+      padding-top: 1.2rem; border-top: 1px opacity(0.08) solid; font-size: 0.78rem; color: rgba(23,35,31,0.65);
+    }
+
+    /* ---------- Mobile Adjustments ---------- */
+    @media (max-width: 900px) {
+      .nav__toggle { display: block; }
+      .nav__menu {
+        position: absolute; top: 100%; left: 0; right: 0; padding: 0 var(--pad) 1.4rem;
+        background: rgba(7,29,24,.96); border-bottom: 1px solid rgba(213,164,65,.3);
+        display: none; flex-direction: column; align-items: stretch;
+      }
+      .nav__menu.is-open { display: flex; }
+      .nav__links { flex-direction: column; align-items: stretch; gap: 0; margin: 0; }
+      .nav__links a { padding: .95rem 0; border-bottom: 1px solid rgba(247,243,232,.1); font-size: 1rem; }
+      .nav__links a::after { display: none; }
+      .nav__links a[aria-current="page"] { color: var(--gold-soft); box-shadow: inset 3px 0 0 var(--gold); padding-left: .8rem; }
+      .nav .btn { display: inline-flex; margin-top: 1.1rem; }
+      
+      .hero-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .hero-header__aside {
+        align-items: flex-start;
+      }
+      .hero-quote-card {
+        text-align: left;
+      }
+
+      .footer__row { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+      .footer__tag { margin-left: 0; }
+      .footer__social { justify-content: center; }
+    }
+    @media (min-width: 901px) { .nav__menu { display: contents; } }
+  </style>
+</head>
+<body>
+
+  <a class="sr-only" href="#main">Skip to content</a>
+
+  <header>
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="index.html" aria-label="ChandaCore home">
+        <img src="assets/logo-mark.png" alt="" width="44" height="44">
+        <span class="brand__text">
+          <span class="brand__name">Chanda<b>Core</b></span>
+          <span class="brand__sub">Ancient Patterns. Modern Possibilities.</span>
+        </span>
+      </a>
+
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <span></span>
+      </button>
+
+      <div class="nav__menu" id="nav-menu">
+        <ul class="nav__links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="generator.html">Generator</a></li>
+          <li><a href="analyzer.html">Analyzer</a></li>
+          <li><a href="combinatorics.html" aria-current="page">Combinatorics</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="tests.html">Tests</a></li>
+        </ul>
+        <a class="btn btn--gold" href="generator.html">Explore Now <span aria-hidden="true">→</span></a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-header">
+    <div class="hero-header__main">
+      <p class="hero-header__eyebrow">COUNT. DISCOVER. GENERALIZE.</p>
+      <h1 class="hero-header__title">Pattern <span>Combinatorics</span></h1>
+      <p class="hero-header__sub">Explore the mathematical beauty behind Laghu–Guru patterns and their combinations.</p>
+    </div>
+    <div class="hero-header__aside">
+      <div class="hero-quote-card">
+        <div class="hero-sanskrit">छन्दः गणितम् संयोजनम् अनन्तता ॥</div>
+        <p class="hero-quote">“From Numbers to Meaning.”</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN WORKSPACE -->
+  <main id="main" class="page-container">
+    <div class="combinatorics-grid">
+
+      <!-- PANEL 1: SELECT n -->
+      <article class="panel-card" aria-labelledby="title-select-n">
+        <div class="panel-header">
+          <div class="panel-header__left">
+            <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <div>
+              <h2 class="panel-title" id="title-select-n">Select n</h2>
+              <p class="panel-subtitle">Choose the pattern length to explore combinatorial properties.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="stepper">
+            <button type="button" class="stepper__btn" id="btn-n-dec" aria-label="Decrease n">−</button>
+            <input type="number" class="stepper__input" id="input-n" value="4" min="0" max="16" aria-label="Number of syllables (n)">
+            <button type="button" class="stepper__btn" id="btn-n-inc" aria-label="Increase n">+</button>
+          </div>
+          <div class="stepper-caption">Number of syllables (n)</div>
+        </div>
+
+        <div class="action-row">
+          <button type="button" class="btn-calc" id="btn-calc">Calculate <span aria-hidden="true">→</span></button>
+          <button type="button" class="btn-reset" id="btn-reset">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> Reset
+          </button>
+        </div>
+
+        <!-- Quick Formulas Box -->
+        <div class="formulas-box">
+          <div class="formulas-box__header">
+            <span>Σ</span> Quick Formulas
+          </div>
+          <div class="formula-item">
+            <span class="formula-label">Total patterns:</span>
+            <span class="formula-math">2<sup>n</sup></span>
+          </div>
+          <div class="formula-item">
+            <span class="formula-label">Patterns with k Gurus:</span>
+            <span class="formula-math">C(n, k) = n! / (k!(n−k)!)</span>
+          </div>
+          <div class="formula-item">
+            <span class="formula-label">Sum of coefficients:</span>
+            <span class="formula-math">Σ<sub>k=0..n</sub> C(n,k) = 2<sup>n</sup></span>
+          </div>
+          <div class="formula-item">
+            <span class="formula-label">Pascal's Identity:</span>
+            <span class="formula-math">C(n,k) = C(n−1,k−1) + C(n−1,k)</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PANEL 2: COMBINATORIAL TABLE -->
+      <article class="panel-card" aria-labelledby="title-table">
+        <div class="panel-header">
+          <div class="panel-header__left">
+            <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+            <div>
+              <h2 class="panel-title" id="title-table">Combinatorial Table</h2>
+              <p class="panel-subtitle">Number of patterns for each possible count of Gurus.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="combo-table" id="combo-table">
+            <thead>
+              <tr>
+                <th>k <span>(Number of Gurus)</span></th>
+                <th>C(n, k) <span>(Number of Patterns)</span></th>
+                <th>Percentage</th>
+              </tr>
+            </thead>
+            <tbody id="combo-tbody">
+              <!-- Dynamically populated -->
+            </tbody>
+            <tfoot>
+              <tr class="total-row">
+                <td>Total</td>
+                <td id="table-total-count">16</td>
+                <td id="table-total-pct">100%</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="observation-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1.55.6 2.8 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/></svg>
+          <div>
+            <div class="observation-title">Observation</div>
+            <p class="observation-text" id="obs-text">For n = 4, the distribution of patterns follows the binomial coefficients, forming the 4th row of Pascal's Triangle.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- PANEL 3: PASCAL'S TRIANGLE -->
+      <article class="panel-card" aria-labelledby="title-pascal">
+        <div class="panel-header">
+          <div class="panel-header__left">
+            <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 22 22 22"/><line x1="12" y1="9" x2="12" y2="15"/></svg>
+            <div>
+              <h2 class="panel-title" id="title-pascal">Pascal's Triangle</h2>
+              <p class="panel-subtitle">Visualize binomial coefficients up to n.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pascal-control">
+          <span>Show up to n =</span>
+          <div class="pascal-stepper">
+            <button type="button" id="btn-pascal-dec" aria-label="Decrease Pascal rows">−</button>
+            <input type="number" id="input-pascal-n" value="6" min="1" max="10" readonly aria-label="Pascal depth">
+            <button type="button" id="btn-pascal-inc" aria-label="Increase Pascal rows">+</button>
+          </div>
+        </div>
+
+        <div class="pascal-container" id="pascal-container">
+          <!-- Dynamic Pascal Nodes -->
+        </div>
+
+        <div class="pascal-caption">
+          Each row n represents the coefficients C(n,k) for k = 0 to n.
+        </div>
+      </article>
+
+      <!-- PANEL 4: PATTERN DISTRIBUTION (BAR CHART) -->
+      <article class="panel-card" aria-labelledby="title-chart">
+        <div class="panel-header">
+          <div class="panel-header__left">
+            <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+            <div>
+              <h2 class="panel-title" id="title-chart">Pattern Distribution</h2>
+              <p class="panel-subtitle">Visual representation of patterns with different numbers of Gurus.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <svg class="chart-svg" id="bar-chart-svg" viewBox="0 0 300 210" preserveAspectRatio="none">
+            <!-- Dynamic SVG elements -->
+          </svg>
+          <div class="chart-title-x">Number of Gurus (k)</div>
+        </div>
+      </article>
+
+      <!-- PANEL 5: EXAMPLES -->
+      <article class="panel-card" aria-labelledby="title-examples">
+        <div class="panel-header">
+          <div class="panel-header__left">
+            <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <div>
+              <h2 class="panel-title" id="title-examples">Examples for n = <span id="ex-n-val">4</span></h2>
+              <p class="panel-subtitle">All patterns grouped by number of Gurus.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="examples-list" id="examples-list">
+          <!-- Dynamically generated accordion list -->
+        </div>
+      </article>
+
+      <!-- PANEL 6: KEY INSIGHTS -->
+      <article class="panel-card" aria-labelledby="title-insights">
+        <div class="panel-header">
+          <div class="panel-header__left">
+            <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3.5z"/></svg>
+            <div>
+              <h2 class="panel-title" id="title-insights">Key Insights</h2>
+              <p class="panel-subtitle">What combinatorics reveals about Laghu–Guru patterns.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="insights-list">
+          <div class="insight-card">
+            <div class="insight-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+            </div>
+            <div class="insight-content">
+              <h4>Symmetry</h4>
+              <p>The distribution is symmetric around n/2.</p>
+            </div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+            </div>
+            <div class="insight-content">
+              <h4>Maximum</h4>
+              <p>The largest number of patterns occurs at k = n/2 (for even n).</p>
+            </div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6H6l6 6-6 6h12"/></svg>
+            </div>
+            <div class="insight-content">
+              <h4>Total Count</h4>
+              <p>The sum of all binomial coefficients equals 2ⁿ.</p>
+            </div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="insight-content">
+              <h4>Connection to Probability</h4>
+              <p>The distribution follows a binomial distribution with p = 0.5.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- RELATED TOPICS SECTION -->
+    <section class="related-section" aria-labelledby="title-related">
+      <div class="related-info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        <div>
+          <h3 class="related-title" id="title-related">Related Topics</h3>
+          <p class="related-sub">Explore more concepts in ChandaCore.</p>
+        </div>
+      </div>
+      <div class="related-buttons">
+        <a href="generator.html" class="btn-topic">Pattern Generator</a>
+        <a href="analyzer.html" class="btn-topic">Pattern Analyzer</a>
+        <span class="btn-topic disabled">Binary Representations</span>
+        <span class="btn-topic disabled">Recursion & Fractals</span>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__container">
+      <div class="footer__grid">
+        <!-- COLUMN 1 — BRAND -->
+        <div class="footer__col-brand">
+          <a class="brand" href="index.html" aria-label="ChandaCore home">
+            <img src="assets/logo-mark.png" alt="ChandaCore Logo" width="44" height="44">
+            <span class="brand__text">
+              <span class="brand__name">Chanda<b>Core</b></span>
+            </span>
+          </a>
+          <p class="footer__tagline">"Ancient Patterns. Modern Possibilities."</p>
+          <p class="footer__desc">Exploring ancient knowledge systems through modern computational thinking.</p>
+          <span class="footer__badge">IKS × Computer Science</span>
+        </div>
+
+        <!-- COLUMN 2 — EXPLORE -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Explore</h3>
+          <ul class="footer__links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="generator.html">Generator</a></li>
+            <li><a href="analyzer.html">Analyzer</a></li>
+            <li><a href="combinatorics.html">Combinatorics</a></li>
+            <li><a href="tests.html">Tests</a></li>
+          </ul>
+        </div>
+
+        <!-- COLUMN 3 — PROJECT -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Project</h3>
+          <ul class="footer__links">
+            <li><a href="about.html">About</a></li>
+            <li><a href="index.html#how-it-works">How It Works</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- COLUMN 4 — KNOWLEDGE -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Knowledge</h3>
+          <ul class="footer__links">
+            <li><a href="index.html#how-it-works">Chandaśāstra</a></li>
+            <li><a href="index.html#how-it-works">Binary Encoding</a></li>
+            <li><a href="combinatorics.html">Combinatorics</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__divider"></div>
+
+      <div class="footer__mid">
+        <div class="footer__mid-statement">
+          <strong>IKS × Computer Science</strong>
+          <p>Exploring ancient patterns through modern computation.</p>
+        </div>
+        <div class="footer__mid-links">
+          <a href="https://github.com/naziasalmani/ChandaCore" target="_blank" rel="noopener" aria-label="GitHub Repository">GitHub ↗</a>
+          <a href="contact.html">Contact ↗</a>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <div>© 2026 ChandaCore. All rights reserved.</div>
+        <div>Built for IKS × Computer Science</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    (function() {
+      // Mobile Nav Toggle
+      const navToggle = document.querySelector('.nav__toggle');
+      const navMenu = document.getElementById('nav-menu');
+      if (navToggle && navMenu) {
+        navToggle.addEventListener('click', () => {
+          const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+          navToggle.setAttribute('aria-expanded', !isOpen);
+          navMenu.classList.toggle('is-open');
+        });
+      }
+
+      // Mathematical Combination C(n, k)
+      function nCr(n, r) {
+        if (r < 0 || r > n) return 0;
+        if (r === 0 || r === n) return 1;
+        if (r > n / 2) r = n - r;
+        let res = 1;
+        for (let i = 1; i <= r; i++) {
+          res = res * (n - i + 1) / i;
+        }
+        return Math.round(res);
+      }
+
+      // Generate all Laghu(L)-Guru(G) combinations of length n with k Gurus
+      function getPatternsWithKGurus(n, k) {
+        if (n > 12) return []; // safety guard for extreme n
+        const result = [];
+        const total = 1 << n;
+        for (let i = 0; i < total; i++) {
+          // Count set bits (Gurus)
+          let count = 0;
+          for (let b = 0; b < n; b++) {
+            if ((i & (1 << (n - 1 - b))) !== 0) count++;
+          }
+          if (count === k) {
+            let pat = "";
+            for (let b = 0; b < n; b++) {
+              pat += ((i & (1 << (n - 1 - b))) !== 0) ? 'G' : 'L';
+            }
+            result.push(pat);
+          }
+        }
+        return result;
+      }
+
+      // DOM Elements
+      const inputN = document.getElementById('input-n');
+      const btnDecN = document.getElementById('btn-n-dec');
+      const btnIncN = document.getElementById('btn-n-inc');
+      const btnCalc = document.getElementById('btn-calc');
+      const btnReset = document.getElementById('btn-reset');
+
+      const comboTbody = document.getElementById('combo-tbody');
+      const tableTotalCount = document.getElementById('table-total-count');
+      const tableTotalPct = document.getElementById('table-total-pct');
+      const obsText = document.getElementById('obs-text');
+
+      const inputPascalN = document.getElementById('input-pascal-n');
+      const btnPascalDec = document.getElementById('btn-pascal-dec');
+      const btnPascalInc = document.getElementById('btn-pascal-inc');
+      const pascalContainer = document.getElementById('pascal-container');
+
+      const barChartSvg = document.getElementById('bar-chart-svg');
+      const exNVal = document.getElementById('ex-n-val');
+      const examplesList = document.getElementById('examples-list');
+
+      let currentN = 4;
+      let pascalMaxN = 6;
+
+      function updatePage(n) {
+        // Validation
+        if (isNaN(n) || n < 0) n = 0;
+        if (n > 12) n = 12; // cap n to avoid browser overload in exhaustive generation
+        currentN = n;
+        inputN.value = n;
+        exNVal.textContent = n;
+
+        // 1. Calculate Combinatorial Table
+        const totalPatterns = Math.pow(2, n);
+        comboTbody.innerHTML = '';
+        
+        for (let k = 0; k <= n; k++) {
+          const count = nCr(n, k);
+          const pct = ((count / totalPatterns) * 100).toFixed(2);
+          
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${k}</td>
+            <td>${count.toLocaleString()}</td>
+            <td>${pct}%</td>
+          `;
+          comboTbody.appendChild(tr);
+        }
+
+        tableTotalCount.textContent = totalPatterns.toLocaleString();
+        tableTotalPct.textContent = '100%';
+
+        // Observation Text
+        obsText.textContent = `For n = ${n}, the distribution of patterns follows the binomial coefficients, forming row ${n} of Pascal's Triangle.`;
+
+        // 2. Render Bar Chart
+        renderBarChart(n);
+
+        // 3. Render Pattern Examples
+        renderExamples(n);
+
+        // 4. Update Pascal Triangle active row highlighting
+        if (pascalMaxN < n) {
+          pascalMaxN = Math.min(n, 10);
+          inputPascalN.value = pascalMaxN;
+        }
+        renderPascalTriangle(pascalMaxN, n);
+      }
+
+      function renderBarChart(n) {
+        const svgWidth = 300;
+        const svgHeight = 210;
+        const padLeft = 35;
+        const padRight = 15;
+        const padTop = 30;
+        const padBottom = 35;
+
+        const chartW = svgWidth - padLeft - padRight;
+        const chartH = svgHeight - padTop - padBottom;
+
+        // Calculate max value for Y-axis scale
+        let maxVal = 0;
+        const counts = [];
+        for (let k = 0; k <= n; k++) {
+          const c = nCr(n, k);
+          counts.push(c);
+          if (c > maxVal) maxVal = c;
+        }
+        if (maxVal === 0) maxVal = 1;
+
+        // Y-axis ticks
+        const yTicksCount = 4;
+        let yHtml = '';
+        for (let i = 0; i <= yTicksCount; i++) {
+          const val = Math.round((maxVal / yTicksCount) * i);
+          const yPos = padTop + chartH - (i / yTicksCount) * chartH;
+          yHtml += `
+            <line x1="${padLeft}" y1="${yPos}" x2="${svgWidth - padRight}" y2="${yPos}" stroke="rgba(180, 146, 92, 0.25)" stroke-dasharray="3,3" />
+            <text x="${padLeft - 6}" y="${yPos + 4}" class="chart-axis-label" text-anchor="end">${val}</text>
+          `;
+        }
+
+        // Y-axis title label
+        yHtml += `<text x="12" y="${svgHeight / 2}" class="chart-title-y" transform="rotate(-90, 12, ${svgHeight / 2})">Number of Patterns</text>`;
+
+        // X-axis bars
+        const numBars = n + 1;
+        const groupW = chartW / numBars;
+        const barW = Math.max(8, Math.min(36, groupW * 0.65));
+
+        let barsHtml = '';
+        for (let k = 0; k <= n; k++) {
+          const c = counts[k];
+          const barH = (c / maxVal) * chartH;
+          const xPos = padLeft + k * groupW + (groupW - barW) / 2;
+          const yPos = padTop + chartH - barH;
+
+          barsHtml += `
+            <text x="${xPos + barW / 2}" y="${yPos - 6}" class="chart-val">${c}</text>
+            <rect x="${xPos}" y="${yPos}" width="${barW}" height="${barH}" class="chart-bar">
+              <title>k = ${k}: ${c} patterns</title>
+            </rect>
+            <text x="${xPos + barW / 2}" y="${svgHeight - 12}" class="chart-axis-label">${k}</text>
+          `;
+        }
+
+        barChartSvg.innerHTML = yHtml + barsHtml;
+      }
+
+      function renderExamples(n) {
+        examplesList.innerHTML = '';
+        const capThreshold = 6; // for n > 6, cap pattern listing per group to 40 items
+
+        for (let k = 0; k <= n; k++) {
+          const count = nCr(n, k);
+          const patterns = getPatternsWithKGurus(n, k);
+
+          const groupEl = document.createElement('div');
+          groupEl.className = 'example-group';
+
+          let patternsHtml = '';
+          const displayLimit = n > capThreshold ? 36 : patterns.length;
+          const subset = patterns.slice(0, displayLimit);
+
+          subset.forEach(pat => {
+            patternsHtml += `<span class="pattern-tag">${pat}</span>`;
+          });
+
+          if (patterns.length > displayLimit) {
+            patternsHtml += `<div class="limit-notice">... showing ${displayLimit} of ${patterns.length} patterns</div>`;
+          }
+
+          groupEl.innerHTML = `
+            <div class="example-header">
+              <span class="example-title">${k} Guru${k === 1 ? '' : 's'} <span class="example-count">(${count} pattern${count === 1 ? '' : 's'})</span></span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="example-body">${patternsHtml}</div>
+          `;
+
+          examplesList.appendChild(groupEl);
+        }
+      }
+
+      function renderPascalTriangle(maxRows, highlightRow) {
+        pascalContainer.innerHTML = '';
+        for (let r = 0; r <= maxRows; r++) {
+          const rowEl = document.createElement('div');
+          rowEl.className = 'pascal-row';
+
+          for (let k = 0; k <= r; k++) {
+            const val = nCr(r, k);
+            const nodeEl = document.createElement('div');
+            nodeEl.className = 'pascal-node' + (r === highlightRow ? ' active-row-node' : '');
+            nodeEl.textContent = val;
+            nodeEl.title = `C(${r}, ${k}) = ${val}`;
+            rowEl.appendChild(nodeEl);
+          }
+          pascalContainer.appendChild(rowEl);
+        }
+      }
+
+      // Event Listeners
+      btnDecN.addEventListener('click', () => updatePage(currentN - 1));
+      btnIncN.addEventListener('click', () => updatePage(currentN + 1));
+      btnCalc.addEventListener('click', () => {
+        const val = parseInt(inputN.value, 10);
+        updatePage(val);
+      });
+      inputN.addEventListener('change', () => {
+        const val = parseInt(inputN.value, 10);
+        updatePage(val);
+      });
+      btnReset.addEventListener('click', () => updatePage(4));
+
+      btnPascalDec.addEventListener('click', () => {
+        if (pascalMaxN > 1) {
+          pascalMaxN--;
+          inputPascalN.value = pascalMaxN;
+          renderPascalTriangle(pascalMaxN, currentN);
+        }
+      });
+      btnPascalInc.addEventListener('click', () => {
+        if (pascalMaxN < 10) {
+          pascalMaxN++;
+          inputPascalN.value = pascalMaxN;
+          renderPascalTriangle(pascalMaxN, currentN);
+        }
+      });
+
+      // Initial Render
+      updatePage(4);
+
+    })();
+  </script>
+</body>
+</html>

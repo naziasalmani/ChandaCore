@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact ChandaCore — Let's Connect</title>
+  <meta name="description" content="Have a question, suggestion, or idea? Reach out to the ChandaCore team to discuss ancient Indian pattern mathematics, research, collaboration, or feedback.">
+  <meta name="theme-color" content="#071D18">
+  <link rel="icon" href="assets/logo-mark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --forest: #071D18;
+      --green: #0D2A23;
+      --gold: #D5A441;
+      --gold-soft: #E4BD67;
+      --parchment: #E8D5AF;
+      --cream: #F4EBDD;
+      --ink: #17231F;
+      --offwhite: #F7F3E8;
+      --brown: #4a3a22;
+
+      --card-bg: #F8F2E6;
+      --card-border: rgba(180, 146, 92, 0.45);
+      --card-shadow: 0 8px 24px rgba(40, 28, 12, 0.08);
+
+      --serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+      --sans: "Inter", "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --deva: "Noto Serif Devanagari", "Kohinoor Devanagari", serif;
+
+      --pad: clamp(1.25rem, 4vw, 3.5rem);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background-color: #E5D5B8;
+      background-image: url("assets/contact_bg.png");
+      background-position: top center;
+      background-size: 100% auto;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @media (max-width: 1024px) {
+      body {
+        background-size: cover;
+      }
+    }
+
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    :focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 3px; border-radius: 4px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* ---------- Brand Wordmark ---------- */
+    .brand { display: inline-flex; align-items: center; gap: .6rem; }
+    .brand img { width: 44px; height: 44px; object-fit: contain; }
+    .brand__text { display: flex; flex-direction: column; line-height: 1; }
+    .brand__name { font-family: var(--serif); font-weight: 600; font-size: 1.7rem; letter-spacing: .005em; color: var(--offwhite); }
+    .brand__name b { font-weight: 600; color: var(--gold); }
+    .brand__sub { font-size: .56rem; letter-spacing: .2em; margin-top: .3rem; color: rgba(247,243,232,.68); text-transform: uppercase; }
+
+    /* ---------- Navbar ---------- */
+    .nav {
+      position: relative; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+      padding: 1.1rem var(--pad);
+      background: linear-gradient(to bottom, rgba(7,29,24,.88), rgba(7,29,24,0));
+    }
+    .nav__links { display: flex; align-items: center; gap: clamp(1.1rem, 2.4vw, 2.3rem); list-style: none; margin: 0 0 0 auto; padding: 0; }
+    .nav__links a {
+      position: relative; display: block; padding: .5rem 0;
+      font-size: .85rem; font-weight: 500; color: rgba(247,243,232,.86);
+      transition: color .2s;
+    }
+    .nav__links a::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: .1rem; height: 2px;
+      background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform .25s ease;
+    }
+    .nav__links a:hover, .nav__links a[aria-current="page"] { color: var(--gold-soft); }
+    .nav__links a:hover::after, .nav__links a[aria-current="page"]::after { transform: scaleX(1); }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+      font: 600 .88rem/1 var(--sans); border-radius: 999px; cursor: pointer;
+      padding: .85rem 1.5rem; border: 1px solid transparent;
+      transition: transform .2s ease, background-color .2s, border-color .2s, box-shadow .2s, color .2s;
+    }
+    .btn--gold { background: linear-gradient(180deg, var(--gold-soft), var(--gold)); color: #241a08; box-shadow: 0 6px 20px -8px rgba(213,164,65,.7); }
+    .btn--gold:hover { transform: translateY(-2px); box-shadow: 0 10px 26px -8px rgba(228,189,103,.85); }
+    .nav .btn { padding: .7rem 1.25rem; font-size: .82rem; }
+
+    .nav__toggle {
+      display: none; width: 44px; height: 44px; margin-left: auto; padding: 0;
+      background: transparent; border: 1px solid rgba(247,243,232,.35); border-radius: 12px; color: var(--offwhite); cursor: pointer;
+    }
+    .nav__toggle span, .nav__toggle span::before, .nav__toggle span::after {
+      display: block; width: 20px; height: 1.5px; background: currentColor; position: relative; margin: 0 auto; transition: transform .25s, background .25s;
+    }
+    .nav__toggle span::before, .nav__toggle span::after { content: ""; position: absolute; left: 0; }
+    .nav__toggle span::before { top: -6px; }
+    .nav__toggle span::after { top: 6px; }
+    .nav__toggle[aria-expanded="true"] span { background: transparent; }
+    .nav__toggle[aria-expanded="true"] span::before { top: 0; transform: rotate(45deg); }
+    .nav__toggle[aria-expanded="true"] span::after { top: 0; transform: rotate(-45deg); }
+
+    /* ---------- Hero Header ---------- */
+    .hero-header {
+      position: relative;
+      padding: 2.2rem var(--pad) 2.5rem;
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .hero-header__main {
+      max-width: 44rem;
+    }
+
+    .hero-header__eyebrow {
+      margin: 0 0 .8rem;
+      font-size: .74rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      color: var(--gold-soft);
+      text-transform: uppercase;
+    }
+
+    .hero-header__title {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 5vw, 3.8rem);
+      font-weight: 600;
+      color: var(--offwhite);
+      line-height: 1.1;
+      margin: 0 0 1rem;
+      letter-spacing: -0.01em;
+    }
+    .hero-header__title span {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .hero-header__sub {
+      font-size: clamp(1rem, 1.8vw, 1.15rem);
+      color: rgba(247, 243, 232, 0.88);
+      line-height: 1.5;
+      margin: 0;
+      max-width: 32rem;
+    }
+
+    .hero-header__aside {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1.2rem;
+      margin-top: .5rem;
+    }
+
+    .hero-quote-card {
+      background: rgba(7, 29, 24, 0.45);
+      border: 1px solid rgba(213, 164, 65, 0.35);
+      backdrop-filter: blur(8px);
+      border-radius: 14px;
+      padding: 1.2rem 1.4rem;
+      max-width: 22rem;
+      text-align: right;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .hero-sanskrit {
+      font-family: var(--deva);
+      color: var(--gold-soft);
+      font-size: 1.15rem;
+      margin-bottom: .4rem;
+      line-height: 1.4;
+      letter-spacing: .02em;
+    }
+
+    .hero-quote {
+      font-family: var(--serif);
+      font-style: italic;
+      color: var(--offwhite);
+      font-size: 1.02rem;
+      margin: 0;
+      opacity: .9;
+      line-height: 1.4;
+    }
+
+    /* ---------- Page Container ---------- */
+    .page-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--pad) 3.5rem;
+    }
+
+    /* ---------- Three Column Workspace Layout ---------- */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 1.05fr;
+      gap: 1.4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .column-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    /* ---------- Parchment Panels ---------- */
+    .panel-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem 1.6rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: .85rem;
+      border-bottom: 1px solid rgba(180, 146, 92, 0.25);
+    }
+
+    .panel-header__icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(180, 146, 92, 0.15);
+      border: 1px solid rgba(180, 146, 92, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brown);
+      flex-shrink: 0;
+    }
+    .panel-header__icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .panel-title {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .panel-subtitle {
+      font-size: .8rem;
+      color: rgba(74, 58, 34, 0.82);
+      margin: .25rem 0 0;
+      line-height: 1.4;
+    }
+
+    /* ---------- Contact Form Controls ---------- */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+
+    .form-label {
+      font-weight: 600;
+      font-size: .85rem;
+      color: var(--ink);
+    }
+    .form-label span {
+      color: #b83232;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.45);
+      border-radius: 10px;
+      padding: .75rem 1rem;
+      font-family: var(--sans);
+      font-size: .9rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .form-input::placeholder, .form-textarea::placeholder {
+      color: rgba(74, 58, 34, 0.5);
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(213, 164, 65, 0.25);
+    }
+
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%204a3a22' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .field-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: -.2rem;
+    }
+
+    .error-msg {
+      font-size: .78rem;
+      color: #c62828;
+      font-weight: 500;
+      display: none;
+    }
+
+    .char-counter {
+      font-size: .75rem;
+      color: rgba(74, 58, 34, 0.7);
+      margin-left: auto;
+    }
+
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .6rem;
+      padding: .85rem 1.6rem;
+      background: var(--green);
+      color: var(--gold-soft);
+      border: 1px solid rgba(213, 164, 65, 0.4);
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: .9rem;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: 0 4px 14px rgba(7,29,24,0.18);
+      margin-top: .4rem;
+    }
+    .btn-submit:hover {
+      background: #071D18;
+      color: var(--gold);
+      border-color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(7,29,24,0.28);
+    }
+    .btn-submit svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .form-alert {
+      display: none;
+      padding: .85rem 1rem;
+      border-radius: 10px;
+      font-size: .88rem;
+      font-weight: 500;
+      line-height: 1.4;
+      margin-top: .4rem;
+    }
+    .form-alert.success {
+      display: block;
+      background: #E1F0E5;
+      border: 1px solid #2E7D32;
+      color: #1B5E20;
+    }
+
+    /* ---------- Common Topics List ---------- */
+    .topics-list {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+    }
+
+    .topic-item {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .75rem .9rem;
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.35);
+      border-radius: 10px;
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .topic-item:hover {
+      background: #E8DAC2;
+      border-color: var(--gold);
+      transform: translateX(3px);
+    }
+
+    .topic-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(180, 146, 92, 0.2);
+      border: 1px solid rgba(180, 146, 92, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brown);
+      flex-shrink: 0;
+    }
+    .topic-icon svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* ---------- Before You Contact Links ---------- */
+    .quick-links-list {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+
+    .quick-link-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .7rem .85rem;
+      border-bottom: 1px solid rgba(180, 146, 92, 0.2);
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--ink);
+      transition: color .2s, background-color .2s;
+      border-radius: 6px;
+    }
+    .quick-link-item:hover {
+      color: #9a6c14;
+      background: rgba(180, 146, 92, 0.1);
+    }
+    .quick-link-item svg {
+      width: 16px;
+      height: 16px;
+      color: var(--brown);
+      transition: transform .2s;
+    }
+    .quick-link-item:hover svg {
+      transform: translateX(3px);
+      color: #9a6c14;
+    }
+
+    /* ---------- Connect With Us Grid ---------- */
+    .social-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+    }
+
+    @media (max-width: 500px) {
+      .social-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .social-card {
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.35);
+      border-radius: 12px;
+      padding: .9rem;
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+      transition: all .2s;
+      position: relative;
+    }
+    .social-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(40,28,12,0.06);
+    }
+
+    .social-card__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .social-card__icon {
+      width: 32px;
+      height: 32px;
+      color: var(--ink);
+    }
+
+    .social-card__ext {
+      width: 16px;
+      height: 16px;
+      color: var(--brown);
+      opacity: .7;
+    }
+
+    .social-card__title {
+      font-weight: 700;
+      font-size: .88rem;
+      color: var(--ink);
+    }
+
+    .social-card__desc {
+      font-size: .75rem;
+      color: rgba(74, 58, 34, 0.82);
+      line-height: 1.35;
+      margin: 0;
+    }
+
+    .email-display-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: .4rem;
+      padding-top: .4rem;
+      border-top: 1px dashed rgba(180, 146, 92, 0.35);
+      font-size: .74rem;
+      font-weight: 600;
+      color: var(--brown);
+    }
+
+    .copy-btn {
+      background: transparent;
+      border: none;
+      padding: 2px;
+      cursor: pointer;
+      color: var(--brown);
+      display: flex;
+      align-items: center;
+    }
+    .copy-btn:hover {
+      color: var(--gold);
+    }
+
+    /* ---------- Our Commitment Card ---------- */
+    .commitment-box {
+      font-size: .86rem;
+      line-height: 1.6;
+      color: rgba(23, 35, 31, 0.88);
+      margin: 0;
+    }
+
+    /* ---------- Footer ---------- */
+    .footer {
+      background: var(--cream); border-top: 1px solid rgba(74,58,34,.18);
+      padding: 3.5rem var(--pad) 2rem; color: var(--ink); position: relative; z-index: 10;
+      font-family: var(--sans);
+    }
+    .footer__container {
+      max-width: 1180px; margin: 0 auto;
+    }
+    .footer__grid {
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .footer .brand img { width: 44px; height: 44px; }
+    .footer__tagline {
+      font-family: var(--serif); font-size: 1.05rem; font-style: italic; font-weight: 600;
+      color: var(--green); margin: 0.75rem 0 0.4rem; line-height: 1.3;
+    }
+    .footer__desc {
+      font-size: 0.82rem; color: rgba(23,35,31,0.75); margin: 0 0 0.9rem; line-height: 1.45;
+    }
+    .footer__badge {
+      display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #b8862a; background: rgba(213,164,65,0.12);
+      border: 1px solid rgba(213,164,65,0.3); padding: 0.25rem 0.65rem; border-radius: 4px;
+    }
+    .footer__heading {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 700; color: var(--green);
+      margin: 0 0 1rem; letter-spacing: 0.02em;
+    }
+    .footer__links {
+      list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem;
+    }
+    .footer__links a {
+      font-size: 0.88rem; color: rgba(23,35,31,0.8); transition: all 0.2s ease;
+      display: inline-flex; align-items: center; gap: 0.3rem;
+    }
+    .footer__links a:hover {
+      color: #b8862a; transform: translateX(2px);
+    }
+    .footer__divider {
+      height: 1px; background: rgba(74,58,34,0.15); margin: 2rem 0 1.5rem;
+    }
+    .footer__mid {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+      margin-bottom: 1.5rem; font-size: 0.88rem;
+    }
+    .footer__mid-statement strong {
+      font-family: var(--serif); color: var(--green); font-size: 1rem; font-weight: 700;
+    }
+    .footer__mid-statement p {
+      margin: 0.2rem 0 0; color: rgba(23,35,31,0.7); font-size: 0.82rem;
+    }
+    .footer__mid-links {
+      display: flex; gap: 1.5rem; align-items: center;
+    }
+    .footer__mid-links a {
+      font-weight: 600; color: var(--green); transition: color 0.2s; display: inline-flex; align-items: center; gap: 0.25rem;
+    }
+    .footer__mid-links a:hover { color: #b8862a; }
+    .footer__bottom {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;
+      padding-top: 1.2rem; border-top: 1px opacity(0.08) solid; font-size: 0.78rem; color: rgba(23,35,31,0.65);
+    }
+
+    @media (max-width: 900px) {
+      .nav__toggle { display: block; }
+      .nav__menu {
+        position: absolute; top: 100%; left: 0; right: 0; padding: 0 var(--pad) 1.4rem;
+        background: rgba(7,29,24,.96); border-bottom: 1px solid rgba(213,164,65,.3);
+        display: none; flex-direction: column; align-items: stretch;
+      }
+      .nav__menu.is-open { display: flex; }
+      .nav__links { flex-direction: column; align-items: stretch; gap: 0; margin: 0; }
+      .nav__links a { padding: .95rem 0; border-bottom: 1px solid rgba(247,243,232,.1); font-size: 1rem; }
+      .nav__links a::after { display: none; }
+      .nav__links a[aria-current="page"] { color: var(--gold-soft); box-shadow: inset 3px 0 0 var(--gold); padding-left: .8rem; }
+      .nav .btn { display: inline-flex; margin-top: 1.1rem; }
+      
+      .hero-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .hero-header__aside {
+        align-items: flex-start;
+      }
+      .hero-quote-card {
+        text-align: left;
+      }
+
+      .footer__row { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+      .footer__tag { margin-left: 0; }
+      .footer__social { justify-content: center; }
+    }
+    @media (min-width: 901px) { .nav__menu { display: contents; } }
+  </style>
+</head>
+<body>
+
+  <a class="sr-only" href="#main">Skip to content</a>
+
+  <header>
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="index.html" aria-label="ChandaCore home">
+        <img src="assets/logo-mark.png" alt="" width="44" height="44">
+        <span class="brand__text">
+          <span class="brand__name">Chanda<b>Core</b></span>
+          <span class="brand__sub">Ancient Patterns. Modern Possibilities.</span>
+        </span>
+      </a>
+
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <span></span>
+      </button>
+
+      <div class="nav__menu" id="nav-menu">
+        <ul class="nav__links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="generator.html">Generator</a></li>
+          <li><a href="analyzer.html">Analyzer</a></li>
+          <li><a href="combinatorics.html">Combinatorics</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="tests.html">Tests</a></li>
+        </ul>
+        <a class="btn btn--gold" href="generator.html">Explore Now <span aria-hidden="true">→</span></a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-header">
+    <div class="hero-header__main">
+      <p class="hero-header__eyebrow">LET'S CONNECT</p>
+      <h1 class="hero-header__title">Contact <span>ChandaCore</span></h1>
+      <p class="hero-header__sub">Have a question, suggestion, or idea?<br>We'd love to hear from you.</p>
+    </div>
+    <div class="hero-header__aside">
+      <div class="hero-quote-card">
+        <div class="hero-sanskrit">विचारः । संवादः । सहकार्य । नवोन्मेषः ॥</div>
+        <p class="hero-quote">“Ideas connect cultures, and dialogue builds the future.”</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTAINER -->
+  <main id="main" class="page-container">
+
+    <div class="contact-grid">
+
+      <!-- COLUMN 1: SEND A MESSAGE FORM -->
+      <article class="panel-card" aria-labelledby="title-send">
+        <div class="panel-header">
+          <div class="panel-header__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div>
+            <h2 class="panel-title" id="title-send">Send a Message</h2>
+            <p class="panel-subtitle">Fill out the form and we'll get back to you soon.</p>
+          </div>
+        </div>
+
+        <form id="contact-form" class="contact-form" novalidate>
+          
+          <!-- NAME -->
+          <div class="form-group">
+            <label class="form-label" for="contact-name">Your Name <span>*</span></label>
+            <input class="form-input" type="text" id="contact-name" placeholder="Enter your name" required>
+            <span class="error-msg" id="err-name">Please enter your name.</span>
+          </div>
+
+          <!-- EMAIL -->
+          <div class="form-group">
+            <label class="form-label" for="contact-email">Your Email <span>*</span></label>
+            <input class="form-input" type="email" id="contact-email" placeholder="Enter your email" required>
+            <span class="error-msg" id="err-email">Please enter a valid email address.</span>
+          </div>
+
+          <!-- SUBJECT -->
+          <div class="form-group">
+            <label class="form-label" for="contact-subject">Subject <span>*</span></label>
+            <select class="form-select" id="contact-subject" required>
+              <option value="" disabled selected>Select a subject</option>
+              <option value="Project related queries">Project related queries</option>
+              <option value="Suggestions and feedback">Suggestions and feedback</option>
+              <option value="Collaboration opportunities">Collaboration opportunities</option>
+              <option value="Academic or research discussions">Academic or research discussions</option>
+              <option value="Bug reports or technical issues">Bug reports or technical issues</option>
+              <option value="General questions about ChandaCore">General questions about ChandaCore</option>
+            </select>
+            <span class="error-msg" id="err-subject">Please select a subject.</span>
+          </div>
+
+          <!-- MESSAGE -->
+          <div class="form-group">
+            <label class="form-label" for="contact-message">Message <span>*</span></label>
+            <textarea class="form-textarea" id="contact-message" placeholder="Write your message here..." maxlength="500" required></textarea>
+            <div class="field-footer">
+              <span class="error-msg" id="err-message">Please write a message.</span>
+              <span class="char-counter" id="char-counter">0 / 500 characters</span>
+            </div>
+          </div>
+
+          <!-- SUBMIT BUTTON -->
+          <button type="submit" class="btn-submit" id="btn-submit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            <span>Send Message →</span>
+          </button>
+
+          <!-- ALERT -->
+          <div class="form-alert" id="form-alert" role="alert"></div>
+
+        </form>
+      </article>
+
+      <!-- COLUMN 2: COMMON TOPICS & BEFORE YOU CONTACT -->
+      <div class="column-stack">
+        
+        <!-- COMMON TOPICS -->
+        <article class="panel-card" aria-labelledby="title-topics">
+          <div class="panel-header">
+            <div class="panel-header__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div>
+              <h2 class="panel-title" id="title-topics">Common Topics</h2>
+              <p class="panel-subtitle">Here are some ways we can help you.</p>
+            </div>
+          </div>
+
+          <div class="topics-list" id="topics-list">
+            <div class="topic-item" data-val="Project related queries">
+              <div class="topic-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              </div>
+              <span>Project related queries</span>
+            </div>
+
+            <div class="topic-item" data-val="Suggestions and feedback">
+              <div class="topic-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <span>Suggestions and feedback</span>
+            </div>
+
+            <div class="topic-item" data-val="Collaboration opportunities">
+              <div class="topic-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <span>Collaboration opportunities</span>
+            </div>
+
+            <div class="topic-item" data-val="Academic or research discussions">
+              <div class="topic-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              </div>
+              <span>Academic or research discussions</span>
+            </div>
+
+            <div class="topic-item" data-val="Bug reports or technical issues">
+              <div class="topic-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              </div>
+              <span>Bug reports or technical issues</span>
+            </div>
+
+            <div class="topic-item" data-val="General questions about ChandaCore">
+              <div class="topic-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
+              <span>General questions about ChandaCore</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- BEFORE YOU CONTACT -->
+        <article class="panel-card" aria-labelledby="title-before">
+          <div class="panel-header">
+            <div class="panel-header__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1.55.63 2.97 1.65 4 .76.76 1.23 1.52 1.41 2.5"/></svg>
+            </div>
+            <div>
+              <h2 class="panel-title" id="title-before">Before You Contact</h2>
+              <p class="panel-subtitle">You might find answers in:</p>
+            </div>
+          </div>
+
+          <div class="quick-links-list">
+            <a href="about.html" class="quick-link-item">
+              <span>About ChandaCore</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a href="generator.html" class="quick-link-item">
+              <span>Pattern Generator</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a href="analyzer.html" class="quick-link-item">
+              <span>Pattern Analyzer</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a href="combinatorics.html" class="quick-link-item">
+              <span>Combinatorics</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a href="tests.html" class="quick-link-item">
+              <span>Tests</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- COLUMN 3: CONNECT WITH US & OUR COMMITMENT -->
+      <div class="column-stack">
+        
+        <!-- CONNECT WITH US -->
+        <article class="panel-card" aria-labelledby="title-connect">
+          <div class="panel-header">
+            <div class="panel-header__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <h2 class="panel-title" id="title-connect">Connect With Us</h2>
+              <p class="panel-subtitle">You can also reach us through these platforms.</p>
+            </div>
+          </div>
+
+          <div class="social-grid">
+            
+            <!-- GITHUB -->
+            <a href="#" class="social-card" aria-label="GitHub">
+              <div class="social-card__top">
+                <svg class="social-card__icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                <svg class="social-card__ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </div>
+              <span class="social-card__title">GitHub</span>
+              <p class="social-card__desc">View the source code and contribute.</p>
+            </a>
+
+            <!-- LINKEDIN -->
+            <a href="#" class="social-card" aria-label="LinkedIn">
+              <div class="social-card__top">
+                <svg class="social-card__icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                <svg class="social-card__ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </div>
+              <span class="social-card__title">LinkedIn</span>
+              <p class="social-card__desc">Connect with the team and follow updates.</p>
+            </a>
+
+            <!-- YOUTUBE -->
+            <a href="#" class="social-card" aria-label="YouTube">
+              <div class="social-card__top">
+                <svg class="social-card__icon" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                <svg class="social-card__ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </div>
+              <span class="social-card__title">YouTube</span>
+              <p class="social-card__desc">Watch tutorials and demonstrations.</p>
+            </a>
+
+            <!-- EMAIL -->
+            <div class="social-card" style="grid-column: span 1;">
+              <div class="social-card__top">
+                <svg class="social-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <svg class="social-card__ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </div>
+              <span class="social-card__title">Email</span>
+              <p class="social-card__desc">Directly reach out via email.</p>
+              <div class="email-display-row">
+                <span id="email-text">chandacore@example.com</span>
+                <button type="button" class="copy-btn" id="btn-copy-email" title="Copy email address" aria-label="Copy email address">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </article>
+
+        <!-- OUR COMMITMENT -->
+        <article class="panel-card" aria-labelledby="title-commitment">
+          <div class="panel-header">
+            <div class="panel-header__icon">
+              <img src="assets/logo-mark.png" alt="" width="26" height="26">
+            </div>
+            <div>
+              <h2 class="panel-title" id="title-commitment">Our Commitment</h2>
+            </div>
+          </div>
+
+          <p class="commitment-box">
+            We value your thoughts, questions, and suggestions. Whether you're a student, researcher, educator, or simply curious about the mathematical beauty of patterns, we're always happy to connect.
+          </p>
+        </article>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__container">
+      <div class="footer__grid">
+        <!-- COLUMN 1 — BRAND -->
+        <div class="footer__col-brand">
+          <a class="brand" href="index.html" aria-label="ChandaCore home">
+            <img src="assets/logo-mark.png" alt="ChandaCore Logo" width="44" height="44">
+            <span class="brand__text">
+              <span class="brand__name">Chanda<b>Core</b></span>
+            </span>
+          </a>
+          <p class="footer__tagline">"Ancient Patterns. Modern Possibilities."</p>
+          <p class="footer__desc">Exploring ancient knowledge systems through modern computational thinking.</p>
+          <span class="footer__badge">IKS × Computer Science</span>
+        </div>
+
+        <!-- COLUMN 2 — EXPLORE -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Explore</h3>
+          <ul class="footer__links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="generator.html">Generator</a></li>
+            <li><a href="analyzer.html">Analyzer</a></li>
+            <li><a href="combinatorics.html">Combinatorics</a></li>
+            <li><a href="tests.html">Tests</a></li>
+          </ul>
+        </div>
+
+        <!-- COLUMN 3 — PROJECT -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Project</h3>
+          <ul class="footer__links">
+            <li><a href="about.html">About</a></li>
+            <li><a href="index.html#how-it-works">How It Works</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- COLUMN 4 — KNOWLEDGE -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Knowledge</h3>
+          <ul class="footer__links">
+            <li><a href="index.html#how-it-works">Chandaśāstra</a></li>
+            <li><a href="index.html#how-it-works">Binary Encoding</a></li>
+            <li><a href="combinatorics.html">Combinatorics</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__divider"></div>
+
+      <div class="footer__mid">
+        <div class="footer__mid-statement">
+          <strong>IKS × Computer Science</strong>
+          <p>Exploring ancient patterns through modern computation.</p>
+        </div>
+        <div class="footer__mid-links">
+          <a href="https://github.com/naziasalmani/ChandaCore" target="_blank" rel="noopener" aria-label="GitHub Repository">GitHub ↗</a>
+          <a href="contact.html">Contact ↗</a>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <div>© 2026 ChandaCore. All rights reserved.</div>
+        <div>Built for IKS × Computer Science</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- INTERACTIVE FORM SCRIPTS -->
+  <script>
+    (function() {
+      // Navbar Toggle
+      const navToggle = document.querySelector('.nav__toggle');
+      const navMenu = document.getElementById('nav-menu');
+      if (navToggle && navMenu) {
+        navToggle.addEventListener('click', () => {
+          const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+          navToggle.setAttribute('aria-expanded', !isOpen);
+          navMenu.classList.toggle('is-open');
+        });
+      }
+
+      // Form Elements
+      const form = document.getElementById('contact-form');
+      const inputName = document.getElementById('contact-name');
+      const inputEmail = document.getElementById('contact-email');
+      const selectSubject = document.getElementById('contact-subject');
+      const textareaMsg = document.getElementById('contact-message');
+      const charCounter = document.getElementById('char-counter');
+      const formAlert = document.getElementById('form-alert');
+
+      const errName = document.getElementById('err-name');
+      const errEmail = document.getElementById('err-email');
+      const errSubject = document.getElementById('err-subject');
+      const errMessage = document.getElementById('err-message');
+
+      // Character Counter
+      if (textareaMsg && charCounter) {
+        textareaMsg.addEventListener('input', () => {
+          const len = textareaMsg.value.length;
+          charCounter.textContent = `${len} / 500 characters`;
+          if (len >= 500) {
+            charCounter.style.color = '#c62828';
+          } else {
+            charCounter.style.color = 'rgba(74, 58, 34, 0.7)';
+          }
+        });
+      }
+
+      // Topic Item Click -> Select Subject
+      const topicItems = document.querySelectorAll('#topics-list .topic-item');
+      topicItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const val = item.dataset.val;
+          if (selectSubject && val) {
+            selectSubject.value = val;
+            errSubject.style.display = 'none';
+            selectSubject.focus();
+          }
+        });
+      });
+
+      // Copy Email Button
+      const copyBtn = document.getElementById('btn-copy-email');
+      const emailText = document.getElementById('email-text');
+      if (copyBtn && emailText) {
+        copyBtn.addEventListener('click', () => {
+          navigator.clipboard.writeText(emailText.textContent.trim()).then(() => {
+            const origTitle = copyBtn.getAttribute('title');
+            copyBtn.setAttribute('title', 'Copied!');
+            copyBtn.style.color = 'var(--gold)';
+            setTimeout(() => {
+              copyBtn.setAttribute('title', origTitle);
+              copyBtn.style.color = 'var(--brown)';
+            }, 2000);
+          }).catch(err => {
+            console.error('Could not copy text: ', err);
+          });
+        });
+      }
+
+      // Form Validation & Submission
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          let isValid = true;
+          formAlert.className = 'form-alert';
+          formAlert.style.display = 'none';
+
+          // Validate Name
+          if (!inputName.value.trim()) {
+            errName.style.display = 'block';
+            isValid = false;
+          } else {
+            errName.style.display = 'none';
+          }
+
+          // Validate Email
+          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!inputEmail.value.trim() || !emailPattern.test(inputEmail.value.trim())) {
+            errEmail.style.display = 'block';
+            isValid = false;
+          } else {
+            errEmail.style.display = 'none';
+          }
+
+          // Validate Subject
+          if (!selectSubject.value) {
+            errSubject.style.display = 'block';
+            isValid = false;
+          } else {
+            errSubject.style.display = 'none';
+          }
+
+          // Validate Message
+          if (!textareaMsg.value.trim()) {
+            errMessage.style.display = 'block';
+            isValid = false;
+          } else {
+            errMessage.style.display = 'none';
+          }
+
+          if (!isValid) return;
+
+          // Simulated Local Submission Success
+          formAlert.textContent = "Message sent successfully! Thank you for contacting ChandaCore.";
+          formAlert.className = 'form-alert success';
+          formAlert.style.display = 'block';
+
+          // Clear Form Fields
+          form.reset();
+          if (charCounter) {
+            charCounter.textContent = '0 / 500 characters';
+            charCounter.style.color = 'rgba(74, 58, 34, 0.7)';
+          }
+
+          // Scroll alert into view smoothly if needed
+          formAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

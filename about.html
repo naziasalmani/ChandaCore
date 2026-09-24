@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About ChandaCore — Ancient Patterns. Modern Possibilities.</title>
+  <meta name="description" content="Learn about ChandaCore's mission to bridge Pingala's Chandaśāstra, ancient Indian knowledge systems, and modern computational thinking through interactive tools.">
+  <meta name="theme-color" content="#071D18">
+  <link rel="icon" href="assets/logo-mark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --forest: #071D18;
+      --green: #0D2A23;
+      --gold: #D5A441;
+      --gold-soft: #E4BD67;
+      --parchment: #E8D5AF;
+      --cream: #F4EBDD;
+      --ink: #17231F;
+      --offwhite: #F7F3E8;
+      --brown: #4a3a22;
+
+      --card-bg: #F8F2E6;
+      --card-border: rgba(180, 146, 92, 0.45);
+      --card-shadow: 0 8px 24px rgba(40, 28, 12, 0.08);
+
+      --serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+      --sans: "Inter", "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --deva: "Noto Serif Devanagari", "Kohinoor Devanagari", serif;
+
+      --pad: clamp(1.25rem, 4vw, 3.5rem);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background-color: #E5D5B8;
+      background-image: url("assets/about_bg.png");
+      background-position: top center;
+      background-size: 100% auto;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @media (max-width: 1024px) {
+      body {
+        background-size: cover;
+      }
+    }
+
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    :focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 3px; border-radius: 4px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* ---------- Brand Wordmark ---------- */
+    .brand { display: inline-flex; align-items: center; gap: .6rem; }
+    .brand img { width: 44px; height: 44px; object-fit: contain; }
+    .brand__text { display: flex; flex-direction: column; line-height: 1; }
+    .brand__name { font-family: var(--serif); font-weight: 600; font-size: 1.7rem; letter-spacing: .005em; color: var(--offwhite); }
+    .brand__name b { font-weight: 600; color: var(--gold); }
+    .brand__sub { font-size: .56rem; letter-spacing: .2em; margin-top: .3rem; color: rgba(247,243,232,.68); text-transform: uppercase; }
+
+    /* ---------- Navbar ---------- */
+    .nav {
+      position: relative; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+      padding: 1.1rem var(--pad);
+      background: linear-gradient(to bottom, rgba(7,29,24,.88), rgba(7,29,24,0));
+    }
+    .nav__links { display: flex; align-items: center; gap: clamp(1.1rem, 2.4vw, 2.3rem); list-style: none; margin: 0 0 0 auto; padding: 0; }
+    .nav__links a {
+      position: relative; display: block; padding: .5rem 0;
+      font-size: .85rem; font-weight: 500; color: rgba(247,243,232,.86);
+      transition: color .2s;
+    }
+    .nav__links a::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: .1rem; height: 2px;
+      background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform .25s ease;
+    }
+    .nav__links a:hover, .nav__links a[aria-current="page"] { color: var(--gold-soft); }
+    .nav__links a:hover::after, .nav__links a[aria-current="page"]::after { transform: scaleX(1); }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+      font: 600 .88rem/1 var(--sans); border-radius: 999px; cursor: pointer;
+      padding: .85rem 1.5rem; border: 1px solid transparent;
+      transition: transform .2s ease, background-color .2s, border-color .2s, box-shadow .2s, color .2s;
+    }
+    .btn--gold { background: linear-gradient(180deg, var(--gold-soft), var(--gold)); color: #241a08; box-shadow: 0 6px 20px -8px rgba(213,164,65,.7); }
+    .btn--gold:hover { transform: translateY(-2px); box-shadow: 0 10px 26px -8px rgba(228,189,103,.85); }
+    .nav .btn { padding: .7rem 1.25rem; font-size: .82rem; }
+
+    .nav__toggle {
+      display: none; width: 44px; height: 44px; margin-left: auto; padding: 0;
+      background: transparent; border: 1px solid rgba(247,243,232,.35); border-radius: 12px; color: var(--offwhite); cursor: pointer;
+    }
+    .nav__toggle span, .nav__toggle span::before, .nav__toggle span::after {
+      display: block; width: 20px; height: 1.5px; background: currentColor; position: relative; margin: 0 auto; transition: transform .25s, background .25s;
+    }
+    .nav__toggle span::before, .nav__toggle span::after { content: ""; position: absolute; left: 0; }
+    .nav__toggle span::before { top: -6px; }
+    .nav__toggle span::after { top: 6px; }
+    .nav__toggle[aria-expanded="true"] span { background: transparent; }
+    .nav__toggle[aria-expanded="true"] span::before { top: 0; transform: rotate(45deg); }
+    .nav__toggle[aria-expanded="true"] span::after { top: 0; transform: rotate(-45deg); }
+
+    /* ---------- Hero Header ---------- */
+    .hero-header {
+      position: relative;
+      padding: 2.2rem var(--pad) 2.5rem;
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .hero-header__main {
+      max-width: 44rem;
+    }
+
+    .hero-header__eyebrow {
+      margin: 0 0 .8rem;
+      font-size: .74rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      color: var(--gold-soft);
+      text-transform: uppercase;
+    }
+
+    .hero-header__title {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: clamp(2.8rem, 5.5vw, 4.4rem);
+      line-height: 1.05;
+      color: var(--offwhite);
+      text-shadow: 0 3px 25px rgba(0,0,0,0.5);
+    }
+    .hero-header__title span {
+      color: var(--gold);
+    }
+
+    .hero-header__sub {
+      margin: .9rem 0 0;
+      font-size: clamp(1rem, 1.3vw, 1.15rem);
+      line-height: 1.5;
+      color: rgba(247, 243, 232, 0.92);
+      text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+      max-width: 36rem;
+    }
+
+    .hero-header__aside {
+      padding-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+      align-items: flex-end;
+    }
+
+    .hero-tag {
+      background: rgba(13, 42, 35, 0.7);
+      border: 1px solid rgba(213, 164, 65, 0.35);
+      border-radius: 4px;
+      padding: .25rem .75rem;
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .18em;
+      color: var(--gold-soft);
+      backdrop-filter: blur(4px);
+    }
+
+    .hero-quote-card {
+      background: rgba(13, 42, 35, 0.75);
+      border: 1px solid rgba(213, 164, 65, 0.4);
+      border-radius: 12px;
+      padding: 1.1rem 1.4rem;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      max-width: 320px;
+      text-align: right;
+    }
+
+    .hero-sanskrit {
+      font-family: var(--deva);
+      font-size: 1.1rem;
+      color: var(--gold-soft);
+      margin-bottom: .4rem;
+      letter-spacing: .02em;
+    }
+
+    .hero-quote {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--offwhite);
+      margin: 0;
+    }
+
+    /* ---------- Container for Main Sections ---------- */
+    .page-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--pad);
+    }
+
+    /* ---------- Section 1: Mission, Vision, Values, Quote ---------- */
+    .mvv-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.4rem;
+      margin-bottom: 2.5rem;
+      align-items: stretch;
+    }
+
+    @media (max-width: 1100px) {
+      .mvv-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .mvv-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card-mvv {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem 1.4rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-mvv__header {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      margin-bottom: 1rem;
+      padding-bottom: .75rem;
+      border-bottom: 1px solid rgba(180, 146, 92, 0.25);
+    }
+
+    .card-mvv__icon {
+      width: 26px;
+      height: 26px;
+      color: var(--brown);
+      flex-shrink: 0;
+    }
+
+    .card-mvv__title {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0;
+    }
+
+    .card-mvv__text {
+      font-size: .88rem;
+      color: rgba(74, 58, 34, 0.9);
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .values-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+    }
+
+    .values-item {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      font-size: .85rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .values-item svg {
+      width: 16px;
+      height: 16px;
+      color: var(--brown);
+      flex-shrink: 0;
+    }
+
+    .card-quote-large {
+      background: #F8F2E6;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.6rem 1.4rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .quote-large-text {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.25rem;
+      line-height: 1.45;
+      color: var(--ink);
+      margin: 0 0 1rem;
+    }
+
+    .quote-author {
+      font-size: .82rem;
+      color: var(--brown);
+      font-weight: 500;
+      position: relative;
+    }
+    .quote-author::before {
+      content: "";
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: rgba(180, 146, 92, 0.5);
+      margin: 0 auto .6rem;
+    }
+
+    /* ---------- Section 2 & 3: Two Column Layout ---------- */
+    .row-two-col {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 1.4rem;
+      margin-bottom: 2.5rem;
+      align-items: stretch;
+    }
+
+    @media (max-width: 1024px) {
+      .row-two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem 1.6rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      margin-bottom: 1.1rem;
+      padding-bottom: .85rem;
+      border-bottom: 1px solid rgba(180, 146, 92, 0.25);
+    }
+
+    .panel-header__icon {
+      width: 24px;
+      height: 24px;
+      color: var(--brown);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .panel-title {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .panel-subtitle {
+      font-size: .82rem;
+      color: rgba(74, 58, 34, 0.82);
+      margin: .25rem 0 0;
+      line-height: 1.4;
+    }
+
+    .inspiration-content {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 1.4rem;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .inspiration-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .inspiration-text p {
+      font-size: .88rem;
+      line-height: 1.6;
+      color: rgba(23, 35, 31, 0.9);
+      margin: 0 0 .9rem;
+    }
+    .inspiration-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .inspiration-img {
+      border-radius: 12px;
+      border: 1px solid rgba(180, 146, 92, 0.4);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    /* What You Can Do Grid */
+    .do-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .9rem;
+      margin-top: .4rem;
+    }
+
+    @media (max-width: 540px) {
+      .do-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .do-card {
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.35);
+      border-radius: 12px;
+      padding: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      transition: border-color .2s, transform .2s;
+    }
+    .do-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .do-card__top {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+    }
+
+    .do-card__icon {
+      width: 22px;
+      height: 22px;
+      color: var(--brown);
+      flex-shrink: 0;
+    }
+
+    .do-card__title {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0;
+    }
+
+    .do-card__desc {
+      font-size: .8rem;
+      color: rgba(74, 58, 34, 0.88);
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    /* ---------- Section 4 & 5: Tech Stack & Journey ---------- */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .75rem;
+      margin-top: .6rem;
+    }
+
+    @media (max-width: 540px) {
+      .tech-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .tech-badge {
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.35);
+      border-radius: 10px;
+      padding: .85rem .6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      text-align: center;
+      transition: transform .2s, border-color .2s;
+    }
+    .tech-badge:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+    }
+    .tech-badge svg {
+      width: 26px;
+      height: 26px;
+    }
+    .tech-badge span {
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    /* Timeline Journey */
+    .timeline-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .5rem;
+      margin-top: 1rem;
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      .timeline-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+      }
+    }
+
+    .timeline-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: .5rem;
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 768px) {
+      .timeline-step {
+        flex-direction: row;
+        text-align: left;
+      }
+    }
+
+    .timeline-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #F1E6D4;
+      border: 1px solid rgba(180, 146, 92, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brown);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      flex-shrink: 0;
+    }
+    .timeline-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .timeline-label {
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .timeline-arrow {
+      color: rgba(180, 146, 92, 0.6);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    @media (max-width: 768px) {
+      .timeline-arrow {
+        transform: rotate(90deg);
+        margin-left: 1rem;
+      }
+    }
+
+    /* ---------- Section 6: CTA Section ---------- */
+    .cta-banner {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.6rem 2rem;
+      margin-bottom: 3.5rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .cta-left {
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+    }
+
+    .cta-logo {
+      width: 46px;
+      height: 46px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .cta-title {
+      font-family: var(--serif);
+      font-size: 1.45rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .cta-sub {
+      font-size: .85rem;
+      color: rgba(74, 58, 34, 0.85);
+      margin: .25rem 0 0;
+    }
+
+    .cta-buttons {
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-github {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      background: var(--green);
+      color: var(--gold-soft);
+      border: 1px solid rgba(213, 164, 65, 0.4);
+      border-radius: 10px;
+      padding: .85rem 1.4rem;
+      font-weight: 600;
+      font-size: .88rem;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: 0 4px 14px rgba(7,29,24,0.18);
+    }
+    .btn-github:hover {
+      background: #071D18;
+      color: var(--gold);
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .btn-contact {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      background: #F1E6D4;
+      color: var(--brown);
+      border: 1px solid rgba(180, 146, 92, 0.45);
+      border-radius: 10px;
+      padding: .85rem 1.4rem;
+      font-weight: 600;
+      font-size: .88rem;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-contact:hover {
+      background: #E8DAC2;
+      border-color: var(--brown);
+      transform: translateY(-2px);
+    }
+
+    /* ---------- Footer ---------- */
+    .footer {
+      background: var(--cream); border-top: 1px solid rgba(74,58,34,.18);
+      padding: 3.5rem var(--pad) 2rem; color: var(--ink); position: relative; z-index: 10;
+      font-family: var(--sans);
+    }
+    .footer__container {
+      max-width: 1180px; margin: 0 auto;
+    }
+    .footer__grid {
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .footer .brand img { width: 44px; height: 44px; }
+    .footer__tagline {
+      font-family: var(--serif); font-size: 1.05rem; font-style: italic; font-weight: 600;
+      color: var(--green); margin: 0.75rem 0 0.4rem; line-height: 1.3;
+    }
+    .footer__desc {
+      font-size: 0.82rem; color: rgba(23,35,31,0.75); margin: 0 0 0.9rem; line-height: 1.45;
+    }
+    .footer__badge {
+      display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #b8862a; background: rgba(213,164,65,0.12);
+      border: 1px solid rgba(213,164,65,0.3); padding: 0.25rem 0.65rem; border-radius: 4px;
+    }
+    .footer__heading {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 700; color: var(--green);
+      margin: 0 0 1rem; letter-spacing: 0.02em;
+    }
+    .footer__links {
+      list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem;
+    }
+    .footer__links a {
+      font-size: 0.88rem; color: rgba(23,35,31,0.8); transition: all 0.2s ease;
+      display: inline-flex; align-items: center; gap: 0.3rem;
+    }
+    .footer__links a:hover {
+      color: #b8862a; transform: translateX(2px);
+    }
+    .footer__divider {
+      height: 1px; background: rgba(74,58,34,0.15); margin: 2rem 0 1.5rem;
+    }
+    .footer__mid {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+      margin-bottom: 1.5rem; font-size: 0.88rem;
+    }
+    .footer__mid-statement strong {
+      font-family: var(--serif); color: var(--green); font-size: 1rem; font-weight: 700;
+    }
+    .footer__mid-statement p {
+      margin: 0.2rem 0 0; color: rgba(23,35,31,0.7); font-size: 0.82rem;
+    }
+    .footer__mid-links {
+      display: flex; gap: 1.5rem; align-items: center;
+    }
+    .footer__mid-links a {
+      font-weight: 600; color: var(--green); transition: color 0.2s; display: inline-flex; align-items: center; gap: 0.25rem;
+    }
+    .footer__mid-links a:hover { color: #b8862a; }
+    .footer__bottom {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;
+      padding-top: 1.2rem; border-top: 1px opacity(0.08) solid; font-size: 0.78rem; color: rgba(23,35,31,0.65);
+    }
+
+    /* ---------- Mobile Adjustments ---------- */
+    @media (max-width: 900px) {
+      .nav__toggle { display: block; }
+      .nav__menu {
+        position: absolute; top: 100%; left: 0; right: 0; padding: 0 var(--pad) 1.4rem;
+        background: rgba(7,29,24,.96); border-bottom: 1px solid rgba(213,164,65,.3);
+        display: none; flex-direction: column; align-items: stretch;
+      }
+      .nav__menu.is-open { display: flex; }
+      .nav__links { flex-direction: column; align-items: stretch; gap: 0; margin: 0; }
+      .nav__links a { padding: .95rem 0; border-bottom: 1px solid rgba(247,243,232,.1); font-size: 1rem; }
+      .nav__links a::after { display: none; }
+      .nav__links a[aria-current="page"] { color: var(--gold-soft); box-shadow: inset 3px 0 0 var(--gold); padding-left: .8rem; }
+      .nav .btn { display: inline-flex; margin-top: 1.1rem; }
+      
+      .hero-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .hero-header__aside {
+        align-items: flex-start;
+      }
+      .hero-quote-card {
+        text-align: left;
+      }
+
+      .footer__row { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+      .footer__tag { margin-left: 0; }
+      .footer__social { justify-content: center; }
+    }
+    @media (min-width: 901px) { .nav__menu { display: contents; } }
+  </style>
+</head>
+<body>
+
+  <a class="sr-only" href="#main">Skip to content</a>
+
+  <header>
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="index.html" aria-label="ChandaCore home">
+        <img src="assets/logo-mark.png" alt="" width="44" height="44">
+        <span class="brand__text">
+          <span class="brand__name">Chanda<b>Core</b></span>
+          <span class="brand__sub">Ancient Patterns. Modern Possibilities.</span>
+        </span>
+      </a>
+
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <span></span>
+      </button>
+
+      <div class="nav__menu" id="nav-menu">
+        <ul class="nav__links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="generator.html">Generator</a></li>
+          <li><a href="analyzer.html">Analyzer</a></li>
+          <li><a href="combinatorics.html">Combinatorics</a></li>
+          <li><a href="about.html" aria-current="page">About</a></li>
+          <li><a href="tests.html">Tests</a></li>
+        </ul>
+        <a class="btn btn--gold" href="generator.html">Explore Now <span aria-hidden="true">→</span></a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-header">
+    <div class="hero-header__main">
+      <p class="hero-header__eyebrow">OUR STORY. OUR PURPOSE. OUR VISION.</p>
+      <h1 class="hero-header__title">About <span>ChandaCore</span></h1>
+      <p class="hero-header__sub">Bridging ancient wisdom and modern computation through the mathematics of patterns.</p>
+    </div>
+    <div class="hero-header__aside">
+      <div class="hero-tags">
+        <span class="hero-tag">PATTERNS</span>
+        <span class="hero-tag">MATHEMATICS</span>
+        <span class="hero-tag">CULTURE</span>
+        <span class="hero-tag">COMPUTATION</span>
+      </div>
+      <div class="hero-quote-card">
+        <div class="hero-sanskrit">परमम् नवोन्मेषः भविष्यति ॥</div>
+        <p class="hero-quote">“Ancient knowledge finds new life in modern tools.”</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTAINER -->
+  <main id="main" class="page-container">
+
+    <!-- SECTION 1: MISSION / VISION / VALUES / QUOTE -->
+    <section class="mvv-grid" aria-label="Mission, Vision, and Values">
+      
+      <!-- CARD 1: MISSION -->
+      <article class="card-mvv">
+        <div class="card-mvv__header">
+          <svg class="card-mvv__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <h2 class="card-mvv__title">Our Mission</h2>
+        </div>
+        <p class="card-mvv__text">To make the mathematical beauty of Indian knowledge systems accessible, interactive, and meaningful through modern computation.</p>
+      </article>
+
+      <!-- CARD 2: VISION -->
+      <article class="card-mvv">
+        <div class="card-mvv__header">
+          <svg class="card-mvv__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          <h2 class="card-mvv__title">Our Vision</h2>
+        </div>
+        <p class="card-mvv__text">A world where ancient wisdom and modern technology come together to inspire learning, research, and innovation.</p>
+      </article>
+
+      <!-- CARD 3: VALUES -->
+      <article class="card-mvv">
+        <div class="card-mvv__header">
+          <svg class="card-mvv__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <h2 class="card-mvv__title">Our Values</h2>
+        </div>
+        <ul class="values-list">
+          <li class="values-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Respect for ancient knowledge
+          </li>
+          <li class="values-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Commitment to computational thinking
+          </li>
+          <li class="values-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Open and accessible learning
+          </li>
+          <li class="values-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Innovation with purpose
+          </li>
+        </ul>
+      </article>
+
+      <!-- CARD 4: QUOTE -->
+      <article class="card-quote-large">
+        <p class="quote-large-text">“The patterns of the past can illuminate the possibilities of the future.”</p>
+        <div class="quote-author">ChandaCore</div>
+      </article>
+
+    </section>
+
+    <!-- SECTION 2 & 3: THE INSPIRATION & WHAT YOU CAN DO HERE -->
+    <div class="row-two-col">
+
+      <!-- THE INSPIRATION -->
+      <article class="panel-card" aria-labelledby="title-inspiration">
+        <div class="panel-header">
+          <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <div>
+            <h2 class="panel-title" id="title-inspiration">The Inspiration</h2>
+          </div>
+        </div>
+
+        <div class="inspiration-content">
+          <div class="inspiration-text">
+            <p>ChandaCore is inspired by Pingala's Chandaśāstra, an ancient Indian work on poetic meter that describes patterns of Laghu (short) and Guru (long) syllables.</p>
+            <p>These binary-like Laghu–Guru patterns can be explored through combinatorics, enumeration, and algorithmic thinking.</p>
+            <p>ChandaCore brings these ideas to life through interactive tools that allow students, researchers, and enthusiasts to explore, visualize, and understand the mathematical structure behind patterns.</p>
+          </div>
+          <div>
+            <img src="assets/inspiration_artwork.png" alt="Ancient Indian scholar writing on palm leaf scroll with binary tree diagram" class="inspiration-img">
+          </div>
+        </div>
+      </article>
+
+      <!-- WHAT YOU CAN DO HERE -->
+      <article class="panel-card" aria-labelledby="title-what-you-can-do">
+        <div class="panel-header">
+          <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <div>
+            <h2 class="panel-title" id="title-what-you-can-do">What You Can Do Here</h2>
+            <p class="panel-subtitle">Explore, experiment, and learn through interactive tools.</p>
+          </div>
+        </div>
+
+        <div class="do-grid">
+          
+          <a href="generator.html" class="do-card">
+            <div class="do-card__top">
+              <svg class="do-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+              <h3 class="do-card__title">Generate</h3>
+            </div>
+            <p class="do-card__desc">Create Laghu–Guru patterns and explore their binary and decimal forms.</p>
+          </a>
+
+          <a href="analyzer.html" class="do-card">
+            <div class="do-card__top">
+              <svg class="do-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+              <h3 class="do-card__title">Analyze</h3>
+            </div>
+            <p class="do-card__desc">Analyze pattern properties, transformations, and mathematical insights.</p>
+          </a>
+
+          <a href="combinatorics.html" class="do-card">
+            <div class="do-card__top">
+              <svg class="do-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 22 22 22"/><line x1="12" y1="9" x2="12" y2="15"/></svg>
+              <h3 class="do-card__title">Combinatorics</h3>
+            </div>
+            <p class="do-card__desc">Discover the combinatorial structure and visualize Pascal's Triangle.</p>
+          </a>
+
+          <div class="do-card">
+            <div class="do-card__top">
+              <svg class="do-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              <h3 class="do-card__title">Learn</h3>
+            </div>
+            <p class="do-card__desc">Connect ancient concepts with modern computational thinking.</p>
+          </div>
+
+        </div>
+      </article>
+
+    </div>
+
+    <!-- SECTION 4 & 5: TECH STACK & OUR JOURNEY -->
+    <div class="row-two-col">
+
+      <!-- TECHNOLOGY STACK -->
+      <article class="panel-card" aria-labelledby="title-tech">
+        <div class="panel-header">
+          <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <div>
+            <h2 class="panel-title" id="title-tech">Technology Stack</h2>
+            <p class="panel-subtitle">Built with modern tools to preserve ancient knowledge.</p>
+          </div>
+        </div>
+
+        <div class="tech-grid">
+          <div class="tech-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#E34F26" stroke-width="2"><path d="M4 3h16l-1.5 17L12 22l-6.5-2L4 3z"/></svg>
+            <span>HTML5</span>
+          </div>
+          <div class="tech-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#1572B6" stroke-width="2"><path d="M4 3h16l-1.5 17L12 22l-6.5-2L4 3z"/><path d="M12 7.5v9"/></svg>
+            <span>CSS3</span>
+          </div>
+          <div class="tech-badge">
+            <svg viewBox="0 0 24 24" fill="#F7DF1E"><rect width="24" height="24" rx="4"/><text x="14" y="18" font-size="12" font-weight="bold" fill="#000">JS</text></svg>
+            <span>JavaScript</span>
+          </div>
+          <div class="tech-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#FF9900" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-5"/></svg>
+            <span>SVG</span>
+          </div>
+          <div class="tech-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#3776AB" stroke-width="2"><path d="M12 2a5 5 0 0 0-5 5v3h10V7a5 5 0 0 0-5-5z"/><path d="M12 22a5 5 0 0 0 5-5v-3H7v3a5 5 0 0 0 5 5z"/></svg>
+            <span>Python</span>
+          </div>
+          <div class="tech-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#339933" stroke-width="2"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z"/></svg>
+            <span>Node.js</span>
+          </div>
+          <div class="tech-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 22.5D12 1.5 0 22.5h24z"/></svg>
+            <span>Vercel</span>
+          </div>
+          <div class="tech-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#17231F" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="3.6" y1="9" x2="20.4" y2="9"/><line x1="3.6" y1="15" x2="20.4" y2="15"/></svg>
+            <span>Web Platform</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- OUR JOURNEY -->
+      <article class="panel-card" aria-labelledby="title-journey">
+        <div class="panel-header">
+          <svg class="panel-header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 17l5-5-5-5"/><path d="M6 17l5-5-5-5"/></svg>
+          <div>
+            <h2 class="panel-title" id="title-journey">Our Journey</h2>
+            <p class="panel-subtitle">A small step towards a bigger vision.</p>
+          </div>
+        </div>
+
+        <div class="timeline-row">
+          <div class="timeline-step">
+            <div class="timeline-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </div>
+            <div class="timeline-label">Ancient<br>Knowledge</div>
+          </div>
+
+          <span class="timeline-arrow">→</span>
+
+          <div class="timeline-step">
+            <div class="timeline-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <div class="timeline-label">Mathematical<br>Exploration</div>
+          </div>
+
+          <span class="timeline-arrow">→</span>
+
+          <div class="timeline-step">
+            <div class="timeline-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <div class="timeline-label">Modern<br>Implementation</div>
+          </div>
+
+          <span class="timeline-arrow">→</span>
+
+          <div class="timeline-step">
+            <div class="timeline-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+            </div>
+            <div class="timeline-label">Broader<br>Impact</div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- SECTION 6: CTA BANNER -->
+    <section class="cta-banner" aria-labelledby="title-cta">
+      <div class="cta-left">
+        <img src="assets/logo-mark.png" alt="" class="cta-logo">
+        <div>
+          <h2 class="cta-title" id="title-cta">Be a Part of the Journey</h2>
+          <p class="cta-sub">Explore. Learn. Contribute. Help us build the future of ChandaCore.</p>
+        </div>
+      </div>
+      <div class="cta-buttons">
+        <a href="https://github.com/naziasalmani/ChandaCore" target="_blank" rel="noopener noreferrer" class="btn-github">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          View on GitHub
+        </a>
+        <a href="mailto:contact@chandacore.org" class="btn-contact">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Get in Touch
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__container">
+      <div class="footer__grid">
+        <!-- COLUMN 1 — BRAND -->
+        <div class="footer__col-brand">
+          <a class="brand" href="index.html" aria-label="ChandaCore home">
+            <img src="assets/logo-mark.png" alt="ChandaCore Logo" width="44" height="44">
+            <span class="brand__text">
+              <span class="brand__name">Chanda<b>Core</b></span>
+            </span>
+          </a>
+          <p class="footer__tagline">"Ancient Patterns. Modern Possibilities."</p>
+          <p class="footer__desc">Exploring ancient knowledge systems through modern computational thinking.</p>
+          <span class="footer__badge">IKS × Computer Science</span>
+        </div>
+
+        <!-- COLUMN 2 — EXPLORE -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Explore</h3>
+          <ul class="footer__links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="generator.html">Generator</a></li>
+            <li><a href="analyzer.html">Analyzer</a></li>
+            <li><a href="combinatorics.html">Combinatorics</a></li>
+            <li><a href="tests.html">Tests</a></li>
+          </ul>
+        </div>
+
+        <!-- COLUMN 3 — PROJECT -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Project</h3>
+          <ul class="footer__links">
+            <li><a href="about.html">About</a></li>
+            <li><a href="index.html#how-it-works">How It Works</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- COLUMN 4 — KNOWLEDGE -->
+        <div class="footer__col">
+          <h3 class="footer__heading">Knowledge</h3>
+          <ul class="footer__links">
+            <li><a href="index.html#how-it-works">Chandaśāstra</a></li>
+            <li><a href="index.html#how-it-works">Binary Encoding</a></li>
+            <li><a href="combinatorics.html">Combinatorics</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__divider"></div>
+
+      <div class="footer__mid">
+        <div class="footer__mid-statement">
+          <strong>IKS × Computer Science</strong>
+          <p>Exploring ancient patterns through modern computation.</p>
+        </div>
+        <div class="footer__mid-links">
+          <a href="https://github.com/naziasalmani/ChandaCore" target="_blank" rel="noopener" aria-label="GitHub Repository">GitHub ↗</a>
+          <a href="contact.html">Contact ↗</a>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <div>© 2026 ChandaCore. All rights reserved.</div>
+        <div>Built for IKS × Computer Science</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    (function() {
+      const navToggle = document.querySelector('.nav__toggle');
+      const navMenu = document.getElementById('nav-menu');
+      if (navToggle && navMenu) {
+        navToggle.addEventListener('click', () => {
+          const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+          navToggle.setAttribute('aria-expanded', !isOpen);
+          navMenu.classList.toggle('is-open');
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
